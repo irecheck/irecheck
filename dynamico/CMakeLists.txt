@@ -1,9 +1,5 @@
-<<<<<<< HEAD
-cmake_minimum_required(VERSION 2.8.3)
-=======
 cmake_minimum_required(VERSION 3.0.2)
->>>>>>> 7658b8009433c34244ea55c38113ca44cb5091bd
-project(platforms)
+project(dynamico)
 
 ## Compile as C++11, supported in ROS Kinetic and newer
 # add_compile_options(-std=c++11)
@@ -11,15 +7,7 @@ project(platforms)
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
-<<<<<<< HEAD
-find_package(catkin REQUIRED COMPONENTS
-  rospy
-  std_msgs
-  message_generation
-)
-=======
 find_package(catkin REQUIRED)
->>>>>>> 7658b8009433c34244ea55c38113ca44cb5091bd
 
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
@@ -55,28 +43,11 @@ find_package(catkin REQUIRED)
 ##   * add every package in MSG_DEP_SET to generate_messages(DEPENDENCIES ...)
 
 ## Generate messages in the 'msg' folder
-<<<<<<< HEAD
-add_message_files(
-  FILES
-  GestureCommand.msg
-  FaceInfo.msg
-  Faces.msg
-  GestureInfo.msg
-  Gestures.msg
-  HandInfo.msg
-  Hands.msg
-  JointInfo.msg
-  SkeletonInfo.msg
-  Skeletons.msg
-#   Message2.msg
-)
-=======
 # add_message_files(
 #   FILES
 #   Message1.msg
 #   Message2.msg
 # )
->>>>>>> 7658b8009433c34244ea55c38113ca44cb5091bd
 
 ## Generate services in the 'srv' folder
 # add_service_files(
@@ -93,17 +64,10 @@ add_message_files(
 # )
 
 ## Generate added messages and services with any dependencies listed here
-<<<<<<< HEAD
-generate_messages(
-  DEPENDENCIES
-  std_msgs
-)
-=======
 # generate_messages(
 #   DEPENDENCIES
 #   std_msgs  # Or other packages containing msgs
 # )
->>>>>>> 7658b8009433c34244ea55c38113ca44cb5091bd
 
 ################################################
 ## Declare ROS dynamic reconfigure parameters ##
@@ -136,16 +100,9 @@ generate_messages(
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
 #  INCLUDE_DIRS include
-<<<<<<< HEAD
-#  LIBRARIES comportement_control
-#  CATKIN_DEPENDS rospy std_msgs
-#  DEPENDS system_lib
-   CATKIN_DEPENDS message_runtime
-=======
-#  LIBRARIES platforms
+#  LIBRARIES dynamico
 #  CATKIN_DEPENDS other_catkin_pkg
 #  DEPENDS system_lib
->>>>>>> 7658b8009433c34244ea55c38113ca44cb5091bd
 )
 
 ###########
@@ -156,20 +113,12 @@ catkin_package(
 ## Your package locations should be listed before other locations
 include_directories(
 # include
-<<<<<<< HEAD
-  ${catkin_INCLUDE_DIRS}
-=======
 # ${catkin_INCLUDE_DIRS}
->>>>>>> 7658b8009433c34244ea55c38113ca44cb5091bd
 )
 
 ## Declare a C++ library
 # add_library(${PROJECT_NAME}
-<<<<<<< HEAD
-#   src/${PROJECT_NAME}/comportement_control.cpp
-=======
-#   src/${PROJECT_NAME}/platforms.cpp
->>>>>>> 7658b8009433c34244ea55c38113ca44cb5091bd
+#   src/${PROJECT_NAME}/dynamico.cpp
 # )
 
 ## Add cmake target dependencies of the library
@@ -180,11 +129,7 @@ include_directories(
 ## Declare a C++ executable
 ## With catkin_make all packages are built within a single CMake context
 ## The recommended prefix ensures that target names across packages don't collide
-<<<<<<< HEAD
-# add_executable(${PROJECT_NAME}_node src/comportement_control_node.cpp)
-=======
-# add_executable(${PROJECT_NAME}_node src/platforms_node.cpp)
->>>>>>> 7658b8009433c34244ea55c38113ca44cb5091bd
+# add_executable(${PROJECT_NAME}_node src/dynamico_node.cpp)
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
@@ -210,11 +155,7 @@ include_directories(
 
 ## Mark executable scripts (Python etc.) for installation
 ## in contrast to setup.py, you can choose the destination
-<<<<<<< HEAD
-# install(PROGRAMS
-=======
 # catkin_install_python(PROGRAMS
->>>>>>> 7658b8009433c34244ea55c38113ca44cb5091bd
 #   scripts/my_python_script
 #   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 # )
@@ -252,11 +193,7 @@ include_directories(
 #############
 
 ## Add gtest based cpp test target and link libraries
-<<<<<<< HEAD
-# catkin_add_gtest(${PROJECT_NAME}-test test/test_comportement_control.cpp)
-=======
-# catkin_add_gtest(${PROJECT_NAME}-test test/test_platforms.cpp)
->>>>>>> 7658b8009433c34244ea55c38113ca44cb5091bd
+# catkin_add_gtest(${PROJECT_NAME}-test test/test_dynamico.cpp)
 # if(TARGET ${PROJECT_NAME}-test)
 #   target_link_libraries(${PROJECT_NAME}-test ${PROJECT_NAME})
 # endif()
