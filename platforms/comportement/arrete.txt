@@ -1,0 +1,3 @@
+"QT/so";1
+"";"On s'arrête pour aujourd'hui"
+"";"On arrête là cette séance"

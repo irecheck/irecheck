@@ -1,0 +1,4 @@
+"QT/handclap";1;
+"QT/happy";"trop fort?" ;
+"QT/happy";"Tu as trop bien réussi " + Prenom	;
+"QT/happy";"Tu as trop bien fait!!"

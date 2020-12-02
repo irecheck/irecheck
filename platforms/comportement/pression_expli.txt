@@ -1,0 +1,2 @@
+"QT/bored";0.6;
+"QT/talking";"Pour jouer à Pression, il faut ..."

@@ -1,0 +1,4 @@
+"QT/curious";0.85;
+"";"Tu semble fatigué";
+"";"On dirait que tu es fatigué ?";
+"";"Tu as l'air fatigué";

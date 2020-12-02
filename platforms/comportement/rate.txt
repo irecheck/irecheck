@@ -1,0 +1,4 @@
+"QT/sad";1;
+"QT/confused";"Mince, nous avons raté"
+"QT/confused";"Oh non, nous n'avons pas été très fort"
+"QT/confused";"Nous n'avons pas très bien réussi"

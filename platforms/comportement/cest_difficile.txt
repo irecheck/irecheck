@@ -1,0 +1,4 @@
+"QT/curious";0.8;
+"QT/afraidshort";"Ce n'est pas si facile!"
+"QT/afraidshort";"Oui mais c'est dur"
+"QT/afraidshort";"C'est quand même difficile!"

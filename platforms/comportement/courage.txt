@@ -1,0 +1,4 @@
+"QT/strong";1;
+"QT/showing_smile";"Courage, nous allons y arriver"
+"QT/showing_smile";"Allez, nous allons faire mieux"
+"QT/showing_smile";"Ne nous décourageons pas"

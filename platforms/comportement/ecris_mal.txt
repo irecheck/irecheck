@@ -1,0 +1,4 @@
+"QT/curious";1;
+"QT/confused";"j'écris vraiment très mal";
+"QT/confused";"Olala, mon écriture n'est pas terrible"
+"QT/confused";"J'ai mal écrit"

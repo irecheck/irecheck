@@ -1,0 +1,4 @@
+"QT/angry";0.8;
+"QT/surprise";"Mais! Ma tablette!"
+"QT/surprise";"Mais où est ma tablette?"
+"QT/surprise";"Je ne trouve plus ma tablette!"

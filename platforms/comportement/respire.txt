@@ -1,0 +1,3 @@
+"QT/breathing_exercise";0.85;
+"QT/breathing_exercise";"Respire un peu, et réessaye";
+"QT/breathing_exercise";"ce n'est pas grave, reprends ton souffle, et on repart"

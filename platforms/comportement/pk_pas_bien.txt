@@ -1,0 +1,4 @@
+"QT/so";0.8;
+"QT/showing_smile";"Pourquoi c'est pas bien,"
+"QT/showing_smile";"Pourquoi, je ne fais pas comme il faut?"
+"QT/showing_smile";"Ah bon? Qu'est-ce qui ne va pas?"
