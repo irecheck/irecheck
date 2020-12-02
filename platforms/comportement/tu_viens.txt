@@ -1,0 +1,5 @@
+"QT/come";0.8;
+"QT/talking";Prenom + " c'est l'heure de mon cours, non?"
+"QT/talking";Prenom + " tu viens m'aider à améliorer mon écriture?"
+"QT/talking";Prenom + " je suis impatient d'écrire, tu viens?"
+"QT/talking";Prenom + " tu peux venir pour qu'on fasse mon cours?"

@@ -1,0 +1,4 @@
+"QT/curious";0.8;
+"QT/confused";"Tu as l'air en colère";
+"QT/confused";"Est-ce que tu es fâché?"
+"QT/confused";"Tu es en colère?"

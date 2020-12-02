@@ -1,0 +1,4 @@
+"QT/thanks";1;
+"QT/showing_smile";"merci"
+"QT/showing_smile";"Merci beaucoup"
+"QT/showing_smile";"Je te remercie"

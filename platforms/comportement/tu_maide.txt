@@ -1,0 +1,4 @@
+"QT/thanks";0.8;
+"QT/happy";Prenom + ", Merci pour ton aide'"
+"QT/happy";"Merci " + Prenom +" tu m'aides beaucoup!"
+"QT/happy";"tu m'as beaucoup aidé " + Prenom

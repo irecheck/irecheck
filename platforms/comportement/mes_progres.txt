@@ -1,0 +1,4 @@
+"QT/hips";0.8;
+"QT/happy";"Tu as vu comment j'écrivais et comment j'ai progressé?";
+"QT/happy";"Tu as vu comme je me suis amélioré en écriture?";
+"QT/happy";"Tu as vu mes progrès?";

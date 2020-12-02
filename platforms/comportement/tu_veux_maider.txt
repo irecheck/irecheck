@@ -1,0 +1,2 @@
+"QT/premiere_recontre";1;
+"QT/talkinglongrepeat";"Je suis content de te rencontrer. J'ai besoin de ton aide pour mieux écrire, car je ne suis pas très fort. Est-ce que tu es d'accord pour m'aider? On s'améliorera ensemble!"

@@ -1,0 +1,4 @@
+"QT/curious";0.9;
+"";"tu patiente un petit moment?"
+"";"Attends un peu, je ne suis pas prêt"
+"";"Attends une seconde"

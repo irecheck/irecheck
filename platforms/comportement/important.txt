@@ -1,0 +1,3 @@
+"QT/challenge";0.8
+"QT/talking";"Qu'est-ce que tu m'as appris qui est le plus important?"
+"QT/talking";"C'est quoi le plus important dans ce que tu m'as appris,"

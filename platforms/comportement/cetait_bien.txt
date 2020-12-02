@@ -1,0 +1,3 @@
+"QT/handclap";0.8;
+"QT/happy";"C'était une super séance";
+"QT/happy";"nous avons bien travaillé aujourd'hui";

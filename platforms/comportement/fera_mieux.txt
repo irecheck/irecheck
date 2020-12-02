@@ -1,0 +1,3 @@
+"QT/hug";1;
+"QT/showing_smile";"Nous n'avons pas réussi, mais nous ferons mieux la prochaine fois!"
+"QT/showing_smile";"On va faire mieux quand on reéessayera!"

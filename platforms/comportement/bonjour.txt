@@ -1,0 +1,3 @@
+"QT/hi";0.9;
+"QT/showing_smile";"Bonjour, " + Prenom;
+"QT/showing_smile";"Coucou, " + Prenom;

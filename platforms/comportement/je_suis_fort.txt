@@ -1,0 +1,4 @@
+"QT/hips";0.9;
+"QT/one_eye_wink";"je suis trop fort"
+"QT/one_eye_wink";"je suis très fier de moi!"
+"QT/one_eye_wink";"J'ai trop bien réussi!"

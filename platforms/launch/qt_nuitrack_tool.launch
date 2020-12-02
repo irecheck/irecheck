@@ -1,0 +1,9 @@
+<launch>
+	
+    <node name="rviz" pkg="rviz" type="rviz" args="-d $(find qt_nuitrack_tool)/launch/TF.rviz" />
+    <node pkg="qt_nuitrack_tool" type="tf_skeletons.py" name="skeletons" />
+	<node pkg="tf" type="static_transform_publisher" name="camera_base_link"
+	  args="0 0 0 0 3.18 0 /Camera_link /nuitrack_frame 1" />
+    
+</launch>
+

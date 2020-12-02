@@ -1,0 +1,4 @@
+"QT/handclap";0.8;
+"QT/happy";"Nous avons beaucoup travaillé aujourd'hui,";
+"QT/happy";"Nous avons travaillé dur";
+"QT/happy";"Nous avons beaucoup travaillé ensemble"
