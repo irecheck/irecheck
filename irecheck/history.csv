@@ -1,0 +1,7 @@
+id,fname,lname,language,gender,age,left_right,country,city,activity,globalS,staticS,pressureS,tiltS,kinematicS,level,duration,result
+1,Julian,Blackwell,en-GB,m,21,r,Switzerland,Kilchberg,TILT,1,1,1,1,1,5,20,w
+2,Julian,Blackwell,en-GB,m,21,r,Switzerland,Kilchberg,TILT,0,0,0,0,0,1,50,f
+29,Dorsa,Safaei,en-GB,f,29,r,iran,tehran,worm,None,None,None,None,None,2,9.8,w
+31,Dorsa,Safaei,en-GB,f,29,r,iran,tehran,worm,None,None,None,None,None,2,9.8,w
+32,Julian,Blackwell,en-GB,m,21,r,Switzerland,Kilchberg,STATIC,1.0,1.0,1.0,1.0,1.0,1,15.0,w
+37,Julian,Blackwell,en-GB,m,21,r,Switzerland,Kilchberg,TILT,1.0,1.0,1.0,0.0,0.0,3,20.0,f

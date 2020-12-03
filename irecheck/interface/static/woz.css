@@ -1,0 +1,267 @@
+@charset "utf-8";
+html, body {
+	height: 92%;
+	min-height: 92%;
+	font-family: Arial, Helvetica, sans-serif;
+	touch-action: manipulation;
+}
+
+body {
+	background-color: #d4e3fc;
+	margin-top: 0em;
+	padding-top: 0em;
+}
+
+#content {
+	height: 100%;
+	width: 90%;
+	margin: auto;
+}
+
+#header {
+	/* height: 10%; 
+	background-color: #0F0;*/
+	border-bottom: 2px solid #ffffff
+}
+
+#breadcrumb {
+	padding: 0.5em;
+	padding-left: 1em;
+	margin-top: 0em;
+	margin-bottom: 1em;
+	color: #ffffff; 
+	background-color: #0000ff;
+	border-bottom-left-radius: 1em;
+	border-bottom-right-radius: 1em;
+
+}
+
+#breadcrumb img {
+	float: right;
+	cursor: pointer;
+}
+
+#footer{
+	height: 5%;
+	/*background-color: #ffffff;*/
+}
+
+#body {
+	/*background-color:#cccccc;*/
+	height: 100%;
+	text-align:center;
+}
+
+#body-left {
+	width: 30%;
+	height: 100%;
+	float: left;
+	/*background-color: #999999;*/
+}
+
+#body-right {
+	width: 30%;
+	height: 100%;
+	float: right;
+	position: relative;
+	/*background-color: #999999;*/
+}
+
+img.bottom_right { 
+	text-align:right;
+	position: absolute;
+	bottom: 0;
+	right: 0;
+}
+
+.tab {
+	display: inline-block;
+	border-top-left-radius: 1em;
+	border-top-right-radius: 1em;
+	width: 9em;
+	height: 1em; 
+	padding: 0.5em;
+	margin: 0em;
+	text-align: center;
+}
+
+.tab a {
+	color: #000000;
+	text-decoration: none;
+}
+
+.tab--on {
+	background-color: #ffffff;
+}
+
+.tab--off {
+	background-color: #cccccc;
+}
+
+
+.main-container {
+	padding-top: 10em;
+}
+
+
+.placeholder {
+	/*background-color: #cccccc;*/
+}
+
+
+.circle-container {
+    position: relative;
+    width: 18em;
+    height: 18em;
+    /*padding: 2.8em;*/
+    /*= 2em * 1.4 (2em = half the width of an img, 1.4 = sqrt(2))*/
+    /* border: 1px solid #000000; */
+    border-radius: 50%;
+    /*margin: 1.75em auto 0;*/
+	margin: auto;
+	/*margin-top: 4em;*/
+	background-color: #ffffff;
+}
+
+.circle-container div {
+}
+
+#spinner-container {
+    position: relative;
+
+	margin: auto;
+	margin-top: -12.5em;
+}
+
+#spinner-container div {
+    /*position: absolute;
+	margin: auto;*/
+}
+
+#spinner-container img {
+	width: 6em;
+	height: 6em;
+}
+
+.auth-circle-container {
+    position: relative;
+    width: 36em;
+    height: 36em;
+    /*padding: 2.8em;*/
+    /*= 2em * 1.4 (2em = half the width of an img, 1.4 = sqrt(2))*/
+    /* border: 1px solid #000000; */
+    border-radius: 50%;
+    /*margin: 1.75em auto 0;*/
+	margin: auto;
+	/*margin-left: -25em;*/
+	margin-top: -4em;
+	background-color: #ffffff;
+	text-align: center;
+}
+
+.auth-circle-container form {
+	padding-top: 12em;
+}
+
+.auth-circle-container h1 {
+	font-size: 1.3em;
+}
+
+.auth-circle-container label {
+    display: inline-block;
+	margin: 0.5em;
+}
+
+.auth-circle-container input[type=submit] {
+	position: relative;
+	top: -1.5em;
+    padding:10px 25px; 
+    background:#00cc00; 
+    border:0 none;
+    cursor:pointer;
+    border-radius: 5px; 
+	margin-left: 5em;
+}
+
+.auth-circle-container img {
+}
+
+
+.group-button-container {
+    position: relative;
+    width: 4.5em;
+    height: 4.5em;
+
+	margin: auto;
+	margin-top: -4.5em;
+}
+
+
+.group-button-container div {
+    position: absolute;
+
+    width: 4em;
+    height: 4em;
+	cursor: pointer;
+}
+
+
+.group-info-container {
+	position: relative;
+	width: 4.5em;
+	height: 4.5em;
+
+	margin: auto;
+	margin-top: -4.5em;
+}
+
+
+.group-info-container div {
+    position: absolute;
+
+    width: 4em;
+    height: 4em;
+}
+
+
+.group-text-container {
+	position: relative;
+	width: 8em;
+	height: 4.5em;
+
+	margin: auto;
+	margin-top: -4.5em;
+}
+
+
+.group-text-container div {
+    position: absolute;
+
+    width: 8em;
+    height: 4em;
+}
+
+
+.commands-list-container {
+	position: relative;
+	width: 9em;
+	height: 9em;
+
+	margin: auto;
+	margin-top: -4em;
+}
+
+.commands-list-container div {
+    position: absolute;
+
+    width: 8em;
+
+	padding: 0.5em;
+	
+	border-radius: 5%;
+	cursor: pointer;
+}
+
+
+
+

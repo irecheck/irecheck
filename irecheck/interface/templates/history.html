@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>History</title>
+    <meta charset="utf-8" />
+    <link href="static/woz.css" rel="stylesheet" type="text/css"/>
+    <link href="static/history.css" rel="stylesheet" type="text/css"/>
+    <script src="static/jquery-3.5.1.min.js"></script>
+    <script src="static/history.js"></script>
+    <script src="https://cdn.amcharts.com/lib/4/core.js"></script>
+    <script src="https://cdn.amcharts.com/lib/4/charts.js"></script>
+</head>
+
+<body onload=dynamicUpdate()>
+
+    <div id="content">
+
+        <div id="header">
+            <div id="breadcrumb">{{ session['user_name'] }}, {{ session['user_surname'] }}
+				<a href="login"><img src="static/images/back.png" width="3%" alt="Back" /></a>
+            </div>
+            
+            <div class="tab tab--off"> <a href="scenarios">Scénario et Jeux</a> </div>
+            <div class="tab tab--off"> <a href="reactions">Réactions</a> </div>
+            <div class="tab tab--off"> <a href="debug">Debug</a> </div>
+            <div class="tab tab--on"> <a href="history">History</a> </div>
+        </div>
+
+        <div id=visualData>
+            <button id=toRaw>Show raw user data</button>
+            <br/> 
+
+            <div class=userBanderole>
+                <img src="static/images/face/nowords.png" width=100/>
+                <span style="width: 2.5%; display: inline-block;"></span>
+                <span id="userAge" class="banderoleText">{{ session['user_age'] }}</span>
+                <span id="userGender" class="banderoleText">{{ session['user_gender'] }}</span>
+                <span id="userDexterity" class="banderoleText">{{ session['user_dext'] }} </span>
+            </div>
+
+            <br/>
+
+            <div>
+                <div id="chartContainer">
+                    <div id="winLossChart" class="pieChart"></div>
+                    <div id="levelChart" class="pieChart"></div>
+                    <div id="activityChart" class="pieChart"></div>
+                </div>
+            </div>
+
+            <br/>
+
+            <div id="footer">
+                <button id=debug>Debug</button>
+                <!-- 
+                <div id="history" style="text-align: center">History: Waiting on server...</div>
+                -->
+                <button>
+                    <a id=seeRaw href="debug">Look at raw data</a>
+                </button>
+            </div>
+
+        </div>
+
+        <div id=rawUD>
+            <button id=toVisual>Show graphs & charts</button>
+            <div id=rawTable>Waiting on server...</div>
+        </div>
+
+    </div>
+
+</body>
+
+</html>

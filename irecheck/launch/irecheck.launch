@@ -2,9 +2,9 @@
   <group>
     <node pkg="irecheck" name="dynamicoListener" type="dynamicoListener.py"/>
     <node pkg="irecheck" name="irecheckBrain" type="irecheckBrain.py"/>
-    <node pkg="irecheck" name="coreEngine" type="coreEngine.py"/>
-    <node pkg="irecheck" name="robotcontroller" type="robotController.py"/>
-
+    <node pkg="irecheck" name="irecheckWorld" type="irecheckWorld.py"/>
+    <node pkg="irecheck" name="dispatcher" type="dispatcher.py"/>
+    <node pkg="irecheck" name="qtdriver" type="qtDriver.py"/>
   </group>
 
   <group>
