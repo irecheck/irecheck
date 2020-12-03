@@ -1,0 +1,6 @@
+<launch>
+
+  <group>
+    <node pkg="dynamico" name="dynamicoListener" type="dynamicoListener.py" output="screen" launch-prefix="gnome-terminal"/>
+  </group>
+</launch>
