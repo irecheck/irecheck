@@ -1,0 +1,13 @@
+<launch>
+  <group>
+    <node pkg="irecheck" name="dynamicoListener" type="dynamicoListener.py"/>
+    <node pkg="irecheck" name="irecheckBrain" type="irecheckBrain.py"/>
+    <node pkg="irecheck" name="coreEngine" type="coreEngine.py"/>
+    <node pkg="irecheck" name="robotcontroller" type="robotController.py"/>
+
+  </group>
+
+  <group>
+    <node pkg="irecheck" name="fakeMultimodalAnalyzer" type="fakeMultimodalAnalyzer.py" output="screen" launch-prefix="gnome-terminal"/>
+  </group>
+</launch>
