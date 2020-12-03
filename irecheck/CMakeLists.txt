@@ -164,6 +164,10 @@ include_directories(
 #   scripts/my_python_script
 #   DESTINATION $***REMOVED***CATKIN_PACKAGE_BIN_DESTINATION***REMOVED***
 # )
+catkin_install_python(PROGRAMS
+	interface/flask_test_server.py
+	DESTINATION $***REMOVED***CATKIN_PACKAGE_BIN_DESTINATION***REMOVED***
+)
 
 ## Mark executables for installation
 ## See http://docs.ros.org/melodic/api/catkin/html/howto/format1/building_executables.html

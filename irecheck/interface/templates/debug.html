@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Debug</title>
+    <meta charset="utf-8" />
+    <link href="static/woz.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="static/debug.css" type="text/css"/>
+    <script src="static/jquery-3.5.1.min.js"></script>
+    <script src="static/debug.js"></script>
+</head>
+
+<body>
+
+    <div id="content">
+        <div id="header">
+            <div id="breadcrumb">***REMOVED******REMOVED*** session['user_name'] ***REMOVED******REMOVED***, ***REMOVED******REMOVED*** session['user_surname'] ***REMOVED******REMOVED***
+				<a href="login"><img src="static/images/back.png" width="3%" alt="back" /></a>
+            </div>
+            
+            <div class="tab tab--off"> <a href="scenarios">Scénario et Jeux</a> </div>
+            <div class="tab tab--off"> <a href="reactions">Réactions</a> </div>
+            <div class="tab tab--on"> <a href="debug">Debug</a> </div>
+            <div class="tab tab--off"> <a href="history">History</a> </div>
+        </div>
+
+        <div id=body>
+            <div id=body-left>
+                <button id=decrement>-</button>
+                <span id=counter>0</span>
+                <button id=increment>+</button>
+                <br/>
+                <input name=textToFlask id="textToFlask" type="text">
+                <button id=sendFlask>Send data to Flask</button>
+                <br/>
+                <span id=newDynamicoData>New dynamico data: </span>
+                <br>
+                <span>ROSCORE status: </span> <span id="coreAval">(Waiting for server...)</span>
+                <br>
+                <span>Robot status: </span> <span id="qtAval">(Waiting for server...)</span>
+                <br>
+                <br>
+                <input id="QTSay" type="text" placeholder="Make QT Speak!">
+                <button id="sendQTSay">Send</button>
+                <br>
+                <button id="QTSay1">Hello</button>
+                <button id="QTSay2">Good job</button>
+                <button id="QTSay3">Cool</button>
+                <br/>
+                <span>Select robot language: </span>
+                <button class=langButton>en-GB</button>
+                <button class=langButton>en-US</button>
+                <button class=langButton>fr-CH</button>
+                <button class=langButton>fr-FR</button>
+                <button class=langButton>it-IT</button>
+                <br/>
+                <span>Simulate:</span>
+                <button class=simButton>WIN</button>
+                <button class=simButton>LOSS</button>
+                <button class=simButton>FLEX</button>
+                <button class=simButton>SCRATCH</button>
+                <button class=simButton>HELLO</button>
+                <br/>
+                <span>Change state: </span>
+                <button class=stateButton>SLEEP</button>
+                <button class=stateButton>AWAKE</button>
+                <button class=stateButton>SIT</button>
+                <button class=stateButton>STAND</button>
+            </div>
+
+            <div id=body-right>
+                <iframe width="400" height="225" src="https://www.youtube.com/embed/2STTNYNF4lk" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                <br/>
+                <h4>Robot: </h4>
+                <input id='toNao' type='text'>
+                <button id='sendNao'>Send command to Robot</button>
+                <br/>
+                <div class="debugScroll" id="debugScroll">
+                    <p>First line</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    
+
+    <div id="footer">
+        <div id="historyLast10">
+            Waiting on server...
+        </div>
+    </div>
+</body>
+
+</html>
