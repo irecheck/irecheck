@@ -14,6 +14,7 @@ from comportement_control.msg import GestureCommand
 sys.path.append(r'/home/jennie/irecheck/iReCheck/QT_ws/src/irecheck/platforms/script')  
 #from control_publisher import RobotBehavior
 from qtrobot import RobotBehavior
+from qt_robot_interface.srv import *
 
 
 '''
@@ -61,6 +62,10 @@ pub = rospy.Publisher('/qt_robot/speech/say', String, queue_size=10)
 langPub = rospy.Publisher('/robot/language', String, queue_size=10)
 simPub = rospy.Publisher('/robot/simulate', String, queue_size=10)
 statePub = rospy.Publisher('/robot/state', String, queue_size=10)
+
+# service
+language_config = rospy.ServiceProxy('/qt_robot/speech/config', speech_config)
+res_language = language_config("fr-FR",0,0)
 
 # Subscribers & callback functions
 
