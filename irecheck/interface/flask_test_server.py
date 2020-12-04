@@ -7,12 +7,14 @@ import copy
 import rospy
 # from control_publisher import RobotBehaviour
 from threading import Thread
-
 from std_msgs.msg import String
-
 import pandas as pd
-
 from my_utils import HistoryUtil
+from comportement_control.msg import GestureCommand
+sys.path.append(r'/home/jennie/irecheck/iReCheck/QT_ws/src/irecheck/platforms/script')  
+#from control_publisher import RobotBehavior
+from qtrobot import RobotBehavior
+
 
 '''
 dynamico_dict = ***REMOVED***
@@ -124,9 +126,9 @@ def ros_ini():
     emo = rospy.Publisher('/qt_robot/emotion/show',String, queue_size=10)
    # gesture = rospy.Publisher('comportement/gesture_name',GestureCommand,queue_size=10)
    # rospy.sleep(1)
-    woz_command(say,emo)
+    woz_command(pub,emo)
     return("")
-def woz_command():
+def woz_command(pub,emo):
     payload = request.get_json() 
     prenom = session.get('user_name')
     behaviour = RobotBehavior()
@@ -246,4 +248,4 @@ def random_util():
 	
 if __name__ == "__main__":
     # Does not work with debug mode on True due to possible incompatibility with ROS Subscriber
-    app.run(host= '0.0.0.0',debug=False)
+    app.run(host= '0.0.0.0',debug=True)
