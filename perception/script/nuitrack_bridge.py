@@ -4,31 +4,42 @@ import tf
 from platforms.msg import * 
 import numpy as np
 
-## This class contains functions related to tf recognition and publish.
+
 
 class NuitrackTfTool(object):
+	"""
+	This class contains functions related to tf recognition and publish by using Nuitrack message.
+	"""
 
-	## Initialisation of class
-	# @param self The object pointer
 	def __init__(self):
+		"""
+		Initialisation of class
+		Arg:
+			self: The object pointer
+		"""
 
 		super(NuitrackTfTool, self).__init__()
-		## The ids of perced objects
+		# The ids of perced objects
 		self.id = []
-		## The joints list of skeleton. The length will be 25. Because Nuitrack describe skeleton with 25 joints. Every joint item has information of translation and rotation
+		# The joints list of skeleton. The length will be 25. Because Nuitrack describe skeleton with 25 joints. Every joint item has information of translation and rotation
 		self.joints = []
-		## The translations of every joint in space
+		# The translations of every joint in space
 		self.translation = np.zeros([10,25,3])
-		## The rotation of every joint in space
+		# The rotation of every joint in space
 		self.rotation = np.zeros([10,25,9])
-		## Transform Broadcaster
+		# Transform Broadcaster
 		self.br = tf.TransformBroadcaster()
 
 
-	## Function for load data heard from nuitrack	
-	# @param self The object pointer
-	# @param data The data heard from nuitrack
+	
 	def load_info(self,data):
+		"""
+		Function for load data heard from nuitrack	
+
+		Args:
+		self: The object pointer
+		data: The data heard from nuitrack
+		"""
 		# load data of every id 
 		for n in range(0,len(data.skeletons)):
 			# verifie if this id was detected before
@@ -50,24 +61,30 @@ class NuitrackTfTool(object):
 					self.rotation[i,j,:] = self.joints[i][j].orientation
 		self.do()
 
-	## Function for subscribe nuitrack message
-	# @param self The object pointer
+
 	def msg_listener(self):
-		""" subscibe nuitrack msg"""
+		""" 
+		subscibe nuitrack msg
+		"""
 		rospy.init_node("tf_skeletons",anonymous=True)
 		rospy.Subscriber('/qt_nuitrack_app/skeletons',Skeletons,self.load_info)
 		rospy.spin()
 
-	## Function to send all ids' TFs
-	# @param self The object pointer	
+	
 	def do(self):
+		"""
+		Function to send all ids' TFs
+		"""
 		for i in self.id:
 			self.handle_tf(self.id.index(i))
 
 
-	## Function send Transform information of every point of skeletons
-	# @param i The id of detected person
 	def handle_tf(self,i):
+		"""
+		Function send Transform information of every point of skeletons
+		Args:
+			i(int): The id of detected person
+		"""
 		# name every joint
 		joint_name = ["Head","Neck","Torso","Waist","Left_Collar","Left_Shoulder","Left_Elbow","Left_Wrist","Left_Hand","Right_Collar","Right_Shoulder","Right_Elbow","Right_Wrist","Right_Hand",
 					"Left_Hip","Left_Knee","Left_Ankle","Right_Hip","Right_Knee","Right_Ankle"]

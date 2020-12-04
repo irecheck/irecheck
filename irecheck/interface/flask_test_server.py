@@ -119,13 +119,19 @@ def scenarios(name=None):
 	
 # woz_command can send ros messages and call ros services
 @app.route("/woz",methods=['POST'])
+def ros_ini():
+   # say = rospy.Publisher('/qt_robot/speech/say', String, queue_size=10)
+    emo = rospy.Publisher('/qt_robot/emotion/show',String, queue_size=10)
+   # gesture = rospy.Publisher('comportement/gesture_name',GestureCommand,queue_size=10)
+   # rospy.sleep(1)
+    woz_command(say,emo)
+    return("")
 def woz_command():
     payload = request.get_json() 
     prenom = session.get('user_name')
-    print(prenom)
-    behaviour = RobotBehaviour()
+    behaviour = RobotBehavior()
     behaviour.load_info(payload['command'],prenom)
-    behaviour.realisation()
+    behaviour.realisation(pub,emo)
     return ("nothing")
 
 
