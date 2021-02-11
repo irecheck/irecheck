@@ -6,14 +6,13 @@ from requests.exceptions import HTTPError
 from google.cloud.firestore import Client
 from google.oauth2.credentials import Credentials
 
-#  variables
+# Access credentials for the Dynamico Firestore
 FIREBASE_REST_API = "https://identitytoolkit.googleapis.com/v1/accounts"
+email = "USE EMAIL IN DYNAMICO_CREDENTIALS.TXT"
+password = "USE PASSWORD IN DYNAMICO_CREDENTIALS.TXT"
+API_KEY = "USE API_KEY IN DYNAMICO_CREDENTIALS.TXT"
 
-email = "email address" 
-password = "password"
-API_KEY = "api-key sample"
-
-# Use the google verify password REST api to authenticate and generate user tokens
+# we use the sign_in_with_email_and_password function from https://gist.github.com/Bob-Thomas/49fcd13bbd890ba9031cc76be46ce446
 def sign_in_with_email_and_password(api_key, email, password):
     request_url = "%s:signInWithPassword?key=%s" % (FIREBASE_REST_API, api_key)
     headers = {"content-type": "application/json; charset=UTF-8"}
@@ -28,18 +27,15 @@ def sign_in_with_email_and_password(api_key, email, password):
         
     return resp.json()
 
-
-# We use the sign_in_with_email_and_password function from https://gist.github.com/Bob-Thomas/49fcd13bbd890ba9031cc76be46ce446
+# sign in on the Dynamico Firestore using the credentials build in https://gist.github.com/Bob-Thomas/4d9370c6b5432fb5150d3618e0ae71ba
 response = sign_in_with_email_and_password(API_KEY, email, password)
-# Use google.oauth2.credentials and the response object to create the correct user credentials
+# use google.oauth2.credentials and the response object to create the correct user credentials
 creds = Credentials(response['idToken'], response['refreshToken'])
-
-# using the credentials build in https://gist.github.com/Bob-Thomas/4d9370c6b5432fb5150d3618e0ae71ba
 db = Client("dynamico-dev", creds)
 
 #diagnosess = db.collection(u'analysisExercises').where(u'userId', u'==', u"TXGCcUC6u5duIO6VRhfnYAXXwTg2").get()
-#diagnosess = db.collection(u'diagnoses').where(u'userId', u'==', u"TXGCcUC6u5duIO6VRhfnYAXXwTg2").get()
-diagnosess = db.collection(u'children').where(u'userId', u'==', u"TXGCcUC6u5duIO6VRhfnYAXXwTg2").get()
+diagnosess = db.collection(u'diagnoses').where(u'userId', u'==', u"TXGCcUC6u5duIO6VRhfnYAXXwTg2").get()
+#diagnosess = db.collection(u'children').where(u'userId', u'==', u"TXGCcUC6u5duIO6VRhfnYAXXwTg2").get()
 
 for doc in diagnosess:
     print("doc id: {}".format(doc.id))
@@ -53,5 +49,4 @@ for doc in diagnosess:
     #print(doc.to_dict())
     #print(f'{doc.id} => {doc.to_dict()}')
 
-
-print(element)
+#print(element)
