@@ -1,4 +1,4 @@
-"QT/so";0.8
+"QT/thanks";0.9
 "QT/sad";"T'as d'la peine?"
 "QT/sad";"Est-ce que tu es triste?"
 "QT/sad";"Quelque chose te rend triste?"

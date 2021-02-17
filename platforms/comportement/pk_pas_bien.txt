@@ -1,4 +1,4 @@
-"QT/so";0.8;
-"QT/showing_smile";"Pourquoi c'est pas bien,"
-"QT/showing_smile";"Pourquoi, je ne fais pas comme il faut?"
-"QT/showing_smile";"Ah bon? Qu'est-ce qui ne va pas?"
+"QT/so";1;
+"QT/sad";"Pourquoi c'est pas bien,"
+"QT/sad";"Pourquoi, je ne fais pas comme il faut?"
+"QT/sad";"Ah bon? Qu'est-ce qui ne va pas?"

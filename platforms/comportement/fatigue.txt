@@ -1,2 +1,2 @@
 "QT/yawn";1;
-"QT/yawn";"Je suis désolé. je suis fatigué aujourd'hui";
+"QT/yawn";"Je suis désolé. #YAWN01# je suis fatigué aujourd'hui";
