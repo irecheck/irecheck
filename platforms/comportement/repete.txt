@@ -1,4 +1,4 @@
-"QT/curious";0.8;
-"QT/confused";"Peux-tu répéter?";
-"QT/confused";"Comment?";
-"QT/confused";"Je n'ai pas entendu?";
+"";0.8;
+"QT/talking";"Peux-tu répéter?";
+"QT/talking";"Comment?";
+"QT/talking";"Je n'ai pas entendu?";

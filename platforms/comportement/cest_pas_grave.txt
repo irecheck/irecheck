@@ -1,3 +1,3 @@
-"QT/so";0.85;
+"QT/so_what";0.85;
 "";"C'est pas grave, ça arrive";
 "";"Ce n'est pas grave";

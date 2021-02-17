@@ -27,7 +27,7 @@ class RobotBehavior(object):
 	It should be used through the WOZ interface by using flask server.
 	"""
 	
-	def load_info(self,name,fname):		
+	def load_info(self,name,fname,lname,fname2):		
 		"""
 		Function for load infomation of behavior file. 
 		It will get from the behavior file the name and speed of gesture, the sentences of speech and the name of emotion. 
@@ -36,7 +36,8 @@ class RobotBehavior(object):
 		Args:
 			self: The object pointer
 			name(str): The name of behavior file
-			name(str): fname The first name of patient	
+			fname(str): fname The first name of patient	
+			lname(str): lname The last name of patient
 		"""
 		# Name of gesture 
 		self.gesture_name= ""
@@ -48,8 +49,10 @@ class RobotBehavior(object):
 		self.speech = []
 		# first name of patient
 		self.fname = ""
+		self.fname2 = ""
 		#global Fname # global variable, the first name of patient
 		self.fname = fname
+		self.fname2 = fname2
 		# import the file of behaviours
 		f = open("/home/jennie/irecheck/iReCheck/QT_ws/src/irecheck/platforms/comportement/"+name+".txt", "r")
 		line = f.readline()
@@ -81,7 +84,6 @@ class RobotBehavior(object):
 		say(ros publisher): The Publisher of rostopic "/qt_robot/speech/say"
 		emo(ros publisher): The Publisher of rostopic "/qt_robot/emotion/play"
 		"""
-
 		# command emotion, speech and gesture 
 		try:
 			rospy.wait_for_service('/qt_robot/gesture/play')
