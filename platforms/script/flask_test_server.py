@@ -62,14 +62,16 @@ def scenarios(name=None):
 def ros_ini():
     say = rospy.Publisher('/qt_robot/speech/say', String, queue_size=10)
     emo = rospy.Publisher('/qt_robot/emotion/show',String, queue_size=10)
-    woz_command(say,emo)
-    return("")
-
-def woz_command(say,emo):
-    payload = request.get_json() 
+    button = rospy.Publisher('/woz/button',String,queue_size=10)
     prenom = session.get('user_name')
     nom = session.get('user_surname')
     prenom2 = session.get('teacher_name')
+    woz_command(say,emo,button,prenom,nom,prenom2)
+    return("")
+
+def woz_command(say,emo,button,prenom,nom,prenom2):
+    payload = request.get_json() 
+    button.publish(payload['command'])
     behaviour = RobotBehavior()
     behaviour.load_info(payload['command'],prenom,nom,prenom2)
     behaviour.realisation(say,emo)
