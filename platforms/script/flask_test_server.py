@@ -8,7 +8,7 @@ from std_msgs.msg import String
 from std_msgs.msg import Float64MultiArray
 from std_msgs.msg import Float64
 from std_msgs.msg import Int32
-from comportement_control.msg import GestureCommand
+from platforms.msg import GestureCommand
 sys.path.append(r'/home/jennie/irecheck_ws/src/platforms/script')  
 #from control_publisher import RobotBehavior
 from qtrobot import RobotBehavior
