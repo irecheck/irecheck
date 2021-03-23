@@ -1,2 +1,2 @@
 "QT/bored";0.6;
-"QT/talking";"On fait une course le long d'un chemin. Attention, il faut attraper tous les fruits sur le chemin. Moi je joue le lapin et on fait la course."
+"QT/talking";"J'ai faim. Suis le chemin avec ton stylo et ramasse tous les fruits pour moi."

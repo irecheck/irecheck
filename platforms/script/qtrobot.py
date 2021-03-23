@@ -54,7 +54,7 @@ class RobotBehavior(object):
 		self.fname = fname
 		self.fname2 = fname2
 		# import the file of behaviours
-		f = open("/home/jennie/irecheck/iReCheck/QT_ws/src/irecheck/platforms/comportement/"+name+".txt", "r")
+		f = open("/home/jennie/irecheck_ws/src/platforms/comportement/"+name+".txt", "r")
 		line = f.readline()
 		a=line.split(";") 
 		# Save information
