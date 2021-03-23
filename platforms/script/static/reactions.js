@@ -68,7 +68,7 @@ var commandsList = [
 					["Le plus simple?","plus_simple"],
 					["Le plus difficile?","plus_difficile"]]	],
 	["",		[	["",""] ]		],
-	["#8791a2",	[	["QT écrire",""] ]		],
+	["#8791a2",	[	["QT écrire","ecrit"] ]		],
 	["#ebecfb", [	["Tu triches", "triche"],
 					["C'est trop facile ?", "facile"],
 					["C'est trop difficile ?", "difficile"],
