@@ -16,7 +16,7 @@ from std_msgs.msg import String
 from std_msgs.msg import Float64MultiArray
 from std_msgs.msg import Float64
 from std_msgs.msg import Int32
-from comportement_control.msg import GestureCommand
+from platforms.msg import GestureCommand
 from qt_gesture_controller.srv import *
 from qt_motors_controller.srv import *
 
