@@ -59,6 +59,7 @@ add_message_files(
   JointInfo.msg
   SkeletonInfo.msg
   Skeletons.msg
+  NameInfo.msg
 #   Message2.msg
 )
 
