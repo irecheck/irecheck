@@ -8,13 +8,14 @@ from std_msgs.msg import String
 from std_msgs.msg import Float64MultiArray
 from std_msgs.msg import Float64
 from std_msgs.msg import Int32
-from platforms.msg import GestureCommand
+from platforms.msg import NameInfo
 sys.path.append(r'/home/jennie/irecheck_ws/src/platforms/script')  
 #from control_publisher import RobotBehavior
 from qtrobot import RobotBehavior
 from threading import Thread
 
 Thread(target=lambda:rospy.init_node("flask_interface",anonymous=True,disable_signals=True)).start()
+
 
 app = Flask(__name__)
 app.secret_key = "woz" 
@@ -26,7 +27,7 @@ def index(name=None):
     return redirect('/login');
 
 @app.route('/login', methods=['GET', 'POST'])
-def login(name=None,):
+def login(name=None):
     if request.method=='POST':
         if (not len( request.form.get('fname') ) or not len( request.form.get('lname') ) ):
             print("error");
@@ -36,6 +37,8 @@ def login(name=None,):
             session['user_name'] = request.form.get('fname');
             session['user_surname'] = request.form.get('lname');
             session['teacher_name'] = request.form.get('fname2');
+            name_info = rospy.Publisher('/woz/nameinfo',NameInfo,queue_size=10)
+            name_info.publish(str(session.get('user_name')),str(session.get('user_surname')),str(session.get('teacher_name')))
             return render_template('scenarios.html', name=name)
 		
 		
@@ -63,9 +66,9 @@ def ros_ini():
     say = rospy.Publisher('/qt_robot/speech/say', String, queue_size=10)
     emo = rospy.Publisher('/qt_robot/emotion/show',String, queue_size=10)
     button = rospy.Publisher('/woz/button',String,queue_size=10)
-    prenom = session.get('user_name')
-    nom = session.get('user_surname')
-    prenom2 = session.get('teacher_name')
+    prenom = str(session.get('user_name'))
+    nom = str(session.get('user_surname'))
+    prenom2 = str(session.get('teacher_name'))
     woz_command(say,emo,button,prenom,nom,prenom2)
     return("")
 
