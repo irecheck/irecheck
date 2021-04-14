@@ -157,3 +157,10 @@ velocity: 4"
 ```
 $ git clone -b dorsa ssh://git@c4science.ch/source/iReCHeCk_repo.git
 ```
+
+5. If you get the error ``unable to locate package python-pip`` when installing pip, try:
+```
+$ sudo add-apt-repository universe 
+$ curl https://bootstrap.pypa.io/pip/2.7/get-pip.py --output get-pip2.py
+$ sudo python get-pip2.py
+```
