@@ -1,0 +1,4 @@
+"QT/so_what";1;
+"";"Aucune idee ! ,Et toi?"
+"";"Je ne sais pas. et toi?"
+"";"Je sais pas trop. et toi?"

@@ -1,4 +1,5 @@
-#! /usr/bin/env python
+#! /usr/bin/env python3
+# -*- coding: latin-1 -*-
 
 """
 Platforms package
@@ -6,9 +7,6 @@ Date: 2020/12/04
 Author: Jianling ZOU 
 """
 
-import sys
-reload(sys)
-sys.setdefaultencoding('utf-8')
 import copy
 import rospy
 import random
@@ -53,7 +51,7 @@ class RobotBehavior(object):
 		self.fname = fname
 		self.fname2 = fname2
 		# import the file of behaviours
-		f = open("/home/jennie/irecheck_ws/src/platforms/comportement/"+name+".txt", "r")
+		f = open("/home/jennie/irecheck_ws/src/irecheck/platforms/comportement/"+name+".txt", "r")
 		line = f.readline()
 		a=line.split(";") 
 		# Save information
@@ -104,7 +102,7 @@ class RobotBehavior(object):
 			res_home = home_pose(['head','left_arm','right_arm'])
 			if not res_gesture.status:
 				print("Could not play gesture '%s'." % self.gesture_name)			
-		except rospy.ServiceException, e:
+		except rospy.ServiceException as e:
 			print("Service call failed: %s." % e)
 
 			

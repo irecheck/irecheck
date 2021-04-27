@@ -1,2 +1,2 @@
 "QT/bored";0.6;
-"QT/talking";"Je joue la girafe, et il faut que tu me libères. Pour ouvrir la cage, il faut mettre tes doigts dans les points de couleurs indiqués"
+"QT/talkinglong";"Je joue la girafe, et il faut que tu me libères. Pour ouvrir la cage, il faut mettre tes doigts dans les points avec une étoile !"
