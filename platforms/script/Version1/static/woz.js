@@ -125,6 +125,7 @@ function makeCircularCommandList(idCommandsWrapper, commandsList, ellipseList) {
 
 
 
+
 function makeCommandList(idCommandsWrapper) {
 	var wrapper = $("." + idCommandsWrapper + "-container");
 	wrapper.html("");
@@ -258,16 +259,18 @@ function groupButtonDblClick( placeholderId ) {
 
 // this will send data to flask
 var busy = false;
-var busyTime = 10000;
+var busytime = 10000;
 function commandButtonClick( g_id, c_id) {
 	if(busy) return;
+	
+	command = commandsList[g_id][1][c_id];
 
 	$("#spinner-container").css('visibility', 'visible');
 	busy = true;
 	setCommandListOpacity("50%");
-	setTimeout(hideSpinner, busyTime);
+	setTimeout(hideSpinner, busytime);
 
-	command = commandsList[g_id][1][c_id];
+	
 	//alert(command);
 	const url_path = "/woz";
 	var xhttp = new XMLHttpRequest();
@@ -275,10 +278,9 @@ function commandButtonClick( g_id, c_id) {
 	// the data sent to flask
 	var payload = { "group_id": g_id,
 					"control_id": c_id,
-					"command": command [1],
+					"command": command[1],
 					"text": command[0],
 					};
-
 					
 	$.ajax({
 		type: "POST", // HTTP method POST or GET

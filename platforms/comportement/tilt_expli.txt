@@ -1,2 +1,2 @@
 "QT/bored";0.6;
-"QT/talking";"Je me suis transformé en vaisseau dans le jeu, et tu dois me piloter avec ton stylo. Mets le dans le cercle bleu, et penche le pour que je comprenne vers où je dois aller. Il faut aller chercher l'étoile et éviter les bombes."
+"QT/talking";"Je me suis transformé en vaisseau dans le jeu, et tu dois me piloter avec ton stylo en évitant les bombes."

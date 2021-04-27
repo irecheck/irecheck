@@ -1,4 +1,4 @@
-"QT/laugh";0.9;
+"QT/laugh";1;
 "QT/happy";"#LAUGH02# C'est rigolo"
-"QT/happy";"Tu me fais rire!"
-"QT/happy";"Tu es drôle!"
+"QT/happy";"Ça me fais rire!"
+"QT/happy";"C'est drôle!"
