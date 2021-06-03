@@ -4,7 +4,7 @@ class HistoryUtil:
     def __init__(self):
         print("Created instance of HistoryUtil")
         self.lastName = '???'
-        self.info = ***REMOVED***'user_age': '???', 'user_gender': '???', 'user_dext': '???'***REMOVED***
+        self.info = {'user_age': '???', 'user_gender': '???', 'user_dext': '???'}
         self.shouldUpdate = True
         self.size = 0
         self.levels = [0, 0, 0, 0, 0]
@@ -67,7 +67,7 @@ class HistoryUtil:
             self.size = len(user_df.index)
 
             # Update user info if possible
-            self.info = ***REMOVED***'user_age': '???', 'user_gender': '???', 'user_dext': '???'***REMOVED***
+            self.info = {'user_age': '???', 'user_gender': '???', 'user_dext': '???'}
             if (self.size > 0):
                 row = user_df.iloc[0]
                 self.info['user_age'] = row['age']
@@ -101,14 +101,14 @@ class HistoryUtil:
         return user_df.to_html()
 
     def getUserData(self):
-        toSend = ***REMOVED***
+        toSend = {
             'shouldUpdate': self.shouldUpdate,
             'size': self.size,
             'levels': self.levels,
             'nSuccess': self.nSuccess,
             'activity': self.activity #,
             # 'historyTable': self.getUserTableHTML()
-        ***REMOVED***
+        }
         self.shouldUpdate = False
         return toSend
 

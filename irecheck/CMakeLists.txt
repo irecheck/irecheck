@@ -118,37 +118,37 @@ catkin_package(
 ## Your package locations should be listed before other locations
 include_directories(
 # include
-  $***REMOVED***catkin_INCLUDE_DIRS***REMOVED***
+  ${catkin_INCLUDE_DIRS}
 )
 
 ## Declare a C++ library
-# add_library($***REMOVED***PROJECT_NAME***REMOVED***
-#   src/$***REMOVED***PROJECT_NAME***REMOVED***/irecheck.cpp
+# add_library(${PROJECT_NAME}
+#   src/${PROJECT_NAME}/irecheck.cpp
 # )
 
 ## Add cmake target dependencies of the library
 ## as an example, code may need to be generated before libraries
 ## either from message generation or dynamic reconfigure
-# add_dependencies($***REMOVED***PROJECT_NAME***REMOVED*** $***REMOVED***$***REMOVED***PROJECT_NAME***REMOVED***_EXPORTED_TARGETS***REMOVED*** $***REMOVED***catkin_EXPORTED_TARGETS***REMOVED***)
+# add_dependencies(${PROJECT_NAME} ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
 ## Declare a C++ executable
 ## With catkin_make all packages are built within a single CMake context
 ## The recommended prefix ensures that target names across packages don't collide
-# add_executable($***REMOVED***PROJECT_NAME***REMOVED***_node src/irecheck_node.cpp)
+# add_executable(${PROJECT_NAME}_node src/irecheck_node.cpp)
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
 ## target back to the shorter version for ease of user use
 ## e.g. "rosrun someones_pkg node" instead of "rosrun someones_pkg someones_pkg_node"
-# set_target_properties($***REMOVED***PROJECT_NAME***REMOVED***_node PROPERTIES OUTPUT_NAME node PREFIX "")
+# set_target_properties(${PROJECT_NAME}_node PROPERTIES OUTPUT_NAME node PREFIX "")
 
 ## Add cmake target dependencies of the executable
 ## same as for the library above
-# add_dependencies($***REMOVED***PROJECT_NAME***REMOVED***_node $***REMOVED***$***REMOVED***PROJECT_NAME***REMOVED***_EXPORTED_TARGETS***REMOVED*** $***REMOVED***catkin_EXPORTED_TARGETS***REMOVED***)
+# add_dependencies(${PROJECT_NAME}_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
 ## Specify libraries to link a library or executable target against
-# target_link_libraries($***REMOVED***PROJECT_NAME***REMOVED***_node
-#   $***REMOVED***catkin_LIBRARIES***REMOVED***
+# target_link_libraries(${PROJECT_NAME}_node
+#   ${catkin_LIBRARIES}
 # )
 
 #############
@@ -162,30 +162,30 @@ include_directories(
 ## in contrast to setup.py, you can choose the destination
 # catkin_install_python(PROGRAMS
 #   scripts/my_python_script
-#   DESTINATION $***REMOVED***CATKIN_PACKAGE_BIN_DESTINATION***REMOVED***
+#   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 # )
 catkin_install_python(PROGRAMS
 	interface/flask_test_server.py
-	DESTINATION $***REMOVED***CATKIN_PACKAGE_BIN_DESTINATION***REMOVED***
+	DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 
 ## Mark executables for installation
 ## See http://docs.ros.org/melodic/api/catkin/html/howto/format1/building_executables.html
-# install(TARGETS $***REMOVED***PROJECT_NAME***REMOVED***_node
-#   RUNTIME DESTINATION $***REMOVED***CATKIN_PACKAGE_BIN_DESTINATION***REMOVED***
+# install(TARGETS ${PROJECT_NAME}_node
+#   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 # )
 
 ## Mark libraries for installation
 ## See http://docs.ros.org/melodic/api/catkin/html/howto/format1/building_libraries.html
-# install(TARGETS $***REMOVED***PROJECT_NAME***REMOVED***
-#   ARCHIVE DESTINATION $***REMOVED***CATKIN_PACKAGE_LIB_DESTINATION***REMOVED***
-#   LIBRARY DESTINATION $***REMOVED***CATKIN_PACKAGE_LIB_DESTINATION***REMOVED***
-#   RUNTIME DESTINATION $***REMOVED***CATKIN_GLOBAL_BIN_DESTINATION***REMOVED***
+# install(TARGETS ${PROJECT_NAME}
+#   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+#   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+#   RUNTIME DESTINATION ${CATKIN_GLOBAL_BIN_DESTINATION}
 # )
 
 ## Mark cpp header files for installation
-# install(DIRECTORY include/$***REMOVED***PROJECT_NAME***REMOVED***/
-#   DESTINATION $***REMOVED***CATKIN_PACKAGE_INCLUDE_DESTINATION***REMOVED***
+# install(DIRECTORY include/${PROJECT_NAME}/
+#   DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION}
 #   FILES_MATCHING PATTERN "*.h"
 #   PATTERN ".svn" EXCLUDE
 # )
@@ -194,7 +194,7 @@ catkin_install_python(PROGRAMS
 # install(FILES
 #   # myfile1
 #   # myfile2
-#   DESTINATION $***REMOVED***CATKIN_PACKAGE_SHARE_DESTINATION***REMOVED***
+#   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
 # )
 
 #############
@@ -202,9 +202,9 @@ catkin_install_python(PROGRAMS
 #############
 
 ## Add gtest based cpp test target and link libraries
-# catkin_add_gtest($***REMOVED***PROJECT_NAME***REMOVED***-test test/test_irecheck.cpp)
-# if(TARGET $***REMOVED***PROJECT_NAME***REMOVED***-test)
-#   target_link_libraries($***REMOVED***PROJECT_NAME***REMOVED***-test $***REMOVED***PROJECT_NAME***REMOVED***)
+# catkin_add_gtest(${PROJECT_NAME}-test test/test_irecheck.cpp)
+# if(TARGET ${PROJECT_NAME}-test)
+#   target_link_libraries(${PROJECT_NAME}-test ${PROJECT_NAME})
 # endif()
 
 ## Add folders to be run by python nosetests

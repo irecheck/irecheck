@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 import rospy
 import json
@@ -30,7 +30,7 @@ class DynamicoListener():
         self.pubMsg = rospy.Publisher('dynamicomsg', String, queue_size=10)
         
         # get credentials information from the file
-        with open('/home/bruno/catkin_ws/src/irecheck/dynamico/scripts/DYNAMICO_CREDENTIALS.txt') as f:
+        with open('/home/bruno/catkin_ws/src/irecheck/dynamico/scripts/DYNAMICO_CREDENTIALS.TXT') as f:
             data = json.load(f)
         self.email = data['EMAIL']
         self.password = data['PASSWORD']
@@ -53,9 +53,6 @@ class DynamicoListener():
         doc_ref = self.db.collection(listening_collection).where(u'userId', u'==', self.user_id)
         self.doc_watch = doc_ref.on_snapshot(self.on_snapshot)
 
-        # [DEBUG ONLY]
-        print("End of init")
-
         # keep python from exiting until this node is stopped
         rospy.spin()
 
@@ -63,14 +60,12 @@ class DynamicoListener():
     # we use the sign_in_with_email_and_password function from https://gist.github.com/Bob-Thomas/49fcd13bbd890ba9031cc76be46ce446
     def sign_in_with_email_and_password(self, url, api_key, email, password):
         request_url = "%s:signInWithPassword?key=%s" % (url, api_key)
-        headers = ***REMOVED***"content-type": "application/json; charset=UTF-8"***REMOVED***
-        data = json.dumps(***REMOVED***"email": email, "password": password, "returnSecureToken": True***REMOVED***)
+        headers = {"content-type": "application/json; charset=UTF-8"}
+        data = json.dumps({"email": email, "password": password, "returnSecureToken": True})
         resp = requests.post(request_url, headers=headers, data=data)
         # check for errors
         try:
             resp.raise_for_status()
-            # [DEBUG ONLY]
-            print(resp)
         except HTTPError as e:
             raise HTTPError(e, resp.text)
             
@@ -79,9 +74,6 @@ class DynamicoListener():
 
     # create a callback on_snapshot function to capture changes in the Dynamico Firestore
     def on_snapshot(self, doc_snapshot, changes, read_time):
-        # [DEBUG ONLY]
-        print("inside snapshot")
-       
         # create an empty list of dataframes to be populated with the changes in database and sent over ROS
         final = []
 
@@ -107,27 +99,18 @@ class DynamicoListener():
         msg = final.to_json(orient='records')
         rospy.loginfo(msg)
         self.pubMsg.publish(msg)
-        #self.dynamicoCallback.set()
+        self.dynamicoCallback.set()
 
 
     # test quering the dynamico db
     def test(self):
         # diagnosesDocs = self.db.collection(u'diagnoses').where(u'userId', u'==', u"TXGCcUC6u5duIO6VRhfnYAXXwTg2").stream()
         # diagnosesDocs = self.db.collection(u'diagnoses').where(u'userId', u'==', u"TXGCcUC6u5duIO6VRhfnYAXXwTg2").stream()
-        diagnosesDocs = self.db.collection('scores').where(u'userId', u'==', self.user_id) #.where(u'childId', u'==', u"75DA34CC-64C4-40C5-8639-6653FBF26FDA")
-        
-        # print(type(diagnosesDocs))
+        diagnosesDocs = self.db.collection('scores').where(u'userId', u'==', self.user_id)
         
         # convert the retrieved docs in dictionaries and extract the handwriting scores values
         for doc in diagnosesDocs.stream():
             tempDict = doc.to_dict()
-            
-            # scores = [-1, -1, -1, -1, -1]
-            # scores[0] = tempDict[u'kinematicScore']
-            # scores[1] = tempDict[u'pressureScore']
-            # scores[2] = tempDict[u'staticScore']
-            # scores[3] = tempDict[u'tiltScore']
-            # scores[4] = tempDict[u'totalScore']
             print(tempDict)
             print("\n")
 
@@ -143,4 +126,3 @@ if __name__ == "__main__":
         pass
     finally:
         myDynamicoListener.doc_watch.unsubscribe()
-        print("Done!")

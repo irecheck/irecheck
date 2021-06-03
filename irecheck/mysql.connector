@@ -21,7 +21,7 @@
 % it is displayed as grayscale.
 %
 /DirectClassPacket
-***REMOVED***
+{
   %
   % Get a DirectClass packet.
   %
@@ -33,35 +33,35 @@
   %
   currentfile color_packet readhexstring pop pop
   compression 0 eq
-  ***REMOVED***
+  {
     /number_pixels 3 def
-  ***REMOVED***
-  ***REMOVED***
+  }
+  {
     currentfile byte readhexstring pop 0 get
     /number_pixels exch 1 add 3 mul def
-  ***REMOVED*** ifelse
+  } ifelse
   0 3 number_pixels 1 sub
-  ***REMOVED***
+  {
     pixels exch color_packet putinterval
-  ***REMOVED*** for
+  } for
   pixels 0 number_pixels getinterval
-***REMOVED*** bind def
+} bind def
 
 /DirectClassImage
-***REMOVED***
+{
   %
   % Display a DirectClass image.
   %
   systemdict /colorimage known
-  ***REMOVED***
+  {
     columns rows 8
     [
       columns 0 0
       rows neg 0 rows
     ]
-    ***REMOVED*** DirectClassPacket ***REMOVED*** false 3 colorimage
-  ***REMOVED***
-  ***REMOVED***
+    { DirectClassPacket } false 3 colorimage
+  }
+  {
     %
     % No colorimage operator;  convert to grayscale.
     %
@@ -70,12 +70,12 @@
       columns 0 0
       rows neg 0 rows
     ]
-    ***REMOVED*** GrayDirectClassPacket ***REMOVED*** image
-  ***REMOVED*** ifelse
-***REMOVED*** bind def
+    { GrayDirectClassPacket } image
+  } ifelse
+} bind def
 
 /GrayDirectClassPacket
-***REMOVED***
+{
   %
   % Get a DirectClass packet;  convert to grayscale.
   %
@@ -92,22 +92,22 @@
   cvi
   /gray_packet exch def
   compression 0 eq
-  ***REMOVED***
+  {
     /number_pixels 1 def
-  ***REMOVED***
-  ***REMOVED***
+  }
+  {
     currentfile byte readhexstring pop 0 get
     /number_pixels exch 1 add def
-  ***REMOVED*** ifelse
+  } ifelse
   0 1 number_pixels 1 sub
-  ***REMOVED***
+  {
     pixels exch gray_packet put
-  ***REMOVED*** for
+  } for
   pixels 0 number_pixels getinterval
-***REMOVED*** bind def
+} bind def
 
 /GrayPseudoClassPacket
-***REMOVED***
+{
   %
   % Get a PseudoClass packet;  convert to grayscale.
   %
@@ -124,22 +124,22 @@
   cvi
   /gray_packet exch def
   compression 0 eq
-  ***REMOVED***
+  {
     /number_pixels 1 def
-  ***REMOVED***
-  ***REMOVED***
+  }
+  {
     currentfile byte readhexstring pop 0 get
     /number_pixels exch 1 add def
-  ***REMOVED*** ifelse
+  } ifelse
   0 1 number_pixels 1 sub
-  ***REMOVED***
+  {
     pixels exch gray_packet put
-  ***REMOVED*** for
+  } for
   pixels 0 number_pixels getinterval
-***REMOVED*** bind def
+} bind def
 
 /PseudoClassPacket
-***REMOVED***
+{
   %
   % Get a PseudoClass packet.
   %
@@ -151,22 +151,22 @@
   /offset exch 3 mul def
   /color_packet colormap offset 3 getinterval def
   compression 0 eq
-  ***REMOVED***
+  {
     /number_pixels 3 def
-  ***REMOVED***
-  ***REMOVED***
+  }
+  {
     currentfile byte readhexstring pop 0 get
     /number_pixels exch 1 add 3 mul def
-  ***REMOVED*** ifelse
+  } ifelse
   0 3 number_pixels 1 sub
-  ***REMOVED***
+  {
     pixels exch color_packet putinterval
-  ***REMOVED*** for
+  } for
   pixels 0 number_pixels getinterval
-***REMOVED*** bind def
+} bind def
 
 /PseudoClassImage
-***REMOVED***
+{
   %
   % Display a PseudoClass image.
   %
@@ -176,7 +176,7 @@
   currentfile buffer readline pop
   token pop /class exch def pop
   class 0 gt
-  ***REMOVED***
+  {
     currentfile buffer readline pop
     token pop /depth exch def pop
     /grays columns 8 add depth sub depth mul 8 idiv string def
@@ -185,9 +185,9 @@
       columns 0 0
       rows neg 0 rows
     ]
-    ***REMOVED*** currentfile grays readhexstring pop ***REMOVED*** image
-  ***REMOVED***
-  ***REMOVED***
+    { currentfile grays readhexstring pop } image
+  }
+  {
     %
     % Parameters:
     %   colors: number of colors in the colormap.
@@ -199,15 +199,15 @@
     /colormap colors string def
     currentfile colormap readhexstring pop pop
     systemdict /colorimage known
-    ***REMOVED***
+    {
       columns rows 8
       [
         columns 0 0
         rows neg 0 rows
       ]
-      ***REMOVED*** PseudoClassPacket ***REMOVED*** false 3 colorimage
-    ***REMOVED***
-    ***REMOVED***
+      { PseudoClassPacket } false 3 colorimage
+    }
+    {
       %
       % No colorimage operator;  convert to grayscale.
       %
@@ -216,13 +216,13 @@
         columns 0 0
         rows neg 0 rows
       ]
-      ***REMOVED*** GrayPseudoClassPacket ***REMOVED*** image
-    ***REMOVED*** ifelse
-  ***REMOVED*** ifelse
-***REMOVED*** bind def
+      { GrayPseudoClassPacket } image
+    } ifelse
+  } ifelse
+} bind def
 
 /DisplayImage
-***REMOVED***
+{
   %
   % Display a DirectClass or PseudoClass image.
   %
@@ -259,10 +259,10 @@
   token pop /class exch def pop
   currentfile buffer readline pop
   token pop /compression exch def pop
-  class 0 gt ***REMOVED*** PseudoClassImage ***REMOVED*** ***REMOVED*** DirectClassImage ***REMOVED*** ifelse
+  class 0 gt { PseudoClassImage } { DirectClassImage } ifelse
   grestore
   showpage
-***REMOVED*** bind def
+} bind def
 %%EndProlog
 %%Page:  1 1
 %%PageBoundingBox: 1486 670 1558 720

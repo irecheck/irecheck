@@ -14,7 +14,7 @@
 
     <div id="content">
         <div id="header">
-			<div id="breadcrumb">***REMOVED******REMOVED*** session['user_name'] ***REMOVED******REMOVED***, ***REMOVED******REMOVED*** session['user_surname'] ***REMOVED******REMOVED***
+			<div id="breadcrumb">{{ session['user_name'] }}, {{ session['user_surname'] }}
 				<a href="login"><img src="static/images/back.png" width="3%" alt="back" /></a>
 			</div>
 
@@ -51,7 +51,7 @@
 
 
 <script><!--
-function onLoad() ***REMOVED***
+function onLoad() {
 	makeCircle("group-button", groupsList, "10em", 1.0)
 	
 	makeCircle("group-info", infoList, "15em", 2.0)
@@ -63,7 +63,7 @@ function onLoad() ***REMOVED***
 	//makeSpinner("spinner");
 	
 	hideEverything();
-***REMOVED***
+}
 --></script>
 
 

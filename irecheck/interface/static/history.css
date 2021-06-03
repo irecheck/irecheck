@@ -1,20 +1,20 @@
-#chartContainer ***REMOVED***
+#chartContainer {
     text-align: center;
-***REMOVED***
+}
 
-.pieChart ***REMOVED***
+.pieChart {
     width: 30%;
     display: inline-block;
-***REMOVED***
+}
 
-.userBanderole ***REMOVED***
+.userBanderole {
     width: 100%;
-***REMOVED***
+}
 
-.banderoleText ***REMOVED***
+.banderoleText {
     font-size: xx-large;
     text-align: left;
     display: inline-block;
     width: 28%;
     vertical-align: 35px;
-***REMOVED***
+}

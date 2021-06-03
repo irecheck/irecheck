@@ -21,7 +21,7 @@ class FakeMultimodalAnalyzer():
 
         # display usage instructions
         print("\n\nThis is the Multimodal Analyzer simulator. Provide info in the following format:")
-        print("***REMOVED***lying, sitting, standing***REMOVED*** ***REMOVED***happy, sad, neutral***REMOVED***")
+        print("{lying, sitting, standing} {happy, sad, neutral}")
         print("e.g.: sitting happy")
         print("Send as many info records as you want and use CTRL+C to quit.")
 

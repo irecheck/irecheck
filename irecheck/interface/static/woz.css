@@ -1,30 +1,30 @@
 @charset "utf-8";
-html, body ***REMOVED***
+html, body {
 	height: 92%;
 	min-height: 92%;
 	font-family: Arial, Helvetica, sans-serif;
 	touch-action: manipulation;
-***REMOVED***
+}
 
-body ***REMOVED***
+body {
 	background-color: #d4e3fc;
 	margin-top: 0em;
 	padding-top: 0em;
-***REMOVED***
+}
 
-#content ***REMOVED***
+#content {
 	height: 100%;
 	width: 90%;
 	margin: auto;
-***REMOVED***
+}
 
-#header ***REMOVED***
+#header {
 	/* height: 10%; 
 	background-color: #0F0;*/
 	border-bottom: 2px solid #ffffff
-***REMOVED***
+}
 
-#breadcrumb ***REMOVED***
+#breadcrumb {
 	padding: 0.5em;
 	padding-left: 1em;
 	margin-top: 0em;
@@ -34,47 +34,47 @@ body ***REMOVED***
 	border-bottom-left-radius: 1em;
 	border-bottom-right-radius: 1em;
 
-***REMOVED***
+}
 
-#breadcrumb img ***REMOVED***
+#breadcrumb img {
 	float: right;
 	cursor: pointer;
-***REMOVED***
+}
 
-#footer***REMOVED***
+#footer{
 	height: 5%;
 	/*background-color: #ffffff;*/
-***REMOVED***
+}
 
-#body ***REMOVED***
+#body {
 	/*background-color:#cccccc;*/
 	height: 100%;
 	text-align:center;
-***REMOVED***
+}
 
-#body-left ***REMOVED***
+#body-left {
 	width: 30%;
 	height: 100%;
 	float: left;
 	/*background-color: #999999;*/
-***REMOVED***
+}
 
-#body-right ***REMOVED***
+#body-right {
 	width: 30%;
 	height: 100%;
 	float: right;
 	position: relative;
 	/*background-color: #999999;*/
-***REMOVED***
+}
 
-img.bottom_right ***REMOVED*** 
+img.bottom_right { 
 	text-align:right;
 	position: absolute;
 	bottom: 0;
 	right: 0;
-***REMOVED***
+}
 
-.tab ***REMOVED***
+.tab {
 	display: inline-block;
 	border-top-left-radius: 1em;
 	border-top-right-radius: 1em;
@@ -83,33 +83,33 @@ img.bottom_right ***REMOVED***
 	padding: 0.5em;
 	margin: 0em;
 	text-align: center;
-***REMOVED***
+}
 
-.tab a ***REMOVED***
+.tab a {
 	color: #000000;
 	text-decoration: none;
-***REMOVED***
+}
 
-.tab--on ***REMOVED***
+.tab--on {
 	background-color: #ffffff;
-***REMOVED***
+}
 
-.tab--off ***REMOVED***
+.tab--off {
 	background-color: #cccccc;
-***REMOVED***
+}
 
 
-.main-container ***REMOVED***
+.main-container {
 	padding-top: 10em;
-***REMOVED***
+}
 
 
-.placeholder ***REMOVED***
+.placeholder {
 	/*background-color: #cccccc;*/
-***REMOVED***
+}
 
 
-.circle-container ***REMOVED***
+.circle-container {
     position: relative;
     width: 18em;
     height: 18em;
@@ -121,29 +121,29 @@ img.bottom_right ***REMOVED***
 	margin: auto;
 	/*margin-top: 4em;*/
 	background-color: #ffffff;
-***REMOVED***
+}
 
-.circle-container div ***REMOVED***
-***REMOVED***
+.circle-container div {
+}
 
-#spinner-container ***REMOVED***
+#spinner-container {
     position: relative;
 
 	margin: auto;
 	margin-top: -12.5em;
-***REMOVED***
+}
 
-#spinner-container div ***REMOVED***
+#spinner-container div {
     /*position: absolute;
 	margin: auto;*/
-***REMOVED***
+}
 
-#spinner-container img ***REMOVED***
+#spinner-container img {
 	width: 6em;
 	height: 6em;
-***REMOVED***
+}
 
-.auth-circle-container ***REMOVED***
+.auth-circle-container {
     position: relative;
     width: 36em;
     height: 36em;
@@ -157,22 +157,22 @@ img.bottom_right ***REMOVED***
 	margin-top: -4em;
 	background-color: #ffffff;
 	text-align: center;
-***REMOVED***
+}
 
-.auth-circle-container form ***REMOVED***
+.auth-circle-container form {
 	padding-top: 12em;
-***REMOVED***
+}
 
-.auth-circle-container h1 ***REMOVED***
+.auth-circle-container h1 {
 	font-size: 1.3em;
-***REMOVED***
+}
 
-.auth-circle-container label ***REMOVED***
+.auth-circle-container label {
     display: inline-block;
 	margin: 0.5em;
-***REMOVED***
+}
 
-.auth-circle-container input[type=submit] ***REMOVED***
+.auth-circle-container input[type=submit] {
 	position: relative;
 	top: -1.5em;
     padding:10px 25px; 
@@ -181,77 +181,77 @@ img.bottom_right ***REMOVED***
     cursor:pointer;
     border-radius: 5px; 
 	margin-left: 5em;
-***REMOVED***
+}
 
-.auth-circle-container img ***REMOVED***
-***REMOVED***
+.auth-circle-container img {
+}
 
 
-.group-button-container ***REMOVED***
+.group-button-container {
     position: relative;
     width: 4.5em;
     height: 4.5em;
 
 	margin: auto;
 	margin-top: -4.5em;
-***REMOVED***
+}
 
 
-.group-button-container div ***REMOVED***
+.group-button-container div {
     position: absolute;
 
     width: 4em;
     height: 4em;
 	cursor: pointer;
-***REMOVED***
+}
 
 
-.group-info-container ***REMOVED***
+.group-info-container {
 	position: relative;
 	width: 4.5em;
 	height: 4.5em;
 
 	margin: auto;
 	margin-top: -4.5em;
-***REMOVED***
+}
 
 
-.group-info-container div ***REMOVED***
+.group-info-container div {
     position: absolute;
 
     width: 4em;
     height: 4em;
-***REMOVED***
+}
 
 
-.group-text-container ***REMOVED***
+.group-text-container {
 	position: relative;
 	width: 8em;
 	height: 4.5em;
 
 	margin: auto;
 	margin-top: -4.5em;
-***REMOVED***
+}
 
 
-.group-text-container div ***REMOVED***
+.group-text-container div {
     position: absolute;
 
     width: 8em;
     height: 4em;
-***REMOVED***
+}
 
 
-.commands-list-container ***REMOVED***
+.commands-list-container {
 	position: relative;
 	width: 9em;
 	height: 9em;
 
 	margin: auto;
 	margin-top: -4em;
-***REMOVED***
+}
 
-.commands-list-container div ***REMOVED***
+.commands-list-container div {
     position: absolute;
 
     width: 8em;
@@ -260,7 +260,7 @@ img.bottom_right ***REMOVED***
 	
 	border-radius: 5%;
 	cursor: pointer;
-***REMOVED***
+}
 
 
 

@@ -1,14 +1,14 @@
 # System Requirements
 
-* Ubuntu 16.04
-* ROS Kinetic
-* Python 2.7 + Pandas
+* Ubuntu 20.04
+* ROS Noetic
+* Python 3.8 + Pandas (1.2.4)
 * QTrobot
 
 # Preliminary Operations
 
-## Install ROS Kinetic
-Follow the instructions on http://wiki.ros.org/kinetic/Installation/Ubuntu
+## Install ROS Noetic
+Follow the instructions on http://wiki.ros.org/noetic/Installation/Ubuntu
 
 Finalize the configuration and setup of the ROS environment following the instructions on http://wiki.ros.org/ROS/Tutorials/InstallingandConfiguringROSEnvironment
 
@@ -21,23 +21,23 @@ $ gedit .bashrc
 ```
 And add at the end of the file the lines:
 ```
-source /opt/ros/kinetic/setup.bash
+source /opt/ros/noetic/setup.bash
 source ~/catkin_ws/devel/setup.bash
 ```
 
 ## Install Pandas
-Make sure you have Python 2.7 installed, with `python --version`.
+Make sure you have Python 3.8 installed, with `python3 --version`.
 
 Install pip (to check if you already have it, type `pip --version`):
 ```
-$ sudo apt install python-pip
+$ sudo apt install python3-pip
 ```
 Then:
 ```
-$ pip install pandas
+$ sudo -H pip3 install pandas
 ```
 
-## Configure your ROS Environment for QTrobot
+## Configure your ROS Environment for QTrobot (I HAVEN'T CHECKED THIS SECTION YET AFTER UPGRADE)
 ```
 $ git clone https://github.com/luxai-qtrobot/software.git
 ```

@@ -1,86 +1,86 @@
-$(document).ready(function()***REMOVED***
+$(document).ready(function(){
 
     var intervalID = setInterval(dynamicUpdate, 1000);
 
-    $("#decrement").click(function()***REMOVED***
+    $("#decrement").click(function(){
         var counter = parseInt($("#counter").text(), 10);
         --counter;
         $("#counter").text(counter);
-    ***REMOVED***);
+    });
 
-    $("#increment").click(function()***REMOVED***
+    $("#increment").click(function(){
         var counter = parseInt($("#counter").text(), 10);
         ++counter;
         $("#counter").text(counter);
-    ***REMOVED***);
+    });
 
-    $("#sendFlask").click(function()***REMOVED***
+    $("#sendFlask").click(function(){
         $.post("ros",
-        ***REMOVED***
+        {
             name: "Julian Blackwell",
             rosMessage: $("#textToFlask").val()
-        ***REMOVED***,
-        function(data, status)***REMOVED***
+        },
+        function(data, status){
             alert(data);
-        ***REMOVED***);
-    ***REMOVED***);
+        });
+    });
 
-    $("#sendQTSay").click(function()***REMOVED***
+    $("#sendQTSay").click(function(){
         $.post("ros", 
-        ***REMOVED***
+        {
             name: "Julian Blackwell",
             rosMessage: "QTSAY",
             data: $("#QTSay").val()
-        ***REMOVED***,
-        function(data, status)***REMOVED***
+        },
+        function(data, status){
             //Callback here
-        ***REMOVED***);
-    ***REMOVED***);
+        });
+    });
 
-    $(".langButton").click(function()***REMOVED***
+    $(".langButton").click(function(){
         sendRobot("LANGUAGE", $(this).text());
-    ***REMOVED***);
+    });
 
-    $(".simButton").click(function()***REMOVED***
+    $(".simButton").click(function(){
         sendRobot("SIM", $(this).text());
-    ***REMOVED***);
+    });
 
-    $(".stateButton").click(function()***REMOVED***
+    $(".stateButton").click(function(){
         sendRobot("STATE", $(this).text());
-    ***REMOVED***);
+    });
 
-***REMOVED***);
+});
 
-function sendRobot(msg, toSend) ***REMOVED***
+function sendRobot(msg, toSend) {
     $.post("ros", 
-    ***REMOVED***
+    {
         rosMessage: msg,
         data: toSend
-    ***REMOVED***, function(data, status)***REMOVED***
+    }, function(data, status){
         //Callback here
-    ***REMOVED***);
-***REMOVED***
+    });
+}
 
-function dynamicUpdate() ***REMOVED***
-    $.get("debug/dynamic", function(data, status)***REMOVED***
-        if(data.newDynamico) ***REMOVED***
+function dynamicUpdate() {
+    $.get("debug/dynamic", function(data, status){
+        if(data.newDynamico) {
             $("<span>ARRIVED! </span>")
                 .appendTo("#newDynamicoData")
                 .css("color", "green")
                 .fadeOut(3000);
             
             $("#historyLast10").html(data.latestHistory);
-        ***REMOVED***
+        }
         connectionStatus("#coreAval", data.coreAval);
         connectionStatus("#qtAval", data.qtAval);
         $("#debugScroll").append(data.newRobot);
-    ***REMOVED***);
-***REMOVED***
+    });
+}
 
-function connectionStatus(id, status) ***REMOVED***
-    if (status) ***REMOVED***
+function connectionStatus(id, status) {
+    if (status) {
         $(id).text("AVAILABLE").css("color", "green");
-    ***REMOVED*** else ***REMOVED***
+    } else {
         $(id).text("DISCONNECTED").css("color", "red");
-    ***REMOVED***
-***REMOVED***
+    }
+}

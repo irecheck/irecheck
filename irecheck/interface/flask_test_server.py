@@ -18,7 +18,7 @@ from qt_robot_interface.srv import *
 
 
 '''
-dynamico_dict = ***REMOVED***
+dynamico_dict = {
     'id': [1, 2],
     'fname': ["Julian", "Julian"],
     'lname': ["Blackwell", "Blackwell"],
@@ -37,7 +37,7 @@ dynamico_dict = ***REMOVED***
     'level': [5, 1],
     'duration': [20, 50],
     'result': ["w", "f"]
-***REMOVED***
+}
 
 df = pd.DataFrame(dynamico_dict, columns=['id', 'fname', 'lname','language', 'gender', 'age', 'left_right', 'country', 'city', 'activity', 'globalS', 'staticS', 'pressureS', 'tiltS', 'kinematicS', 'level', 'duration', 'result'])
 df.set_index('id')
@@ -46,12 +46,12 @@ print(pd.read_csv('history.csv', usecols=['fname', 'lname']))
 '''
 
 #Global variables
-dynamicData = ***REMOVED***
+dynamicData = {
     'newDynamico': False,
     'coreAval': False,
     'qtAval': False,
     'newRobot': "<p>Test</p>"
-***REMOVED***
+}
 
 hU = HistoryUtil()
 
@@ -87,7 +87,7 @@ rospy.Subscriber('robot/debug', String, debugSubCallback)
 app = Flask(__name__)
 app.secret_key = "woz" 
 
-# session = ***REMOVED*** 'user_name': "Julian", 'user_surname': "Blackwell"***REMOVED***
+# session = { 'user_name': "Julian", 'user_surname': "Blackwell"}
 
 @app.route('/')
 def index(name=None):

@@ -5,7 +5,7 @@
 
 
 
-function makeCircle( idWrapper, imageList, translation, delta) ***REMOVED***
+function makeCircle( idWrapper, imageList, translation, delta) {
 	var noOfCircles = imageList.length;
 	/* equally divide 360 by the no of circles to be drawn */
 	var degreeAngle = 360 / noOfCircles;
@@ -16,14 +16,14 @@ function makeCircle( idWrapper, imageList, translation, delta) ***REMOVED***
 	/* initialize angle incrementer variable */
 	var currAngle = delta;
 	/* draw each circle at the specified angle */
-	for (var i = 0; i < noOfCircles; i++) ***REMOVED***
+	for (var i = 0; i < noOfCircles; i++) {
 		/* add to the wrapper */
 		wrapper.append(getGroupDiv(idWrapper + "-" + i, currAngle, translation, imageList[i]));
 		/* increment the angle incrementer */
 		currAngle = currAngle + degreeAngle;
-	***REMOVED***
+	}
 
-***REMOVED***
+}
 
 
 /*
@@ -31,49 +31,49 @@ function makeCircle( idWrapper, imageList, translation, delta) ***REMOVED***
 	It also applies a random color for fun.
 	stole the CSS from :http://stackoverflow.com/questions/12813573/position-icons-into-circle
 */
-function getGroupDiv(placeholderId, currAngle, translation, imageInfo) ***REMOVED***
+function getGroupDiv(placeholderId, currAngle, translation, imageInfo) {
 	var div = ""
 	
 	div += "<div id='" + placeholderId + "' class='placeholder' name='" + placeholderId +"' ";
 	div += "style='transform: rotate(" + currAngle + "deg) translate(" + translation + ") rotate(-" + currAngle + "deg);'>"
 		
-	if(imageInfo[0].length)***REMOVED***
+	if(imageInfo[0].length){
 		div += "<img src='" + imageInfo[0] + "' width='100\%' alt='" + imageInfo[1] +"' ";
 		div += "onClick='groupButtonClick(\""+ placeholderId +"\")' ondblclick='groupButtonDblClick(\""+ placeholderId +"\")' />"
-	***REMOVED***
+	}
 	else
 		div += "<p>" + imageInfo[1] + "</p>";
 		
 	div += "</div>"
 	
 	return div
-***REMOVED***
+}
 
 
 
-function getRandomColor() ***REMOVED***
+function getRandomColor() {
 	var letters = '0123456789ABCDEF'.split('');
 	var color = '#';
-	for (var i = 0; i < 6; i++) ***REMOVED***
+	for (var i = 0; i < 6; i++) {
 		color += letters[Math.floor(Math.random() * 16)];
-	***REMOVED***
+	}
 	return color;
-***REMOVED***
+}
 
 
 
-function makeCircularCommandList(idCommandsWrapper, commandsList, translation, delta) ***REMOVED***
+function makeCircularCommandList(idCommandsWrapper, commandsList, translation, delta) {
 	var wrapper = $("." + idCommandsWrapper + "-container");
 	wrapper.html("");
 	
-	for( var g_id = 0; g_id < commandsList.length; g_id++) ***REMOVED***
+	for( var g_id = 0; g_id < commandsList.length; g_id++) {
 		var color = commandsList[g_id][0];
 
 		var noOfCircles = commandsList[g_id][1].length;
 		var degreeAngle = 360.0 / 10.0;
 		var currAngle =  360/commandsList.length * g_id + delta; //delta;
 		
-		for( var c_id = 0; c_id < commandsList[g_id][1].length; c_id++) ***REMOVED***
+		for( var c_id = 0; c_id < commandsList[g_id][1].length; c_id++) {
 			var id = idCommandsWrapper + "-" + g_id + "-" + c_id
 			commandsHTML = "";
 			commandsHTML += "<div id='" + id + "' class='" + idCommandsWrapper + "-element" + "' name='" + id +"' "
@@ -84,9 +84,9 @@ function makeCircularCommandList(idCommandsWrapper, commandsList, translation, d
 			commandsHTML += "</div>";
 			wrapper.append(commandsHTML);
 			currAngle = currAngle + degreeAngle;
-		***REMOVED***
-	***REMOVED***
-***REMOVED***
+		}
+	}
+}
 
 
 
@@ -95,13 +95,13 @@ function makeCircularCommandList(idCommandsWrapper, commandsList, translation, d
 
 
 
-function makeCommandList(idCommandsWrapper) ***REMOVED***
+function makeCommandList(idCommandsWrapper) {
 	var wrapper = $("." + idCommandsWrapper + "-container");
 	wrapper.html("");
 	
-	for( var g_id = 0; g_id < commandsList.length; g_id++) ***REMOVED***
+	for( var g_id = 0; g_id < commandsList.length; g_id++) {
 		var color = commandsList[g_id][0];
-		for( var c_id = 0; c_id < commandsList[g_id][1].length; c_id++) ***REMOVED***
+		for( var c_id = 0; c_id < commandsList[g_id][1].length; c_id++) {
 			var id = idCommandsWrapper + "-" + g_id + "-" + c_id
 			commandsHTML = "";
 			commandsHTML += "<div id='" + id + "' class='"  + "' name='" + id +"' " ; /*+ idCommandsWrapper + "-element" */
@@ -111,125 +111,125 @@ function makeCommandList(idCommandsWrapper) ***REMOVED***
 			commandsHTML += commandsList[g_id][1][c_id][0];
 			commandsHTML += "</div>";
 			wrapper.append(commandsHTML);
-		***REMOVED***
-	***REMOVED***
-***REMOVED***
+		}
+	}
+}
 
-function makeSpinner( idSpinnerWrapper) ***REMOVED***
+function makeSpinner( idSpinnerWrapper) {
 	var wrapper = $("#" + idSpinnerWrapper + "-container");
 	wrapper.html("");
 
 	commandsHTML = "<img src='static/images/spinner.gif'/>"
 	wrapper.append(commandsHTML);
-***REMOVED***
+}
 
 
-function hideEverything() ***REMOVED***	
-	for( var i = 0; i < infoList.length; i++) ***REMOVED***
+function hideEverything() {	
+	for( var i = 0; i < infoList.length; i++) {
 		$("#group-info-" + i).hide();
 		$("#group-text-" + i).hide();
-	***REMOVED***
+	}
 	
 	var idCommandsWrapper = "commands-list";
 
 	for( var g_id = 0; g_id < commandsList.length; g_id++)
-		for( var c_id = 0; c_id < commandsList[g_id][1].length; c_id++) ***REMOVED***
+		for( var c_id = 0; c_id < commandsList[g_id][1].length; c_id++) {
 			var id = "#" + idCommandsWrapper + "-" + g_id + "-" + c_id;
 				$(id).hide();
-		***REMOVED***
+		}
 		
 	hideSpinner();
 	//$("#spinner-container").hide();
-***REMOVED***
+}
 
 
-function showInfo() ***REMOVED***
+function showInfo() {
 	var idCommandsWrapper = "commands-list";
 	for( var g_id = 0; g_id < commandsList.length; g_id++)
-		for( var c_id = 0; c_id < commandsList[g_id][1].length; c_id++) ***REMOVED***
+		for( var c_id = 0; c_id < commandsList[g_id][1].length; c_id++) {
 			var id = "#" + idCommandsWrapper + "-" + g_id + "-" + c_id;
 				$(id).hide();
-		***REMOVED***
+		}
 
 
 	var visible = false;
 	for( var g_id = 0; g_id < infoList.length; g_id++)
-		if($("#group-text-" + g_id).is(":visible")) ***REMOVED***
+		if($("#group-text-" + g_id).is(":visible")) {
 			visible = true;
 			break;
-		***REMOVED***
+		}
 	
 	if(visible)
-		for( var g_id = 0; g_id < infoList.length; g_id++) ***REMOVED***
+		for( var g_id = 0; g_id < infoList.length; g_id++) {
 			$("#group-info-" + g_id).hide();
 			$("#group-text-" + g_id).hide();
-		***REMOVED***
+		}
 	else
-		for( var g_id = 0; g_id < infoList.length; g_id++) ***REMOVED***
+		for( var g_id = 0; g_id < infoList.length; g_id++) {
 			$("#group-info-" + g_id).show();
 			$("#group-text-" + g_id).show();
-		***REMOVED***
-***REMOVED***
+		}
+}
 
 
 
-function groupButtonClick( placeholderId ) ***REMOVED***
+function groupButtonClick( placeholderId ) {
 	var idCommandsWrapper = "commands-list";
 	for( var g_id = 0; g_id < commandsList.length; g_id++)
-		for( var c_id = 0; c_id < commandsList[g_id][1].length; c_id++) ***REMOVED***
+		for( var c_id = 0; c_id < commandsList[g_id][1].length; c_id++) {
 			var id = "#" + idCommandsWrapper + "-" + g_id + "-" + c_id;
 				$(id).hide();
-		***REMOVED***
+		}
 
 	var visible = false;
 	for( var g_id = 0; g_id < infoList.length; g_id++)
-		if($("#group-text-" + g_id).is(":visible")) ***REMOVED***
+		if($("#group-text-" + g_id).is(":visible")) {
 			visible = true;
 			break;
-		***REMOVED***
+		}
 	
 	var buttonId = placeholderId.split("-")[2];
 
 	if(visible)
-		for( var g_id = 0; g_id < infoList.length; g_id++) ***REMOVED***
-			if(g_id != buttonId) ***REMOVED***
+		for( var g_id = 0; g_id < infoList.length; g_id++) {
+			if(g_id != buttonId) {
 				$("#group-info-" + g_id).hide();
 				$("#group-text-" + g_id).hide();
-			***REMOVED***
-		***REMOVED***
+			}
+		}
 
 	$("#group-info-" + buttonId).toggle();
 	$("#group-text-" + buttonId).toggle();
-***REMOVED***
+}
 
 
-function groupButtonDblClick( placeholderId ) ***REMOVED***
-	for( var g_id = 0; g_id < infoList.length; g_id++) ***REMOVED***
+function groupButtonDblClick( placeholderId ) {
+	for( var g_id = 0; g_id < infoList.length; g_id++) {
 		$("#group-info-" + g_id).hide();
 		$("#group-text-" + g_id).hide();
-	***REMOVED***
+	}
 	
 	var idCommandsWrapper = "commands-list";
 	var group_id = placeholderId.split("-")[2];
 	for( var g_id = 0; g_id < commandsList.length; g_id++)
 		if(g_id != group_id)
-			for( var c_id = 0; c_id < commandsList[g_id][1].length; c_id++) ***REMOVED***
+			for( var c_id = 0; c_id < commandsList[g_id][1].length; c_id++) {
 				var id = "#" + idCommandsWrapper + "-" + g_id + "-" + c_id;
 				$(id).hide();
-			***REMOVED***
+			}
 
 	g_id = group_id;
-	for( var c_id = 0; c_id < commandsList[g_id][1].length; c_id++) ***REMOVED***
+	for( var c_id = 0; c_id < commandsList[g_id][1].length; c_id++) {
 		var id = "#" + idCommandsWrapper + "-" + g_id + "-" + c_id;
 			$(id).toggle();
-	***REMOVED***
+	}
 
-***REMOVED***
+}
 
 // this will send data to flask
 var busy = false;
 var busyTime = 10000;
-function commandButtonClick( g_id, c_id) ***REMOVED***
+function commandButtonClick( g_id, c_id) {
 	if(busy) return;
 
 	$("#spinner-container").css('visibility', 'visible');
@@ -243,43 +243,43 @@ function commandButtonClick( g_id, c_id) ***REMOVED***
 	var xhttp = new XMLHttpRequest();
 
 	// the data sent to flask
-	var payload = ***REMOVED*** "group_id": g_id,
+	var payload = { "group_id": g_id,
 					"control_id": c_id,
 					"command": command [1],
 					"text": command[0],
-					***REMOVED***;
+					};
 
 					
-	$.ajax(***REMOVED***
+	$.ajax({
 		type: "POST", // HTTP method POST or GET
 		contentType: 'application/json; charset=utf-8', //content type
 		url: url_path, //Where to make Ajax calls
 		dataType:'json', // Data type, HTML, json etc.
 		processData: false,
 		data: JSON.stringify(payload), 
-	***REMOVED***).done(
-		function(data) ***REMOVED***
+	}).done(
+		function(data) {
 			console.log(data);
-		***REMOVED***
+		}
 	);
 	
-***REMOVED***
+}
 
-function hideSpinner() ***REMOVED***
+function hideSpinner() {
 	$("#spinner-container").css('visibility', 'hidden');
 	setCommandListOpacity("100%");
 	busy = false;
-***REMOVED***
+}
 
-function setCommandListOpacity( opacity) ***REMOVED***
+function setCommandListOpacity( opacity) {
 	var idCommandsWrapper = "commands-list";
 
 	for( var g_id = 0; g_id < commandsList.length; g_id++)
-		for( var c_id = 0; c_id < commandsList[g_id][1].length; c_id++) ***REMOVED***
+		for( var c_id = 0; c_id < commandsList[g_id][1].length; c_id++) {
 			var id = "#" + idCommandsWrapper + "-" + g_id + "-" + c_id;
 			$(id).css('opacity', opacity);
-		***REMOVED***
-***REMOVED***
+		}
+}
 
 
 
