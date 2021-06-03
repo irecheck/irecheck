@@ -7,7 +7,7 @@ from irecheck.srv import *
 from irecheckWorld import IrecheckWorld
 
 
-class IrecheckBrain():
+class IrecheckWorldManager():
     def __init__(self):
         self.dynamicoFields = []        # list containing the names of the fields in the dynamico database
         self.latestDynamicoValues = []  # list containing the latest writing-related values obtained from dynamico
@@ -21,7 +21,7 @@ class IrecheckBrain():
 
     
         # initialize ROS node
-        rospy.init_node('irecheckbrain', anonymous=True)
+        rospy.init_node('irecheckworldmanager', anonymous=True)
         # initialize publishers/subscribers
         # rospy.Subscriber([topic_name],[topic_type],[callback_function_name])
         rospy.Subscriber('dynamicomsg', String, self.dynamicomsgCallback)
