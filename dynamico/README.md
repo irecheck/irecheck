@@ -18,7 +18,7 @@ $ pip install --upgrade google-cloud-firestore
 ```
 
 ## Configure your system to access the Dynamico Firestore database
-Subtitute lines 11--13 of **dynamicoListener.py** with the credentials in the **DYNAMICO_CREDENTIALS.TXT** file, that you should have received separately.
+Place the **DYNAMICO_CREDENTIALS.TXT** file, that you should have received separately, in the *scripts* folder.
 
 **Do NOT upload those information on the public repo!!**
 
