@@ -8,7 +8,7 @@
 ## Install the Requests library
 In a terminal tab:
 ```
-$ python -m pip install requests
+$ python3 -m pip install requests
 ```
 
 ## Install the Firestore library
@@ -28,8 +28,16 @@ Place the **DYNAMICO_CREDENTIALS.TXT** file, that you should have received separ
 
 * fix get of collections (all the relevant ones)
 * extract meaningful elements from the returned dictionaries
-* set a listener to receive data-change events instead of get
 
-# Usage Guide 
+# Usage Guide
+In a terminal tab, start with launching the *roscore* (skip this step if it is already running):
+```
+$ roscore
+```
+
+Then, **in a new terminal tab**:
+```
+$ rosrun dynamico dynamicoListener.py
+```
 
 # Tips & Tricks
