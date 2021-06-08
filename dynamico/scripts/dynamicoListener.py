@@ -1,9 +1,11 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 
+# import rospkg as rospy
 import rospy
 import json
 import requests
 import threading
+import os
 import pandas as pd
 
 from pandas.core.frame import DataFrame
@@ -21,7 +23,8 @@ class DynamicoListener():
     
     """
 
-    def __init__(self, listening_collection):
+    def __init__(self, listening_collection_1):#, listening_collection_2):
+        
         # initialize ROS node
         rospy.init_node('dynamicolistener', anonymous=True)
         # initialize publishers/subscribers
@@ -30,7 +33,8 @@ class DynamicoListener():
         self.pubMsg = rospy.Publisher('dynamicomsg', String, queue_size=10)
         
         # get credentials information from the file
-        with open('/home/bruno/catkin_ws/src/irecheck/dynamico/scripts/DYNAMICO_CREDENTIALS.TXT') as f:
+        path = os.path.realpath(__file__).replace('dynamicoListener.py','')
+        with open(path + '/DYNAMICO_CREDENTIALS.txt') as f:
             data = json.load(f)
         self.email = data['EMAIL']
         self.password = data['PASSWORD']
@@ -42,6 +46,8 @@ class DynamicoListener():
         self.FIREBASE_REST_API = "https://identitytoolkit.googleapis.com/v1/accounts"
         response = self.sign_in_with_email_and_password(self.FIREBASE_REST_API, self.API_KEY, self.email, self.password)
         
+        self.listening_collection = listening_collection_1
+
         # use google.oauth2.credentials and the response object to create the correct user credentials
         creds = Credentials(response['idToken'], response['refreshToken'])
         self.db = Client(self.project_id, creds)
@@ -50,11 +56,18 @@ class DynamicoListener():
         self.dynamicoCallback = threading.Event()
     
         # watch the changes in the listening_collection only with regards to our user
-        doc_ref = self.db.collection(listening_collection).where(u'userId', u'==', self.user_id)
-        self.doc_watch = doc_ref.on_snapshot(self.on_snapshot)
+        doc_ref = self.db.collection(listening_collection_1).where(u'userId', u'==', self.user_id)
+        self.doc_watch_1 = doc_ref.on_snapshot(self.on_snapshot_1)
 
-        # keep python from exiting until this node is stopped
-        rospy.spin()
+        # watch the changes in the listening_collection only with regards to our user
+        # doc_ref_2 = self.db.collection(listening_collection_2).where(u'userId', u'==', self.user_id)
+        # self.doc_watch_2 = doc_ref.on_snapshot(self.on_snapshot_1)
+
+        # [DEBUG ONLY]
+        print("End of init")
+
+        # # keep python from exiting until this node is stopped
+        # rospy.spin()
 
 
     # we use the sign_in_with_email_and_password function from https://gist.github.com/Bob-Thomas/49fcd13bbd890ba9031cc76be46ce446
@@ -66,6 +79,8 @@ class DynamicoListener():
         # check for errors
         try:
             resp.raise_for_status()
+            # [DEBUG ONLY]
+            # print(resp)
         except HTTPError as e:
             raise HTTPError(e, resp.text)
             
@@ -73,7 +88,10 @@ class DynamicoListener():
     
 
     # create a callback on_snapshot function to capture changes in the Dynamico Firestore
-    def on_snapshot(self, doc_snapshot, changes, read_time):
+    def on_snapshot_1(self, doc_snapshot, changes, read_time):
+        # [DEBUG ONLY]
+        print("\n\nPublication from collection-> '{}' --------------\n".format(self.listening_collection))
+       
         # create an empty list of dataframes to be populated with the changes in database and sent over ROS
         final = []
 
@@ -99,18 +117,29 @@ class DynamicoListener():
         msg = final.to_json(orient='records')
         rospy.loginfo(msg)
         self.pubMsg.publish(msg)
-        self.dynamicoCallback.set()
+        #self.dynamicoCallback.set()
 
+        # [DEBUG ONLY]
+        print("\nEND of collection----------------\n\n")
 
     # test quering the dynamico db
     def test(self):
         # diagnosesDocs = self.db.collection(u'diagnoses').where(u'userId', u'==', u"TXGCcUC6u5duIO6VRhfnYAXXwTg2").stream()
         # diagnosesDocs = self.db.collection(u'diagnoses').where(u'userId', u'==', u"TXGCcUC6u5duIO6VRhfnYAXXwTg2").stream()
-        diagnosesDocs = self.db.collection('scores').where(u'userId', u'==', self.user_id)
+        diagnosesDocs = self.db.collection('scores').where(u'userId', u'==', self.user_id) #.where(u'childId', u'==', u"75DA34CC-64C4-40C5-8639-6653FBF26FDA")
+        
+        # print(type(diagnosesDocs))
         
         # convert the retrieved docs in dictionaries and extract the handwriting scores values
         for doc in diagnosesDocs.stream():
             tempDict = doc.to_dict()
+            
+            # scores = [-1, -1, -1, -1, -1]
+            # scores[0] = tempDict[u'kinematicScore']
+            # scores[1] = tempDict[u'pressureScore']
+            # scores[2] = tempDict[u'staticScore']
+            # scores[3] = tempDict[u'tiltScore']
+            # scores[4] = tempDict[u'totalScore']
             print(tempDict)
             print("\n")
 
@@ -118,11 +147,20 @@ class DynamicoListener():
 
 #########################################################################
 if __name__ == "__main__":
+    
+    myDynamicoListener = DynamicoListener('children')
+    myDynamicoListener_2 = DynamicoListener('scores')
+    # keep python from exiting until this node is stopped
+    rospy.spin()
+
+    print("My code never gets here!")
     try:
+        pass
         # myDynamicoListener = DynamicoListener('writingDiagnoses')
         # myDynamicoListener = DynamicoListener('scores')
-        myDynamicoListener = DynamicoListener('scores')
     except rospy.ROSInterruptException:
         pass
     finally:
-        myDynamicoListener.doc_watch.unsubscribe()
+        myDynamicoListener.doc_watch_1.unsubscribe()
+        # myDynamicoListener.doc_watch_2.unsubscribe()
+        print("Done!")
