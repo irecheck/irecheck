@@ -113,21 +113,16 @@ If you have problems in sending command to QTrobot (and you did all the above st
 $ sudo ufw disable
 ```
 
-## Connecting your PC to both QtRobot AND internet ( Using WiFi dongle)
-
+## Connecting your PC to both QTrobot AND Internet (Using WiFi dongle)
 
 ### Installing and setting up the USB dongle (ONLY FIRST TIME)
-
 With kernel 5.4 (check with “uname -a”), the following worked on Ubuntu 20.04 (with a few restarts) - testing on 18.04:
 ```
 $ git clone https://github.com/aircrack-ng/rtl8814au.git
 $ cd rtl8814au
 $ sudo make dkms_install
 ```
-
 ### Configuring networks (Everytime)
-
-
 1. Connect USB WiFi to “QT109” and PC WiFi to Internet Network Wifi 
 ```
 $ ifc     					# verify connections
