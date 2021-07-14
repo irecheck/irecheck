@@ -167,11 +167,13 @@ Create the folder before running the package, or change the path.
 
 Copy the packages of the path «path_of_inseders_packages», present in this repo, inside the rotobt (head) in the path "~/catkin_ws/src" with the comand:
 ```
-scp «path_of_package/package_name» qtrobot@10.42.0.1
+scp -r irecheck/platforms/qt_robot/«package_name»/ qtrobot@10.42.0.1
 ```
 List of packages:
 - qt_behaviour_control
 - woz_interface
+
+**TO DO:** Update commands for Woz_interface
 
 To have these packages running, call them form inside (ssh) the robot:
 ```
@@ -206,7 +208,7 @@ The options of behavior are:
 - Sous_marin = ["pression_lance","pression_expli","pression_complet"]
 - Apprenti = ["cowritter_lance","cowritter_expli_class","cowritter_complet"]
 
-**TO DO:** Update commands for Woz_interface
+
 **NOTE**: All the behavior are in French!
 
 
