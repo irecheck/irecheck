@@ -3,13 +3,23 @@
 import sys
 import rospy
 import smach
-import smach_ros
 import pandas as pd
 import roslib; roslib.load_manifest('smach_ros')
 from std_msgs.msg import String
 from numpy.lib.shape_base import split
 from datetime import datetime
 
+
+# define state Init
+class Init(smach.State):
+    def __init__(self):
+        smach.State.__init__(self, outcomes=['default'])
+
+    def execute(self, userdata):
+        # # [DEBUG ONLY]
+        # rospy.loginfo('Executing state INIT')
+        print('WAITING FOR SOMETHING TO HAPPEN')
+        return 'default'
 
 # define state Greetings
 class Greetings(smach.State):
@@ -60,8 +70,7 @@ class Goodbye(smach.State):
         self.pubMsg = rospy.Publisher('/irecheck/button_name', String, queue_size=10)
 
     def execute(self, userdata):
-        # # [DEBUG ONLY]
-        # rospy.loginfo('Executing state GOODBYE')
+        rospy.loginfo('Executing state GOODBYE')
         msg = 'au_revoir'
         rospy.loginfo(msg)
         self.pubMsg.publish(msg)
@@ -85,18 +94,20 @@ class IrecheckManager():
         # open the container
         with self.sm:
             # add states to the container
+            smach.StateMachine.add('INIT', Init(), 
+                               transitions={'default':'GREETINGS'})
             smach.StateMachine.add('GREETINGS', Greetings(), 
-                                   transitions={'default':'ACTIVITY_0'})
+                               transitions={'default':'ACTIVITY_0'})
             smach.StateMachine.add('ACTIVITY_0', Activity('0'), 
-                                   transitions={'default':'ACTIVITY_1', 'wait':'ACTIVITY_0'})
+                               transitions={'default':'ACTIVITY_1', 'wait':'ACTIVITY_0'})
             smach.StateMachine.add('ACTIVITY_1', Activity('1'), 
-                                   transitions={'default':'ACTIVITY_2', 'wait':'ACTIVITY_1'})
+                               transitions={'default':'ACTIVITY_2', 'wait':'ACTIVITY_1'})
             smach.StateMachine.add('ACTIVITY_2', Activity('2'), 
-                                   transitions={'default':'ASSESSMENT', 'wait':'ACTIVITY_2'})
+                               transitions={'default':'ASSESSMENT', 'wait':'ACTIVITY_2'})
             smach.StateMachine.add('ASSESSMENT', Activity('as'), 
-                                   transitions={'default':'GOODBYE', 'wait':'ASSESSMENT'})
+                               transitions={'default':'GOODBYE', 'wait':'ASSESSMENT'})
             smach.StateMachine.add('GOODBYE', Goodbye(), 
-                                   transitions={'default':'end'})
+                               transitions={'default':'end'})
         
         # execute SMACH plan
         outcome = self.sm.execute()
