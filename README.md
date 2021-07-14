@@ -138,11 +138,53 @@ $ sudo route add -net 0.0.0.0/0 wlp59s0                                   # rest
 $ sudo route -n                                                           # Verify the routing table
 ```
 
+With the dongle, the ROS master IP will also change, so make sure that you have the following confgurations on the ROS IPs:
+```
+export ROS_IP=10.42.0.208                    # local IP from the **dongle** took in ifconfig 
+export ROS_MASTER_URI=http://10.42.0.1:11311 # Note the 10.42.0.1 instead of 192.168.100.1
+
+```
+
 3. Check whether it worked by sending commands to the robot
 ```
 $ rostopic pub -1 /qt_robot/speech/say std_msgs/String "data: 'Hi'"
 $ rosservice call /qt_robot/behavior/talkText "message: 'I am QT.'" 
 ```
+
+4. Voilá!
+
+If you are sure that it worked, you can add all these lines in your bash_alias in a function to speed up the configuration process.
+
+1. open the bash aliases file:
+```
+sudo gedit ~/.bash_aliases
+```
+
+2. create functions with the configurations:
+```
+config_rounter_table(){
+sudo ip route flush table main
+sudo route add -net 10.42.0.0/24 wlxd03745b4cad0	
+sudo ip route add 192.168.100.1 via 10.42.0.1 dev wlxd03745b4cad0 
+sudo route add -net 0.0.0.0/0 wlp0s20f3 
+}
+
+
+qtrobot_add_ROS_IPS(){
+sed -i '$ a #QTrobot' ~/.bash_aliases
+sed -i '$ a export ROS_IP=10.42.0.208' ~/.bash_aliases
+sed -i '$ a export ROS_MASTER_URI=http:\/\/10.42.0.1:11311' ~/.bash_aliases
+source ~/.bashrc
+}
+
+```
+
+3. Use the function in the terminal after conecting and turning on the devices
+```
+config_rounter_table
+```
+
+**NOTE** You need all the same devices you used for configuring to make it work with your alias
 
 ***Important*** Do NOT forget to set the robot's ros node as the master node (export ROS_IP=... and export ROS_MASTER_URI=...)
 
