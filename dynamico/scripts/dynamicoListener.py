@@ -35,7 +35,11 @@ class DynamicoListener():
         # get credentials information from the file
         path = os.path.realpath(__file__).replace('dynamicoListener.py','')
         with open(path + '/DYNAMICO_CREDENTIALS.txt') as f:
+        # with open(path + '/DYNAMICO_CREDENTIALS_PARIS.txt') as f:
             data = json.load(f)
+
+        print("DATA", data)
+
         self.email = data['EMAIL']
         self.password = data['PASSWORD']
         self.API_KEY = data['API_KEY']
@@ -64,7 +68,9 @@ class DynamicoListener():
         # self.doc_watch_2 = doc_ref.on_snapshot(self.on_snapshot_1)
 
         # [DEBUG ONLY]
-        print("End of init")
+        print("Waiting for messages")
+
+       
 
         # # keep python from exiting until this node is stopped
         # rospy.spin()
@@ -86,19 +92,17 @@ class DynamicoListener():
             
         return resp.json()
     
-
-    # create a callback on_snapshot function to capture changes in the Dynamico Firestore
     def on_snapshot_1(self, doc_snapshot, changes, read_time):
-        # [DEBUG ONLY]
-        print("\n\nPublication from collection-> '{}' --------------\n".format(self.listening_collection))
-       
-        # create an empty list of dataframes to be populated with the changes in database and sent over ROS
-        final = []
-
-        for ch in changes:  
-            # get the item as a dictionary
-            item = ch.document._data
+        
+        print("LEN   " + self.listening_collection + " : ", len(changes)) 
+        
+        if len(changes)==1:
+        # if True:
+            # [DEBUG ONLY]
+            # print("\n\nChanges after initialized --------------\n")
             
+            item = changes[0].document._data #ch.document._data
+                
             # correct Google's stupidity of DateTime with Nanoseconds .... (why god???)
             # NOTE again -> Google's server time is different from Switzerland timezone
             val1 = item['createdAt']
@@ -106,18 +110,84 @@ class DynamicoListener():
             utc_time  = "%s-%s-%s %s:%s:%s"%(year, month, day,hour,minute,second) 
             item['createdAt']=utc_time
 
-            #create a pandas dataframe with the current information or change in the firebase
-            final.append(pd.DataFrame(item, index=[0]))
+            final = pd.DataFrame(item, index=[0])
+            # convert the dataframe in a json string and publish it as a ROS message
+            msg = final.to_json(orient='records')
+            rospy.loginfo(msg)
+            self.pubMsg.publish(msg)
+            #self.dynamicoCallback.set()
 
-        # concatenate all the new changes in a single dataframe
-        final = pd.concat(final, ignore_index=True)
-        final = final.sort_values('createdAt', ignore_index=True)
+            # score = item['score']
+
+            # mymsg = "Foing to next phase! "#You scored {} points in the game {}".format(item['score'], item['game'])
+            # msg_2_pub = f''' rostopic pub -1 /qt_robot/speech/say std_msgs/String "data: '{mymsg}'" ''' 
+            # os.system(msg_2_pub)
+
+            # msg_2_pub = f''' rosservice call /qt_robot/behavior/talkText "message: '{mymsg}'" ''' 
+            # rosservice call /qt_robot/behavior/talkText "message: 'I am Q.T.'" 
+            # print ("MSG HERE", msg_2_pub)
+
+
+
+
+            # [DEBUG ONLY]
+            # print("\nEND of collection----------------\n\n")
+
+        else:
+            # [DEBUG ONLY]
+            print("\n\n-------------- Fisrt time. No message was sent --------------\n")
+
+
+
+
+    # create a callback on_snapshot function to capture changes in the Dynamico Firestore
+    def on_snapshot_OLD(self, doc_snapshot, changes, read_time):
+        
+        # [DEBUG ONLY]
+        # print("\n\nPublication from collection-> '{}' --------------\n".format(self.listening_collection))
+       
+        # create an empty list of dataframes to be populated with the changes in database and sent over ROS
+        final = []
+
+        if len(changes)>1:
+            # [DEBUG ONLY]
+            print("\n\nFisrt time '{}' --------------\n".format(len(changes)))
+            
+            key_list = list(changes[0].document._data.keys())
+            
+            final = pd.DataFrame(columns=key_list)
+            
+            # item = ch.document._data
+            # final.append(pd.DataFrame(item, index=[0]))
+            # final = 
+
+
+        else:
+            for ch in changes:  
+                # get the item as a dictionary
+                item = ch.document._data
+                
+                # correct Google's stupidity of DateTime with Nanoseconds .... (why god???)
+                # NOTE again -> Google's server time is different from Switzerland timezone
+                val1 = item['createdAt']
+                year,month,day,hour,minute,second,tzinfo = val1.year,val1.month,val1.day,val1.hour, val1.minute, val1.second, val1.tzinfo
+                utc_time  = "%s-%s-%s %s:%s:%s"%(year, month, day,hour,minute,second) 
+                item['createdAt']=utc_time
+
+                #create a pandas dataframe with the current information or change in the firebase
+                final.append(pd.DataFrame(item, index=[0]))
+
+            # concatenate all the new changes in a single dataframe
+            final = pd.concat(final, ignore_index=True)
+            final = final.sort_values('createdAt', ignore_index=True)
 
         # convert the dataframe in a json string and publish it as a ROS message
         msg = final.to_json(orient='records')
         rospy.loginfo(msg)
         self.pubMsg.publish(msg)
         #self.dynamicoCallback.set()
+
+       
 
         # [DEBUG ONLY]
         print("\nEND of collection----------------\n\n")
@@ -148,19 +218,22 @@ class DynamicoListener():
 #########################################################################
 if __name__ == "__main__":
     
+    # myDynamicoListener = DynamicoListener('scores')
+    
     try:
-        myDynamicoListener = DynamicoListener('children')
-        # myDynamicoListener_2 = DynamicoListener('scores')
+        # myDynamicoListener_2 = DynamicoListener('writingAnalysisExercises')
+        myDynamicoListener_2 = DynamicoListener('scores')
+        myDynamicoListener = DynamicoListener('writingDiagnoses')
         # keep python from exiting until this node is stopped
         rospy.spin()
 
         print("My code never gets here!")
         pass
-        # myDynamicoListener = DynamicoListener('writingDiagnoses')
         # myDynamicoListener = DynamicoListener('scores')
     except rospy.ROSInterruptException:
         pass
     finally:
         myDynamicoListener.doc_watch_1.unsubscribe()
+        myDynamicoListener_2.doc_watch_1.unsubscribe()
         # myDynamicoListener.doc_watch_2.unsubscribe()
         print("Done!")
