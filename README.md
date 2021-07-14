@@ -113,6 +113,40 @@ If you have problems in sending command to QTrobot (and you did all the above st
 $ sudo ufw disable
 ```
 
+## Connecting your PC to both QTrobot AND Internet (Using WiFi dongle)
+
+### Installing and setting up the USB dongle (ONLY FIRST TIME)
+With kernel 5.4 (check with “uname -a”), the following worked on Ubuntu 20.04 (with a few restarts) - testing on 18.04:
+```
+$ git clone https://github.com/aircrack-ng/rtl8814au.git
+$ cd rtl8814au
+$ sudo make dkms_install
+```
+### Configuring networks (Everytime)
+1. Connect USB WiFi to “QT109” and PC WiFi to Internet Network Wifi 
+```
+$ ifc     					# verify connections
+```
+
+2. Configure the routing table
+```
+$ sudo ip route flush cache
+$ sudo ip route flush table main
+$ sudo route add -net 10.42.0.0/24 <<wlxd03745b39aa4>>                    # QTRP/ROS through USB WiFi (“ifconfig”)
+$ sudo ip route add 192.168.100.1 via 10.42.0.1 dev <<wlxd03745b39aa4>>   # fix for services
+$ sudo route add -net 0.0.0.0/0 wlp59s0                                   # rest through the PC WiFi (“ifconfig”)*
+$ sudo route -n                                                           # Verify the routing table
+```
+
+3. Check whether it worked by sending commands to the robot
+```
+$ rostopic pub -1 /qt_robot/speech/say std_msgs/String "data: 'Hi'"
+$ rosservice call /qt_robot/behavior/talkText "message: 'I am QT.'" 
+```
+
+***Important*** Do NOT forget to set the robot's ros node as the master node (export ROS_IP=... and export ROS_MASTER_URI=...)
+
+
 ## Set up the iReCHeCk ROS package
 Clone the content of this repo inside your catkin workspace (typically, inside the **catkin_ws/src/** folder).
 
@@ -124,7 +158,7 @@ $ catkin_make
 
 iReCHeCk keeps all data collected at run-time in a Pandas dataframe, which is exported to a .csv file at the end of the session.
 
-As specified in the script *irecheckWorld.py*, the .csv file is saved inside the **~/Documents/iReCHeCk_logs/** folder.
+The .csv file is saved inside the **~/Documents/iReCHeCk_logs/** folder.
 
 Create the folder before running the package, or change the path.
 
