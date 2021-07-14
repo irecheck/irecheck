@@ -1,0 +1,2 @@
+"QT/challenge";0.9
+"QT/confused";"Est-ce que c'est trop difficile?"

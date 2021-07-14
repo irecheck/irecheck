@@ -1,0 +1,2 @@
+"QT/bored_long";1;
+"QT/talkinglong";"\sel=alt=p-50\Rappelle-toi \pau=100\ il faut bien rester sur le chemin bleu pour ne pas perdre des ballons. Tu peux prendre ton temps."

@@ -1,0 +1,4 @@
+"QT/thanks";0.9
+"QT/sad";"Tu as de la\sel=alt=p-20\  peine?"
+"QT/sad"; self.fname + ",Est-ce que tu es triste?"
+"QT/sad";"Quelque chose te rend triste?"

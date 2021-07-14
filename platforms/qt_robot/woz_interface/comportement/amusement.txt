@@ -1,0 +1,3 @@
+"QT/happy";0.9
+"QT/happy";"Ça a l'air de t'amuser!"
+"QT/happy";"Tu as l'air de trouver que c'est drôle"

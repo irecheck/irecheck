@@ -1,0 +1,4 @@
+"QT/strong";1;
+"";"Nous avons beaucoup travaillé aujourd'hui,";
+"";"Nous avons travaillé dur";
+"";"Nous avons beaucoup travaillé ensemble"

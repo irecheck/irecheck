@@ -1,0 +1,2 @@
+"";0;
+"QT/talking";"Qu'est-ce que je fais mal \sel=alt=p-50\ \Rspd=80\ et \sel=alt=p-50\ bien?"
