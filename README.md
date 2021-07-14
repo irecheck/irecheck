@@ -183,7 +183,7 @@ Then, you can send commands trough ros topics to run the behaviors:
 self.pubMsg = rospy.Publisher('/irecheck/button_name', String, queue_size=10) #Create the publisher in the topic
 self.pubMsg.publish('bonjour')  #publishes the request for the 'bonjour' behavior 
 ```
-The options of the implemented behavior are:
+The options of behavior are:
 
 - identifie_sentiments = ["la_joie","amusement","la_colere", "la_motivation", "la_fatigue", "la_tristesse", "la_fierte", "etonnement"]
 - interagit_avec_adulte = ["adulte_accord","demande_adulte","que_pense","monsieur","madame"]
@@ -199,14 +199,16 @@ The options of the implemented behavior are:
 - QT_conclue = ["dernier_jeu","cetait_bien","tu_maide","mes_progres","bisou","bcp_travaille","il_est_lheure","arrete","au_revoir"]
 - gere_rythme = ["pause","change_jeu","choisis_jeu"]
 - explique_scenario = ["je_mappelle_qt","tu_veux_maider","tu_maides_encore","adieu","adieu2"]
-- lance_seance = ["tu_viens","ton_nom","ca_va","bonjour"]
+- lance_seance = ["tu_viens","ton_nom","ca_va",**"bonjour"**]
 - Analyse = ["analyse_lance"]
 - Helicoptere = ["tilt_lance","tilt_expli","tilt_complet"]
 - Poursuite = ["poursuite_lance","poursuite_expli","poursuite_complet"]
 - Sous_marin = ["pression_lance","pression_expli","pression_complet"]
 - Apprenti = ["cowritter_lance","cowritter_expli_class","cowritter_complet"]
 
-TO DO: Update commands for Woz_interface
+**TO DO:** Update commands for Woz_interface
+**NOTE**: All the behavior are in French!
+
 
 # System overview (TO BE UPDATED)
 The overall iReCHeCk architecture is sketched in the file SWarchitecture.png.
