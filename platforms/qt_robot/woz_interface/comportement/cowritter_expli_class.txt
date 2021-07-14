@@ -1,0 +1,2 @@
+"QT/bored";0.6;
+"QT/talkinglongrepeat";"Tu m'entraîne à écrire. Dans ce jeu, mon surnom est le robot de proust. Tu me montre comment bien corriger mes erreurs!"

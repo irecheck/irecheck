@@ -1,0 +1,4 @@
+"";0;
+"QT/showing_smile";"Comment vas-tu?"
+"QT/showing_smile";"Ça va?"
+"QT/showing_smile";"Tu vas bien?" 

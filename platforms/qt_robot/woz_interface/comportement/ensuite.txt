@@ -1,0 +1,3 @@
+"QT/angry";0.9;
+"QT/showing_smile";"Que fait-on maintenant pour que j'apprenne mieux à écrire"
+"QT/showing_smile";"Quel jeu pourrait le pluss m'aider tu penses"

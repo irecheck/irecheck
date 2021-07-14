@@ -1,0 +1,4 @@
+"QT/no";0.8;
+"";"Ah bon? Je ne trouve pas"
+"";"Je ne suis pas vraiment d'accord"
+"";"Je ne suis pas du même avis que toi"

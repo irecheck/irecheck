@@ -1,0 +1,2 @@
+"QT/show_tablet";1;
+"QT/talking"; self.fname2 + ", tu est d'accord?"
