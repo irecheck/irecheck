@@ -3,6 +3,7 @@
 import rospy
 from std_msgs.msg import String
 
+# publish fake dynamicomsg with a fixed frequency
 def talker():
     toggle = 0
     pub = rospy.Publisher('dynamicomsg', String, queue_size=10)
@@ -19,8 +20,17 @@ def talker():
         pub.publish(hello_str)
         rate.sleep()
 
+# publish ONE dynamicomsg
+def talkerOnce():
+    toggle = 0
+    pub = rospy.Publisher('dynamicomsg', String, queue_size=10)
+    rospy.init_node('talkerOnce', anonymous=True)
+    hello_str = '[{"userId":"QtT0sFPO89aasSW7W9vfqHXdvue2","createdAt":"2021-6-3 9:56:10","score":32,"childId":"75DA34CC-64C4-40C5-8639-6653FBF26FDA","level":"PP_04","stars":1,"game":"pursuit"}]'
+    rospy.loginfo(hello_str)
+    pub.publish(hello_str)
+
 if __name__ == '__main__':
     try:
-        talker()
+        talkerOnce()
     except rospy.ROSInterruptException:
         pass
