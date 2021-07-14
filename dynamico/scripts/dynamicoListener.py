@@ -35,7 +35,11 @@ class DynamicoListener():
         # get credentials information from the file
         path = os.path.realpath(__file__).replace('dynamicoListener.py','')
         with open(path + '/DYNAMICO_CREDENTIALS.txt') as f:
+        # with open(path + '/DYNAMICO_CREDENTIALS_PARIS.txt') as f:
             data = json.load(f)
+
+        print("DATA", data)
+
         self.email = data['EMAIL']
         self.password = data['PASSWORD']
         self.API_KEY = data['API_KEY']
@@ -66,8 +70,10 @@ class DynamicoListener():
         # [DEBUG ONLY]
         print("Waiting for messages")
 
+       
+
         # # keep python from exiting until this node is stopped
-        rospy.spin()
+        # rospy.spin()
 
 
     # we use the sign_in_with_email_and_password function from https://gist.github.com/Bob-Thomas/49fcd13bbd890ba9031cc76be46ce446
@@ -88,8 +94,10 @@ class DynamicoListener():
     
     def on_snapshot_1(self, doc_snapshot, changes, read_time):
         
+        print("LEN   " + self.listening_collection + " : ", len(changes)) 
         
         if len(changes)==1:
+        # if True:
             # [DEBUG ONLY]
             # print("\n\nChanges after initialized --------------\n")
             
@@ -108,6 +116,19 @@ class DynamicoListener():
             rospy.loginfo(msg)
             self.pubMsg.publish(msg)
             #self.dynamicoCallback.set()
+
+            # score = item['score']
+
+            # mymsg = "Foing to next phase! "#You scored {} points in the game {}".format(item['score'], item['game'])
+            # msg_2_pub = f''' rostopic pub -1 /qt_robot/speech/say std_msgs/String "data: '{mymsg}'" ''' 
+            # os.system(msg_2_pub)
+
+            # msg_2_pub = f''' rosservice call /qt_robot/behavior/talkText "message: '{mymsg}'" ''' 
+            # rosservice call /qt_robot/behavior/talkText "message: 'I am Q.T.'" 
+            # print ("MSG HERE", msg_2_pub)
+
+
+
 
             # [DEBUG ONLY]
             # print("\nEND of collection----------------\n\n")
@@ -166,6 +187,8 @@ class DynamicoListener():
         self.pubMsg.publish(msg)
         #self.dynamicoCallback.set()
 
+       
+
         # [DEBUG ONLY]
         print("\nEND of collection----------------\n\n")
 
@@ -195,20 +218,22 @@ class DynamicoListener():
 #########################################################################
 if __name__ == "__main__":
     
-    myDynamicoListener = DynamicoListener('scores')
+    # myDynamicoListener = DynamicoListener('scores')
     
     try:
-        # myDynamicoListener_2 = DynamicoListener('scores')
+        # myDynamicoListener_2 = DynamicoListener('writingAnalysisExercises')
+        myDynamicoListener_2 = DynamicoListener('scores')
+        myDynamicoListener = DynamicoListener('writingDiagnoses')
         # keep python from exiting until this node is stopped
-        # rospy.spin()
+        rospy.spin()
 
         print("My code never gets here!")
         pass
-        # myDynamicoListener = DynamicoListener('writingDiagnoses')
         # myDynamicoListener = DynamicoListener('scores')
     except rospy.ROSInterruptException:
         pass
     finally:
         myDynamicoListener.doc_watch_1.unsubscribe()
+        myDynamicoListener_2.doc_watch_1.unsubscribe()
         # myDynamicoListener.doc_watch_2.unsubscribe()
         print("Done!")
