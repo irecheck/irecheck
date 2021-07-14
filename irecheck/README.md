@@ -20,7 +20,7 @@ The **irecheck** package runs the Finite State Machine managing the robot's auto
 
 The .csv file is saved inside the **~/Documents/iReCHeCk_logs/** folder.
 
-Create the folder before running the package, or change the path.
+If you haven't done it already, create the folder before running the package, or change the path.
 
 # Package overview (TO BE UPDATED)
 The **irecheck** ROS package includes the following nodes:

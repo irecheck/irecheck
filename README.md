@@ -158,7 +158,7 @@ $ catkin_make
 
 iReCHeCk keeps all data collected at run-time in a Pandas dataframe, which is exported to a .csv file at the end of the session.
 
-As specified in the script *irecheckWorld.py*, the .csv file is saved inside the **~/Documents/iReCHeCk_logs/** folder.
+The .csv file is saved inside the **~/Documents/iReCHeCk_logs/** folder.
 
 Create the folder before running the package, or change the path.
 
