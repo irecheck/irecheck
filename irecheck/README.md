@@ -1,13 +1,24 @@
 # System Requirements (package specific)
 
-* (PySide2)
+* SMACH (ROS package for Finite State Machine management)
 
 # Preliminary Operations
 
-## Set up the irecheck package
-The **irecheck** package keeps all data collected at run-time in a Pandas dataframe, which is exported to a .csv file at the end of the session.
+## Download and set up SMACH
+Move into your catkin workspace (typically, inside the **catkin_ws/src/** folder) and clone the SMACH package inside it:
+```
+$ git clone https://github.com/ros/executive_smach.git 
+```
+Run catkin_make to generate SMACH messages and services:
+```
+$ cd ~/catkin_ws
+$ catkin_make
+```
 
-As specified in the script *irecheckWorld.py*, the .csv file is saved inside the **~/Documents/iReCHeCk_logs/** folder.
+## Set up the irecheck package
+The **irecheck** package runs the Finite State Machine managing the robot's autonomous behaviour and keeps all data collected at run-time in a Pandas dataframe, which is exported to a .csv file at the end of the session.
+
+The .csv file is saved inside the **~/Documents/iReCHeCk_logs/** folder.
 
 Create the folder before running the package, or change the path.
 
