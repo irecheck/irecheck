@@ -15,16 +15,22 @@ from datetime import datetime
 class Greetings(smach.State):
     def __init__(self):
         smach.State.__init__(self, outcomes=['default'])
+        self.pubMsg = rospy.Publisher('/irecheck/button_name', String, queue_size=10)
 
     def execute(self, userdata):
-        rospy.loginfo('Executing state GREETINGS')
-        print('DO THE WHOLE GREETING PROCEDURE')
+        # # [DEBUG ONLY]
+        # rospy.loginfo('Executing state GREETINGS')
+        msg = 'bonjour'
+        rospy.loginfo(msg)
+        self.pubMsg.publish(msg)
+        print('GREETING THE KID - ' + msg)
         return 'default'
 
 # define state Activity
 class Activity(smach.State):
     def __init__(self, activityID):
         smach.State.__init__(self, outcomes=['default','wait'])
+        self.pubMsg = rospy.Publisher('/irecheck/button_name', String, queue_size=10)
         self.newData = False
         self.activityID = activityID
     
@@ -32,28 +38,33 @@ class Activity(smach.State):
         self.newData = True
 
     def execute(self, userdata):
-        rospy.loginfo('Executing state ACTIVITY')
+        # # [DEBUG ONLY]
+        # rospy.loginfo('Executing state ACTIVITY')
         rospy.Subscriber('dynamicomsg', String, self.callback)
         if (self.newData == True):
             self.newData = False
-            print('PUBLISH APPROPRIATE ROBOT REACTION - ' + self.activityID)
+            msg = 'bravo'
+            rospy.loginfo(msg)
+            self.pubMsg.publish(msg)
+            print('PUBLISHING APPROPRIATE ROBOT REACTION - ' + msg)
             return 'default'
         else:
-            print('WAIT')
+            # # [DEBUG ONLY]
+            # print('WAIT')
             return 'wait'
 
 # define state Goodbye
 class Goodbye(smach.State):
     def __init__(self):
         smach.State.__init__(self, outcomes=['default'])
-        self.pubMsg = rospy.Publisher('/qt_robot/speech/say', String, queue_size=10)
+        self.pubMsg = rospy.Publisher('/irecheck/button_name', String, queue_size=10)
 
     def execute(self, userdata):
-        rospy.loginfo('Executing state GOODBYE')
-        msg = 'Se la sorte ti e contraria'
+        # # [DEBUG ONLY]
+        # rospy.loginfo('Executing state GOODBYE')
+        msg = 'au_revoir'
         rospy.loginfo(msg)
         self.pubMsg.publish(msg)
-        print('DO THE WHOLE GOODBYE PROCEDURE')
         return 'default'
 
 
@@ -69,25 +80,25 @@ class IrecheckManager():
         rospy.Subscriber('dynamicomsg', String, self.dynamicoCallback)
         # rospy.Publisher([topic_name],[topic_type],[max_queue_size])
 
-        # Create a SMACH state machine
+        # create a SMACH state machine
         self.sm = smach.StateMachine(outcomes=['end'])
-        # Open the container
+        # open the container
         with self.sm:
-            # Add states to the container
+            # add states to the container
             smach.StateMachine.add('GREETINGS', Greetings(), 
-                               transitions={'default':'ACTIVITY_0'})
+                                   transitions={'default':'ACTIVITY_0'})
             smach.StateMachine.add('ACTIVITY_0', Activity('0'), 
-                               transitions={'default':'ACTIVITY_1', 'wait':'ACTIVITY_0'})
+                                   transitions={'default':'ACTIVITY_1', 'wait':'ACTIVITY_0'})
             smach.StateMachine.add('ACTIVITY_1', Activity('1'), 
-                               transitions={'default':'ACTIVITY_2', 'wait':'ACTIVITY_1'})
+                                   transitions={'default':'ACTIVITY_2', 'wait':'ACTIVITY_1'})
             smach.StateMachine.add('ACTIVITY_2', Activity('2'), 
-                               transitions={'default':'ASSESSMENT', 'wait':'ACTIVITY_2'})
+                                   transitions={'default':'ASSESSMENT', 'wait':'ACTIVITY_2'})
             smach.StateMachine.add('ASSESSMENT', Activity('as'), 
-                               transitions={'default':'GOODBYE', 'wait':'ASSESSMENT'})
+                                   transitions={'default':'GOODBYE', 'wait':'ASSESSMENT'})
             smach.StateMachine.add('GOODBYE', Goodbye(), 
-                               transitions={'default':'end'})
+                                   transitions={'default':'end'})
         
-        # Execute SMACH plan
+        # execute SMACH plan
         outcome = self.sm.execute()
 
         # keep python from exiting until this node is stopped
