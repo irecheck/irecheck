@@ -1,0 +1,4 @@
+"QT/thanks";1;
+"QT/sad";"j'écris vraiment très mal";
+"QT/sad";"Olala, mon écriture n'est pas terrible"
+"QT/sad";"J'ai mal écrit"

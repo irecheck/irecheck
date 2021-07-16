@@ -1,0 +1,3 @@
+"QT/challenge";0.8;
+"";"Tu peux relancer le jeu?"
+"";"Peux-tu relancer l'activité ?"

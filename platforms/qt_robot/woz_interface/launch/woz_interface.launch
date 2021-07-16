@@ -1,0 +1,4 @@
+<launch>
+    <node name="flask_interface" pkg="woz_interface" type="$(find woz_interface)/script/Version2.0/flask_test_server1.py" output="screen"/>
+</launch>
+

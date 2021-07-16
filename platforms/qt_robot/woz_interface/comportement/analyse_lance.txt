@@ -1,0 +1,3 @@
+"QT/show_tablet";0.8;
+"QT/talking";"Démarre l'analyse"
+"QT/talking";"Clique sur analyse"
