@@ -262,6 +262,18 @@ Refer to the **README** guides of the single packages.
 
 # Tips & Tricks (TO BE UPDATED)
 
+Did you push something you shouldn't have and now Google, FBI, CIA and Dynamico are all after you? No worries! With git you can change the past:
+1. make a new commit deleting the file(s) that shouldn't have been uploaded (e.g. the infamous DYNAMICO_CREDENTIALS.txt)
+2. cd Documents (or some other random place)
+3. git clone --mirror https://github.com/irecheck/irecheck.git
+4. download the BFG tool from https://rtyley.github.io/bfg-repo-cleaner/ and place the .jar in the same folder containing your repo
+5. run the appropriate BFG command (e.g. java -jar bfg-1.14.0.jar --delete-files DYNAMICO_CREDENTIALS.txt irecheck.git)
+6. cd irecheck.git
+7. git reflog expire --expire=now --all && git gc --prune=now --aggressive
+8. git push
+9. to check if it really worked, go to the unlucky commit and browse the repo at that point: the file(s) should no longer appear!
+
+Some other useful tips:
 1. To make a python script executable (e.g. "scripts/dbListener.py"): 
 ```
 $ chmod +x scripts/dbListener.py
