@@ -78,6 +78,7 @@ class Goodbye(smach.State):
         rospy.loginfo('Executing state GOODBYE')
         # wait some time
         rospy.sleep(5)
+        # transition to the next state (end)
         msg = 'au revoir'
         rospy.loginfo(msg)
         userdata.pubMsg.publish(msg)   
@@ -113,13 +114,13 @@ class IrecheckManager():
                                 transitions={'proceed':'ASSESSMENT'},
                                 remapping={'continueKey':'dynamicoKey',
                                             'pubMsg':'pubMsg', 
-                                            'continueKey':'continueKey',
+                                            'continueKey':'dynamicoKey',
                                             'pubMsg':'pubMsg'})
             smach.StateMachine.add('ASSESSMENT', Assessment(), 
                                 transitions={'proceed':'GOODBYE'},
                                 remapping={'continueKey':'dynamicoKey',
                                             'pubMsg':'pubMsg', 
-                                            'continueKey':'continueKey',
+                                            'continueKey':'dynamicoKey',
                                             'pubMsg':'pubMsg'})
             smach.StateMachine.add('GOODBYE', Goodbye(), 
                                 transitions={'proceed':'end'},
