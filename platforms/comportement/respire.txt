@@ -1,3 +1,3 @@
-"QT/breathing_exercise";0.85;
-"QT/breathing_exercise";"Respire un peu, et réessaye";
-"QT/breathing_exercise";"ce n'est pas grave, reprends ton souffle, et on repart"
+"";0.85;
+"QT/calmig_down_exercise_nose";"Respire un peu, et réessaye";
+"QT/calmig_down_exercise_nose";"ce n'est pas grave, reprends ton souffle, et on repart"

@@ -280,6 +280,3 @@ function setCommandListOpacity( opacity) {
 			$(id).css('opacity', opacity);
 		}
 }
-
-
-

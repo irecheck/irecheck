@@ -89,6 +89,7 @@ app.secret_key = "woz"
 
 # session = { 'user_name': "Julian", 'user_surname': "Blackwell"}
 
+
 @app.route('/')
 def index(name=None):
     return redirect('/login');

@@ -1,0 +1,2 @@
+"QT/adieu";0.75
+"QT/dernieradieu";"On a terminé notre dernière séance. Merci beaucoup. J'ai fais beaucoup de progrès, et je me suis bien amusé. J'espère que toi aussi. "

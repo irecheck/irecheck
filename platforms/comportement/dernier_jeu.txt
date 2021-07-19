@@ -1,0 +1,4 @@
+"";1;
+"QT/showing_smile";"Ce sera notre dernière activité."
+"QT/showing_smile";"Plus qu'une partie et on arrête."
+"QT/showing_smile";"C'est le dernier jeu."
