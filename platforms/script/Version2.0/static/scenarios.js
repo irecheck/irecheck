@@ -3,11 +3,11 @@ var groupsList = [
 	["static/images/scenario/explain.png", "QT explique son scénario"],
 	["static/images/scenario/start.png", "QT lance la séance"],
 	["static/images/scenario/analyse.png","Analyse"],
-	["static/images/scenario/tilt.png", "Jeu \"Tilt\""],
+	["static/images/scenario/tilt.png", "Jeu \"Hélicoptère\""],
 	["static/images/scenario/chase.png", "Jeu \"Poursuite\""],
-	["static/images/scenario/pressure.png", "Jeu \"Pression\""],
+	["static/images/scenario/pressure.png", "Jeu \"Sous-marin\""],
 	["static/images/scenario/twister.png", "Jeu \"Twister\""],
-	["static/images/scenario/cowritter.png","Jeu \"Cowritter\""]
+	["static/images/scenario/cowritter.png","Jeu \"Apprenti\""]
 ]
 
 var infoList = [
@@ -27,11 +27,11 @@ var textList = [
 	["", "QT explique son scénario"],
 	["", "QT lance la séance"],
 	["","Analyse"],
-	["", "Jeu \"Tilt\""],
+	["", "Jeu \"Hélicoptère\""],
 	["", "Jeu \"Poursuite\""],
-	["", "Jeu \"Pression\""],
+	["", "Jeu \"Sous-marin\""],
 	["", "Jeu \"Twister\""],
-	["","Jeu \"Cowritter\""]
+	["","Jeu \"Apprenti\""]
 ]
 
 var commandsList = [
@@ -58,11 +58,9 @@ var commandsList = [
 					["Explication des règles", "poursuite_expli",12]	]	],
 	["#fdf3cc", [	["Lancement", "pression_lance",10],
 					["Explication des règles", "pression_expli",12]	]	],
-	["#fccbad", [	["Lancement", "twister_lance",10],
-					["Explication des règles", "twister_expli",12]	]	],
+	["#fccbad", [	]	],
 	["#f8fdf9", [	["Lancement", "cowritter_lance",10],
-					["Règles ABC", "cowritter_expli",17],
-					["Règles Classe","cowritter_expli_class",13]	]	]
+					["Explication des règles","cowritter_expli_class",13]	]	]
 ]
 
 // icon position

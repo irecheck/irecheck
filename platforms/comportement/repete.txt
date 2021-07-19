@@ -1,4 +1,5 @@
 "";0.8;
+"QT/talking"; self.fname + ", est-ce que tu peux répèter?";
 "QT/talking";"Peux-tu répéter?";
 "QT/talking";"Comment?";
 "QT/talking";"Je n'ai pas entendu?";
