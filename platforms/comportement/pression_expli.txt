@@ -1,2 +1,2 @@
-"QT/bored";0.6;
-"QT/talking";"Je me suis transformé en sous-marin dans le jeu. Pour me faire descendre et monter, il faut que tu appuies plus ou moins fort avec ton stylo sur le cercle bleu. Avancer en évitant les obstacles."
+"QT/bored";0.75;
+"QT/talkinglong";"Je me suis transformé en sous-marin. Appuie ton stylo plus ou moins fort pour me piloter. Attention aux obstacles." 

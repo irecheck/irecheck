@@ -18,7 +18,11 @@ from qt_robot_interface.srv import *
 
 
 '''
+<<<<<<< HEAD
 dynamico_dict = {
+=======
+dynamico_dict = ***REMOVED***
+>>>>>>> 8832a7b795d6e3fb29254763f5a2a25dadd29e4b
     'id': [1, 2],
     'fname': ["Julian", "Julian"],
     'lname': ["Blackwell", "Blackwell"],
@@ -37,7 +41,11 @@ dynamico_dict = {
     'level': [5, 1],
     'duration': [20, 50],
     'result': ["w", "f"]
+<<<<<<< HEAD
 }
+=======
+***REMOVED***
+>>>>>>> 8832a7b795d6e3fb29254763f5a2a25dadd29e4b
 
 df = pd.DataFrame(dynamico_dict, columns=['id', 'fname', 'lname','language', 'gender', 'age', 'left_right', 'country', 'city', 'activity', 'globalS', 'staticS', 'pressureS', 'tiltS', 'kinematicS', 'level', 'duration', 'result'])
 df.set_index('id')
@@ -46,12 +54,20 @@ print(pd.read_csv('history.csv', usecols=['fname', 'lname']))
 '''
 
 #Global variables
+<<<<<<< HEAD
 dynamicData = {
+=======
+dynamicData = ***REMOVED***
+>>>>>>> 8832a7b795d6e3fb29254763f5a2a25dadd29e4b
     'newDynamico': False,
     'coreAval': False,
     'qtAval': False,
     'newRobot': "<p>Test</p>"
+<<<<<<< HEAD
 }
+=======
+***REMOVED***
+>>>>>>> 8832a7b795d6e3fb29254763f5a2a25dadd29e4b
 
 hU = HistoryUtil()
 
@@ -87,7 +103,11 @@ rospy.Subscriber('robot/debug', String, debugSubCallback)
 app = Flask(__name__)
 app.secret_key = "woz" 
 
+<<<<<<< HEAD
 # session = { 'user_name': "Julian", 'user_surname': "Blackwell"}
+=======
+# session = ***REMOVED*** 'user_name': "Julian", 'user_surname': "Blackwell"***REMOVED***
+>>>>>>> 8832a7b795d6e3fb29254763f5a2a25dadd29e4b
 
 @app.route('/')
 def index(name=None):

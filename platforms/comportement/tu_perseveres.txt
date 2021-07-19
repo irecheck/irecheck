@@ -1,0 +1,4 @@
+"";1;
+"QT/happy";"Tu n'as pas abandonné! Bravo!";
+"QT/happy";"Tu as tenu bon! C'est bien !";
+"QT/happy";"Tu persévères! Super!";

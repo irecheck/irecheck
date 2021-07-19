@@ -1,0 +1,3 @@
+openni_tracker
+*.pyc
+*/__pycache__

@@ -1,2 +1,3 @@
 "";0;
 "QT/talking";"attention, ne va pas trop vite"
+"QT/talking";self.fname + ", ne va pas trop vite"

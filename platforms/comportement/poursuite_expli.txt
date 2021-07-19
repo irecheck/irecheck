@@ -1,2 +1,2 @@
 "QT/bored";0.6;
-"QT/talking";"J'ai faim. Suis le chemin avec ton stylo et ramasse tous les fruits pour moi."
+"QT/talkinglong";"J'ai faim. Suis le chemin avec ton stylo et ramasse tous les fruits pour moi."

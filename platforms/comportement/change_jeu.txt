@@ -1,0 +1,4 @@
+"QT/show_tablet";1;
+"QT/talking";"Tu veux qu'on fasse un autre \sel=alt=p-30\jeu?"
+"QT/talking";"Tu as envie de changer de jeu?"
+"QT/talking";"On passe à la prochaine activité?"
