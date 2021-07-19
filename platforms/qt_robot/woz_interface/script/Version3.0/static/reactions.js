@@ -111,7 +111,7 @@ var commandsList = [
 					["On est fort", "nous_sommes_fort",10],
 					["Je suis fier de toi","fier_de_toi",6],
 					["Tu t'appliques","applique",10],
-					["Tu pérsèveres","tu_perseveres",6]	]	],
+					["Tu persévères","tu_perseveres",6]	]	],
 	["#fcbc98", [	["Aie", "aie",11],
 					["Ahahah", "ahahah",9],
 					["J'ai des muscles en plastique", "muscle",10]	]	],

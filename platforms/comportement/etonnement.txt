@@ -1,3 +1,0 @@
-"QT/curious";0.9;
-"";"Tu as l'air étonné"
-"";"Tu es étonné,"

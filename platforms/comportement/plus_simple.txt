@@ -1,2 +1,0 @@
-"";1;
-"QT/talking";"C'était quoi le plus simple pour toi "

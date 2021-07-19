@@ -1,3 +1,0 @@
-"QT/challenge";1;
-"QT/talking"; self.fname2 + ", qu'en penses tu?"
-"QT/talking";"Qu'est-ce que tu en pense" + self.fname2 + "?"

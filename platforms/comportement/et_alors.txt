@@ -1,4 +1,0 @@
-"QT/so_what";1;
-"QT/confused";"Oui, et alors?"
-"QT/confused";"Qu'est-ce que ça fait?"
-"QT/confused";"Et alors?"

@@ -1,3 +1,0 @@
-"QT/hi";1;
-"QT/showing_smile";"Bonjour, " + self.fname;
-"QT/showing_smile";"Coucou? " + self.fname;

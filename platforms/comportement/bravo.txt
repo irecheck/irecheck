@@ -1,5 +1,0 @@
-"QT/happy";0.9;
-"QT/happy";"Felicitations !";
-"QT/happy";"Bravo!";
-"QT/happy";"Bien joué "+ self.fname;
-"QT/happy";"Félicitations " + self.fname;

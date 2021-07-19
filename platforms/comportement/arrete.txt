@@ -1,3 +1,0 @@
-"QT/bored";1
-"";self.fname + ", On s'arrête pour aujourd'hui"
-"";"On arrête là cette séance"

@@ -1,5 +1,0 @@
-"";1;
-"";"Hey! "+self.fname+"?";
-"";self.fname+"?";
-"";self.fname+", tu m'écoutes?";
-"";"Tu ne m'écoutes plus "+self.fname+" ?";

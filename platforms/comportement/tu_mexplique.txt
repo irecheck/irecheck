@@ -1,4 +1,0 @@
-"QT/curious";1;
-"QT/confused";"tu m'expliques?";
-"QT/confused";"Tu peux m'expliquer un peu?"
-"QT/confused";"Olala. c'est difficile! Tu peux m'expliquer?"

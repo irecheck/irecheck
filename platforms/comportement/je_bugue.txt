@@ -1,3 +1,0 @@
-"QT/thanks";1;
-"QT/confused";"Ça n'a pas bien marché"
-"QT/confused";"J'ai eu un bug"

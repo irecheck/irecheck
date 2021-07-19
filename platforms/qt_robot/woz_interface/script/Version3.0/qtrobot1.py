@@ -55,7 +55,7 @@ class RobotBehavior(object):
 		self.fname = fname
 		self.fname2 = fname2
 		# import the file of behaviours
-		f = open("/home/qtrobot/catkin_ws/src/woz_interface/comportement/"+name+".txt", "r") 
+		f = open("/home/jennie/irecheck_ws/src/irecheck/platforms/qtrobot/woz_interface/comportement/"+name+".txt", "r") 
 		# Save information
 		# first line of file is infomation of gesture 
 		line = f.readline()

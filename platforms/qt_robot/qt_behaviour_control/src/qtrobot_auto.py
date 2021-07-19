@@ -18,6 +18,7 @@ from std_msgs.msg import Float64
 from std_msgs.msg import Int32
 from qt_gesture_controller.srv import *
 from qt_motors_controller.srv import *
+from qt_behaviour_control.srv import *
 from threading import Thread
 
 
@@ -55,7 +56,7 @@ class RobotBehavior(object):
 			data: The button name
 		"""
 
-		f = open("/home/qtrobot/catkin_ws/src/woz_interface/comportement/"+ data.data +".txt", "r")  # you need to change the path here
+		f = open("/home/qtrobot/catkin_ws/src/woz_interface/comportement/"+ data.Name +".txt", "r")  # you need to change the path here
 		# Save information
 		# first line of file is infomation of gesture 
 		line = f.readline()
@@ -80,10 +81,12 @@ class RobotBehavior(object):
 		t3.start()
 		t2.join()
 		t3.join()
-
+		
+		return True
 	def listener(self):
 		# Create a button name subscriber
-		rospy.Subscriber("/irecheck/button_name", String, self.load_info)
+		Server = rospy.Service('/irecheck/buttonName', behavior_control, self.load_info) # Create Service Server
+		#rospy.Subscriber("/irecheck/button_name", String, self.load_info)
 		rospy.spin()
 
 	

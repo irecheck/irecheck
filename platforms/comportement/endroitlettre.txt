@@ -1,3 +1,0 @@
-"";1;
-"QT/talking";"Est-ce que je débute mes lettres où il faut?"
-"QT/talking";"Est-ce qu'il y a des lettres que je ne commence pas au bon endroit?"

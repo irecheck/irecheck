@@ -1,4 +1,0 @@
-"QT/angry";1;
-"QT/talking";"mais tu sais je fais comme je peux, je fais beaucoup d'efforts";
-"QT/talking";"Je fais de mon mieux"
-"QT/talking";"Je fais de gros effort"

@@ -1,3 +1,0 @@
-"QT/bored";1
-"";"Il est l'heure, on doit s'arrêter"
-"";"C'est l'heure à laquelle on doit finir"

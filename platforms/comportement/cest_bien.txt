@@ -1,4 +1,0 @@
-"QT/happy";0.9;
-"QT/showing_smile";"Super!";
-"QT/showing_smile";"C'est bien !";
-"QT/showing_smile";"C'est chouette!"

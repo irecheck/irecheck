@@ -1,2 +1,0 @@
-"QT/challenge";0.7;
-"";"Bon.Tu as gagné. On s'y remet?"
