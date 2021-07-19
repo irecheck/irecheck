@@ -3,19 +3,19 @@
 from flask import Flask, jsonify, render_template, request, redirect, session
 import sys
 import copy
-# import rospy
-# from std_msgs.msg import String
-# from std_msgs.msg import Float64MultiArray
-# from std_msgs.msg import Float64
-# from std_msgs.msg import Int32
+import rospy
+from std_msgs.msg import String
+from std_msgs.msg import Float64MultiArray
+from std_msgs.msg import Float64
+from std_msgs.msg import Int32
 from platforms.msg import NameInfo
 sys.path.append(r'/home/jennie/irecheck_ws/src/irecheck/platforms/script/Version2.0')  
 #from control_publisher import RobotBehavior
-# from qtrobot1 import RobotBehavior
+from qtrobot1 import RobotBehavior
 from threading import Thread
 
-# Thread(target=lambda:rospy.init_node("flask_interface",anonymous=True,disable_signals=True)).start()
-# state = rospy.Publisher('/woz/state',String,queue_size=10)
+Thread(target=lambda:rospy.init_node("flask_interface",anonymous=True,disable_signals=True)).start()
+state = rospy.Publisher('/woz/state',String,queue_size=10)
 
 
 app = Flask(__name__)
@@ -39,8 +39,8 @@ def login(name=None):
             session['user_name'] = request.form.get('fname')
             session['user_surname'] = request.form.get('lname')
             session['teacher_name'] = request.form.get('fname2')
-            # name_info = rospy.Publisher('/woz/nameinfo',NameInfo,queue_size=10)
-            # name_info.publish(str(session.get('user_name')),str(session.get('user_surname')),str(session.get('teacher_name')))
+            name_info = rospy.Publisher('/woz/nameinfo',NameInfo,queue_size=10)
+            name_info.publish(str(session.get('user_name')),str(session.get('user_surname')),str(session.get('teacher_name')))
             return render_template('scenarios.html', name=name)
 		
 		
@@ -67,18 +67,18 @@ def scenarios(name=None):
 def ros_ini():
     """say = rospy.Publisher('/qt_robot/speech/say', String, queue_size=10)
     emo = rospy.Publisher('/qt_robot/emotion/show',String, queue_size=10)"""
-    # button = rospy.Publisher('/woz/button',String,queue_size=10)
+    button = rospy.Publisher('/woz/button',String,queue_size=10)
     prenom = str(session.get('user_name'))
     nom = str(session.get('user_surname'))
     prenom2 = str(session.get('teacher_name'))
-    # woz_command(button,prenom,nom,prenom2)
+    woz_command(button,prenom,nom,prenom2)
     return("")
 
 def woz_command(button,prenom,nom,prenom2):
     payload = request.get_json() 
-    # button.publish(payload['command'])
-    # behaviour = RobotBehavior()
-    # behaviour.load_info(payload['command'],prenom,nom,prenom2)
+    button.publish(payload['command'])
+    behaviour = RobotBehavior()
+    behaviour.load_info(payload['command'],prenom,nom,prenom2)
     return ("")
 
 	

@@ -21,7 +21,11 @@
 % it is displayed as grayscale.
 %
 /DirectClassPacket
+<<<<<<< HEAD
 {
+=======
+***REMOVED***
+>>>>>>> 8832a7b795d6e3fb29254763f5a2a25dadd29e4b
   %
   % Get a DirectClass packet.
   %
@@ -33,6 +37,7 @@
   %
   currentfile color_packet readhexstring pop pop
   compression 0 eq
+<<<<<<< HEAD
   {
     /number_pixels 3 def
   }
@@ -49,19 +54,47 @@
 
 /DirectClassImage
 {
+=======
+  ***REMOVED***
+    /number_pixels 3 def
+  ***REMOVED***
+  ***REMOVED***
+    currentfile byte readhexstring pop 0 get
+    /number_pixels exch 1 add 3 mul def
+  ***REMOVED*** ifelse
+  0 3 number_pixels 1 sub
+  ***REMOVED***
+    pixels exch color_packet putinterval
+  ***REMOVED*** for
+  pixels 0 number_pixels getinterval
+***REMOVED*** bind def
+
+/DirectClassImage
+***REMOVED***
+>>>>>>> 8832a7b795d6e3fb29254763f5a2a25dadd29e4b
   %
   % Display a DirectClass image.
   %
   systemdict /colorimage known
+<<<<<<< HEAD
   {
+=======
+  ***REMOVED***
+>>>>>>> 8832a7b795d6e3fb29254763f5a2a25dadd29e4b
     columns rows 8
     [
       columns 0 0
       rows neg 0 rows
     ]
+<<<<<<< HEAD
     { DirectClassPacket } false 3 colorimage
   }
   {
+=======
+    ***REMOVED*** DirectClassPacket ***REMOVED*** false 3 colorimage
+  ***REMOVED***
+  ***REMOVED***
+>>>>>>> 8832a7b795d6e3fb29254763f5a2a25dadd29e4b
     %
     % No colorimage operator;  convert to grayscale.
     %
@@ -70,12 +103,21 @@
       columns 0 0
       rows neg 0 rows
     ]
+<<<<<<< HEAD
     { GrayDirectClassPacket } image
   } ifelse
 } bind def
 
 /GrayDirectClassPacket
 {
+=======
+    ***REMOVED*** GrayDirectClassPacket ***REMOVED*** image
+  ***REMOVED*** ifelse
+***REMOVED*** bind def
+
+/GrayDirectClassPacket
+***REMOVED***
+>>>>>>> 8832a7b795d6e3fb29254763f5a2a25dadd29e4b
   %
   % Get a DirectClass packet;  convert to grayscale.
   %
@@ -92,6 +134,7 @@
   cvi
   /gray_packet exch def
   compression 0 eq
+<<<<<<< HEAD
   {
     /number_pixels 1 def
   }
@@ -108,6 +151,24 @@
 
 /GrayPseudoClassPacket
 {
+=======
+  ***REMOVED***
+    /number_pixels 1 def
+  ***REMOVED***
+  ***REMOVED***
+    currentfile byte readhexstring pop 0 get
+    /number_pixels exch 1 add def
+  ***REMOVED*** ifelse
+  0 1 number_pixels 1 sub
+  ***REMOVED***
+    pixels exch gray_packet put
+  ***REMOVED*** for
+  pixels 0 number_pixels getinterval
+***REMOVED*** bind def
+
+/GrayPseudoClassPacket
+***REMOVED***
+>>>>>>> 8832a7b795d6e3fb29254763f5a2a25dadd29e4b
   %
   % Get a PseudoClass packet;  convert to grayscale.
   %
@@ -124,6 +185,7 @@
   cvi
   /gray_packet exch def
   compression 0 eq
+<<<<<<< HEAD
   {
     /number_pixels 1 def
   }
@@ -140,6 +202,24 @@
 
 /PseudoClassPacket
 {
+=======
+  ***REMOVED***
+    /number_pixels 1 def
+  ***REMOVED***
+  ***REMOVED***
+    currentfile byte readhexstring pop 0 get
+    /number_pixels exch 1 add def
+  ***REMOVED*** ifelse
+  0 1 number_pixels 1 sub
+  ***REMOVED***
+    pixels exch gray_packet put
+  ***REMOVED*** for
+  pixels 0 number_pixels getinterval
+***REMOVED*** bind def
+
+/PseudoClassPacket
+***REMOVED***
+>>>>>>> 8832a7b795d6e3fb29254763f5a2a25dadd29e4b
   %
   % Get a PseudoClass packet.
   %
@@ -151,6 +231,7 @@
   /offset exch 3 mul def
   /color_packet colormap offset 3 getinterval def
   compression 0 eq
+<<<<<<< HEAD
   {
     /number_pixels 3 def
   }
@@ -167,6 +248,24 @@
 
 /PseudoClassImage
 {
+=======
+  ***REMOVED***
+    /number_pixels 3 def
+  ***REMOVED***
+  ***REMOVED***
+    currentfile byte readhexstring pop 0 get
+    /number_pixels exch 1 add 3 mul def
+  ***REMOVED*** ifelse
+  0 3 number_pixels 1 sub
+  ***REMOVED***
+    pixels exch color_packet putinterval
+  ***REMOVED*** for
+  pixels 0 number_pixels getinterval
+***REMOVED*** bind def
+
+/PseudoClassImage
+***REMOVED***
+>>>>>>> 8832a7b795d6e3fb29254763f5a2a25dadd29e4b
   %
   % Display a PseudoClass image.
   %
@@ -176,7 +275,11 @@
   currentfile buffer readline pop
   token pop /class exch def pop
   class 0 gt
+<<<<<<< HEAD
   {
+=======
+  ***REMOVED***
+>>>>>>> 8832a7b795d6e3fb29254763f5a2a25dadd29e4b
     currentfile buffer readline pop
     token pop /depth exch def pop
     /grays columns 8 add depth sub depth mul 8 idiv string def
@@ -185,9 +288,15 @@
       columns 0 0
       rows neg 0 rows
     ]
+<<<<<<< HEAD
     { currentfile grays readhexstring pop } image
   }
   {
+=======
+    ***REMOVED*** currentfile grays readhexstring pop ***REMOVED*** image
+  ***REMOVED***
+  ***REMOVED***
+>>>>>>> 8832a7b795d6e3fb29254763f5a2a25dadd29e4b
     %
     % Parameters:
     %   colors: number of colors in the colormap.
@@ -199,15 +308,25 @@
     /colormap colors string def
     currentfile colormap readhexstring pop pop
     systemdict /colorimage known
+<<<<<<< HEAD
     {
+=======
+    ***REMOVED***
+>>>>>>> 8832a7b795d6e3fb29254763f5a2a25dadd29e4b
       columns rows 8
       [
         columns 0 0
         rows neg 0 rows
       ]
+<<<<<<< HEAD
       { PseudoClassPacket } false 3 colorimage
     }
     {
+=======
+      ***REMOVED*** PseudoClassPacket ***REMOVED*** false 3 colorimage
+    ***REMOVED***
+    ***REMOVED***
+>>>>>>> 8832a7b795d6e3fb29254763f5a2a25dadd29e4b
       %
       % No colorimage operator;  convert to grayscale.
       %
@@ -216,6 +335,7 @@
         columns 0 0
         rows neg 0 rows
       ]
+<<<<<<< HEAD
       { GrayPseudoClassPacket } image
     } ifelse
   } ifelse
@@ -223,6 +343,15 @@
 
 /DisplayImage
 {
+=======
+      ***REMOVED*** GrayPseudoClassPacket ***REMOVED*** image
+    ***REMOVED*** ifelse
+  ***REMOVED*** ifelse
+***REMOVED*** bind def
+
+/DisplayImage
+***REMOVED***
+>>>>>>> 8832a7b795d6e3fb29254763f5a2a25dadd29e4b
   %
   % Display a DirectClass or PseudoClass image.
   %
@@ -259,10 +388,17 @@
   token pop /class exch def pop
   currentfile buffer readline pop
   token pop /compression exch def pop
+<<<<<<< HEAD
   class 0 gt { PseudoClassImage } { DirectClassImage } ifelse
   grestore
   showpage
 } bind def
+=======
+  class 0 gt ***REMOVED*** PseudoClassImage ***REMOVED*** ***REMOVED*** DirectClassImage ***REMOVED*** ifelse
+  grestore
+  showpage
+***REMOVED*** bind def
+>>>>>>> 8832a7b795d6e3fb29254763f5a2a25dadd29e4b
 %%EndProlog
 %%Page:  1 1
 %%PageBoundingBox: 1486 670 1558 720
