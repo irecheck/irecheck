@@ -22,6 +22,7 @@ class Sleeping(smach.State):
             pass
         # transition to the next state
         userdata.continueKey = False
+        #msg = 'bonjour'
         msg = 'Bonjour !'
         rospy.loginfo(msg)
         userdata.pubMsg.publish(msg)   
@@ -42,6 +43,7 @@ class Activity(smach.State):
             pass
         # transition to the next state
         userdata.continueKey = False
+        #msg = 'bravo'
         msg = 'Bravo !'
         rospy.loginfo(msg)
         userdata.pubMsg.publish(msg)   
@@ -62,6 +64,7 @@ class Assessment(smach.State):
             pass
         # transition to the next state
         userdata.continueKey = False
+        #msg = 'bravo'
         msg = 'Bravo !'
         rospy.loginfo(msg)
         userdata.pubMsg.publish(msg)   
@@ -80,6 +83,7 @@ class Goodbye(smach.State):
         # wait some time
         rospy.sleep(5)
         # transition to the next state (end)
+        #msg = 'au_revoir'
         msg = 'Au revoir !'
         rospy.loginfo(msg)
         userdata.pubMsg.publish(msg)   
