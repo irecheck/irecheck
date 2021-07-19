@@ -4,7 +4,7 @@ import rospy
 import smach
 import roslib; roslib.load_manifest('smach')
 from std_msgs.msg import String
-
+from qt_nuitrack_app.msg import *
 
 # define state Sleeping
 class Sleeping(smach.State):
@@ -14,6 +14,7 @@ class Sleeping(smach.State):
                              input_keys=['continueKey','pubMsg'],
                              output_keys=['continueKey','pubMsg'])
 
+
     def execute(self, userdata):
         rospy.loginfo('Executing state SLEEPING')
         # stay here until the condition for transitioning is met
@@ -21,7 +22,7 @@ class Sleeping(smach.State):
             pass
         # transition to the next state
         userdata.continueKey = False
-        msg = 'bonjour'
+        msg = 'Bonjour !'
         rospy.loginfo(msg)
         userdata.pubMsg.publish(msg)   
         return 'proceed'
@@ -41,7 +42,7 @@ class Activity(smach.State):
             pass
         # transition to the next state
         userdata.continueKey = False
-        msg = 'bravo'
+        msg = 'Bravo !'
         rospy.loginfo(msg)
         userdata.pubMsg.publish(msg)   
         return 'proceed'
@@ -61,7 +62,7 @@ class Assessment(smach.State):
             pass
         # transition to the next state
         userdata.continueKey = False
-        msg = 'bravo'
+        msg = 'Bravo !'
         rospy.loginfo(msg)
         userdata.pubMsg.publish(msg)   
         return 'proceed'
@@ -79,7 +80,7 @@ class Goodbye(smach.State):
         # wait some time
         rospy.sleep(5)
         # transition to the next state (end)
-        msg = 'au revoir'
+        msg = 'Au revoir !'
         rospy.loginfo(msg)
         userdata.pubMsg.publish(msg)   
         return 'proceed'
@@ -92,14 +93,15 @@ class IrecheckManager():
         rospy.init_node('irecheckmanager', anonymous=True)
         # initialize subscribers
         rospy.Subscriber('dynamicomsg', String, self.dynamicoCallback)
-        rospy.Subscriber('qt_nuitrack_app/faces', Faces, self.nuitrackCallback)
+        rospy.Subscriber('/qt_nuitrack_app/faces', Faces, self.nuitrackCallback)
         
         # create a SMACH state machine
         self.sm = smach.StateMachine(outcomes=['end'])
         # create and initialize the variables to be passed to states
         self.sm.userdata.dynamicoKey = False
         self.sm.userdata.faceKey = False
-        self.sm.userdata.pubMsg = rospy.Publisher('/irecheck/button_name', String, queue_size=1)
+        #self.sm.userdata.pubMsg = rospy.Publisher('/irecheck/button_name', String, queue_size=1)
+        self.sm.userdata.pubMsg = rospy.Publisher('/qt_robot/speech/say', String, queue_size=1)
 
         # open the container
         with self.sm:
@@ -141,7 +143,8 @@ class IrecheckManager():
     # callback on nuitrack/faces
     def nuitrackCallback(self, data):
         # log the reception of the message
-        rospy.loginfo(rospy.get_caller_id() + '- received %s', data.data)
+        #rospy.loginfo(rospy.get_caller_id() + '- received %s', data.faces)
+        rospy.loginfo(rospy.get_caller_id() + '- received face')
         # notify the FSM of the detection of a face
         self.sm.userdata.faceKey = True
 
