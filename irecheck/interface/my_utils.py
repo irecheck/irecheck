@@ -4,11 +4,7 @@ class HistoryUtil:
     def __init__(self):
         print("Created instance of HistoryUtil")
         self.lastName = '???'
-<<<<<<< HEAD
         self.info = {'user_age': '???', 'user_gender': '???', 'user_dext': '???'}
-=======
-        self.info = ***REMOVED***'user_age': '???', 'user_gender': '???', 'user_dext': '???'***REMOVED***
->>>>>>> 8832a7b795d6e3fb29254763f5a2a25dadd29e4b
         self.shouldUpdate = True
         self.size = 0
         self.levels = [0, 0, 0, 0, 0]
@@ -71,11 +67,7 @@ class HistoryUtil:
             self.size = len(user_df.index)
 
             # Update user info if possible
-<<<<<<< HEAD
             self.info = {'user_age': '???', 'user_gender': '???', 'user_dext': '???'}
-=======
-            self.info = ***REMOVED***'user_age': '???', 'user_gender': '???', 'user_dext': '???'***REMOVED***
->>>>>>> 8832a7b795d6e3fb29254763f5a2a25dadd29e4b
             if (self.size > 0):
                 row = user_df.iloc[0]
                 self.info['user_age'] = row['age']
@@ -109,22 +101,14 @@ class HistoryUtil:
         return user_df.to_html()
 
     def getUserData(self):
-<<<<<<< HEAD
         toSend = {
-=======
-        toSend = ***REMOVED***
->>>>>>> 8832a7b795d6e3fb29254763f5a2a25dadd29e4b
             'shouldUpdate': self.shouldUpdate,
             'size': self.size,
             'levels': self.levels,
             'nSuccess': self.nSuccess,
             'activity': self.activity #,
             # 'historyTable': self.getUserTableHTML()
-<<<<<<< HEAD
         }
-=======
-        ***REMOVED***
->>>>>>> 8832a7b795d6e3fb29254763f5a2a25dadd29e4b
         self.shouldUpdate = False
         return toSend
 

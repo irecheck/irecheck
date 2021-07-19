@@ -1,0 +1,2 @@
+"QT/angry";0.9;
+"QT/talking";"Demandons à" + self.fname2;

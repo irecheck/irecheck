@@ -34,8 +34,8 @@ class DynamicoListener():
         
         # get credentials information from the file
         path = os.path.realpath(__file__).replace('dynamicoListener.py','')
-        with open(path + '/DYNAMICO_CREDENTIALS.txt') as f:
-        # with open(path + '/DYNAMICO_CREDENTIALS_PARIS.txt') as f:
+        #with open(path + '/DYNAMICO_CREDENTIALS.txt') as f:
+        with open(path + '/DYNAMICO_CREDENTIALS_PARIS.txt') as f:
             data = json.load(f)
 
         print("DATA", data)

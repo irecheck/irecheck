@@ -1,14 +1,9 @@
 @charset "utf-8";
-<<<<<<< HEAD
 html, body {
-=======
-html, body ***REMOVED***
->>>>>>> 8832a7b795d6e3fb29254763f5a2a25dadd29e4b
 	height: 92%;
 	min-height: 92%;
 	font-family: Arial, Helvetica, sans-serif;
 	touch-action: manipulation;
-<<<<<<< HEAD
 }
 
 body {
@@ -30,29 +25,6 @@ body {
 }
 
 #breadcrumb {
-=======
-***REMOVED***
-
-body ***REMOVED***
-	background-color: #d4e3fc;
-	margin-top: 0em;
-	padding-top: 0em;
-***REMOVED***
-
-#content ***REMOVED***
-	height: 100%;
-	width: 90%;
-	margin: auto;
-***REMOVED***
-
-#header ***REMOVED***
-	/* height: 10%; 
-	background-color: #0F0;*/
-	border-bottom: 2px solid #ffffff
-***REMOVED***
-
-#breadcrumb ***REMOVED***
->>>>>>> 8832a7b795d6e3fb29254763f5a2a25dadd29e4b
 	padding: 0.5em;
 	padding-left: 1em;
 	margin-top: 0em;
@@ -62,7 +34,6 @@ body ***REMOVED***
 	border-bottom-left-radius: 1em;
 	border-bottom-right-radius: 1em;
 
-<<<<<<< HEAD
 }
 
 #breadcrumb img {
@@ -82,67 +53,28 @@ body ***REMOVED***
 }
 
 #body-left {
-=======
-***REMOVED***
-
-#breadcrumb img ***REMOVED***
-	float: right;
-	cursor: pointer;
-***REMOVED***
-
-#footer***REMOVED***
-	height: 5%;
-	/*background-color: #ffffff;*/
-***REMOVED***
-
-#body ***REMOVED***
-	/*background-color:#cccccc;*/
-	height: 100%;
-	text-align:center;
-***REMOVED***
-
-#body-left ***REMOVED***
->>>>>>> 8832a7b795d6e3fb29254763f5a2a25dadd29e4b
 	width: 30%;
 	height: 100%;
 	float: left;
 	/*background-color: #999999;*/
-<<<<<<< HEAD
 }
 
 #body-right {
-=======
-***REMOVED***
-
-#body-right ***REMOVED***
->>>>>>> 8832a7b795d6e3fb29254763f5a2a25dadd29e4b
 	width: 30%;
 	height: 100%;
 	float: right;
 	position: relative;
 	/*background-color: #999999;*/
-<<<<<<< HEAD
 }
 
 img.bottom_right { 
-=======
-***REMOVED***
-
-img.bottom_right ***REMOVED*** 
->>>>>>> 8832a7b795d6e3fb29254763f5a2a25dadd29e4b
 	text-align:right;
 	position: absolute;
 	bottom: 0;
 	right: 0;
-<<<<<<< HEAD
 }
 
 .tab {
-=======
-***REMOVED***
-
-.tab ***REMOVED***
->>>>>>> 8832a7b795d6e3fb29254763f5a2a25dadd29e4b
 	display: inline-block;
 	border-top-left-radius: 1em;
 	border-top-right-radius: 1em;
@@ -151,7 +83,6 @@ img.bottom_right ***REMOVED***
 	padding: 0.5em;
 	margin: 0em;
 	text-align: center;
-<<<<<<< HEAD
 }
 
 .tab a {
@@ -179,35 +110,6 @@ img.bottom_right ***REMOVED***
 
 
 .circle-container {
-=======
-***REMOVED***
-
-.tab a ***REMOVED***
-	color: #000000;
-	text-decoration: none;
-***REMOVED***
-
-.tab--on ***REMOVED***
-	background-color: #ffffff;
-***REMOVED***
-
-.tab--off ***REMOVED***
-	background-color: #cccccc;
-***REMOVED***
-
-
-.main-container ***REMOVED***
-	padding-top: 10em;
-***REMOVED***
-
-
-.placeholder ***REMOVED***
-	/*background-color: #cccccc;*/
-***REMOVED***
-
-
-.circle-container ***REMOVED***
->>>>>>> 8832a7b795d6e3fb29254763f5a2a25dadd29e4b
     position: relative;
     width: 18em;
     height: 18em;
@@ -219,26 +121,16 @@ img.bottom_right ***REMOVED***
 	margin: auto;
 	/*margin-top: 4em;*/
 	background-color: #ffffff;
-<<<<<<< HEAD
 }
 
 .circle-container div {
 }
 
 #spinner-container {
-=======
-***REMOVED***
-
-.circle-container div ***REMOVED***
-***REMOVED***
-
-#spinner-container ***REMOVED***
->>>>>>> 8832a7b795d6e3fb29254763f5a2a25dadd29e4b
     position: relative;
 
 	margin: auto;
 	margin-top: -12.5em;
-<<<<<<< HEAD
 }
 
 #spinner-container div {
@@ -252,21 +144,6 @@ img.bottom_right ***REMOVED***
 }
 
 .auth-circle-container {
-=======
-***REMOVED***
-
-#spinner-container div ***REMOVED***
-    /*position: absolute;
-	margin: auto;*/
-***REMOVED***
-
-#spinner-container img ***REMOVED***
-	width: 6em;
-	height: 6em;
-***REMOVED***
-
-.auth-circle-container ***REMOVED***
->>>>>>> 8832a7b795d6e3fb29254763f5a2a25dadd29e4b
     position: relative;
     width: 36em;
     height: 36em;
@@ -280,7 +157,6 @@ img.bottom_right ***REMOVED***
 	margin-top: -4em;
 	background-color: #ffffff;
 	text-align: center;
-<<<<<<< HEAD
 }
 
 .auth-circle-container form {
@@ -297,24 +173,6 @@ img.bottom_right ***REMOVED***
 }
 
 .auth-circle-container input[type=submit] {
-=======
-***REMOVED***
-
-.auth-circle-container form ***REMOVED***
-	padding-top: 12em;
-***REMOVED***
-
-.auth-circle-container h1 ***REMOVED***
-	font-size: 1.3em;
-***REMOVED***
-
-.auth-circle-container label ***REMOVED***
-    display: inline-block;
-	margin: 0.5em;
-***REMOVED***
-
-.auth-circle-container input[type=submit] ***REMOVED***
->>>>>>> 8832a7b795d6e3fb29254763f5a2a25dadd29e4b
 	position: relative;
 	top: -1.5em;
     padding:10px 25px; 
@@ -323,7 +181,6 @@ img.bottom_right ***REMOVED***
     cursor:pointer;
     border-radius: 5px; 
 	margin-left: 5em;
-<<<<<<< HEAD
 }
 
 .auth-circle-container img {
@@ -331,127 +188,70 @@ img.bottom_right ***REMOVED***
 
 
 .group-button-container {
-=======
-***REMOVED***
-
-.auth-circle-container img ***REMOVED***
-***REMOVED***
-
-
-.group-button-container ***REMOVED***
->>>>>>> 8832a7b795d6e3fb29254763f5a2a25dadd29e4b
     position: relative;
     width: 4.5em;
     height: 4.5em;
 
 	margin: auto;
 	margin-top: -4.5em;
-<<<<<<< HEAD
 }
 
 
 .group-button-container div {
-=======
-***REMOVED***
-
-
-.group-button-container div ***REMOVED***
->>>>>>> 8832a7b795d6e3fb29254763f5a2a25dadd29e4b
     position: absolute;
 
     width: 4em;
     height: 4em;
 	cursor: pointer;
-<<<<<<< HEAD
 }
 
 
 .group-info-container {
-=======
-***REMOVED***
-
-
-.group-info-container ***REMOVED***
->>>>>>> 8832a7b795d6e3fb29254763f5a2a25dadd29e4b
 	position: relative;
 	width: 4.5em;
 	height: 4.5em;
 
 	margin: auto;
 	margin-top: -4.5em;
-<<<<<<< HEAD
 }
 
 
 .group-info-container div {
-=======
-***REMOVED***
-
-
-.group-info-container div ***REMOVED***
->>>>>>> 8832a7b795d6e3fb29254763f5a2a25dadd29e4b
     position: absolute;
 
     width: 4em;
     height: 4em;
-<<<<<<< HEAD
 }
 
 
 .group-text-container {
-=======
-***REMOVED***
-
-
-.group-text-container ***REMOVED***
->>>>>>> 8832a7b795d6e3fb29254763f5a2a25dadd29e4b
 	position: relative;
 	width: 8em;
 	height: 4.5em;
 
 	margin: auto;
 	margin-top: -4.5em;
-<<<<<<< HEAD
 }
 
 
 .group-text-container div {
-=======
-***REMOVED***
-
-
-.group-text-container div ***REMOVED***
->>>>>>> 8832a7b795d6e3fb29254763f5a2a25dadd29e4b
     position: absolute;
 
     width: 8em;
     height: 4em;
-<<<<<<< HEAD
 }
 
 
 .commands-list-container {
-=======
-***REMOVED***
-
-
-.commands-list-container ***REMOVED***
->>>>>>> 8832a7b795d6e3fb29254763f5a2a25dadd29e4b
 	position: relative;
 	width: 9em;
 	height: 9em;
 
 	margin: auto;
 	margin-top: -4em;
-<<<<<<< HEAD
 }
 
 .commands-list-container div {
-=======
-***REMOVED***
-
-.commands-list-container div ***REMOVED***
->>>>>>> 8832a7b795d6e3fb29254763f5a2a25dadd29e4b
     position: absolute;
 
     width: 8em;
@@ -460,12 +260,4 @@ img.bottom_right ***REMOVED***
 	
 	border-radius: 5%;
 	cursor: pointer;
-<<<<<<< HEAD
 }
-=======
-***REMOVED***
->>>>>>> 8832a7b795d6e3fb29254763f5a2a25dadd29e4b
-
-
-
-

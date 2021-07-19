@@ -1,0 +1,73 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Scenarios</title>
+    <link href="static/woz.css" rel="stylesheet" type="text/css" />
+    <script src="static/jquery-3.5.1.min.js"></script>
+    <script src="static/woz.js"></script>
+	<script src="static/scenarios.js"></script>
+</head>
+
+<body onload="onLoad()">
+
+    <div id="content">
+        <div id="header">
+			<div id="breadcrumb">{{ session['user_name'] }}, {{ session['user_surname'] }}
+				<a href="login"><img src="static/images/back.png" width="3%" alt="back" /></a>
+			</div>
+
+            <div class="tab tab--on">
+            <a href="scenarios">Scénario et Jeux</a> </div><div class="tab tab--off">
+            <a href="reactions">Réactions</a> </div><div class="tab tab--off">
+            ... </div>
+        </div>
+    
+        <div id="body">            
+            <div id="body-left">
+            </div>
+            <div id="body-right">
+                <img class="bottom_right" src="static/images/info.png" width="15%" alt="info" onClick="showInfo()" />
+            </div>
+            
+            <div class="main-container">
+				<div class='ellipse-container'>
+                    <div class="horizontal-container"></div>
+                </div>
+				<div id='spinner-container'> <img src="static/images/spinner.gif"/> </div>
+				<div class='group-button-container'></div>
+				<div class='group-info-container'></div>
+				<div class='group-text-container'></div>
+				<div class='commands-list-container'></div>
+            </div>
+            <!--
+			-->
+
+        </div>
+        
+        <div id="footer"></div>
+    
+    </div>
+
+
+
+<script><!--
+function onLoad() {
+	makeEllipseExact("group-button", groupsList, ellipseGroupList)
+	
+	makeEllipseExact("group-info", infoList, ellipseInfoList)
+	
+	makeEllipseExact("group-text", textList, ellipseTextList);
+
+	makeCircularCommandList("commands-list", commandsList, ellipseCommandList);
+	
+	//makeSpinner("spinner");
+	
+	hideEverything();
+}
+--></script>
+
+
+</body>
+</html>

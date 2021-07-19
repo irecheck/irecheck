@@ -1,193 +1,29 @@
-# System Requirements
+# System Requirements (package specific)
 
-* Ubuntu 16.04
-* ROS Kinetic
-* Python 2.7 + Pandas
-* mySQL Server (temporary)
-* (PySide2)
-* QTrobot
+* SMACH (ROS package for Finite State Machine management)
 
 # Preliminary Operations
 
-## Install ROS Kinetic
-Follow the instructions on http://wiki.ros.org/kinetic/Installation/Ubuntu
-
-Finalize the configuration and setup of the ROS environment following the instructions on http://wiki.ros.org/ROS/Tutorials/InstallingandConfiguringROSEnvironment
-
-If you are not familiar with ROS, we recommend you to go through the Beginner Level Tutorials (http://wiki.ros.org/ROS/Tutorials), up to **[16] Examining the Simple Service and Client** included.
-
-It is very convenient to have access to the ROS commands and the catkin workspace from all terminal shells.
-To do so, edit the .bashrc file to source them:
+## Download and set up SMACH
+Move into your catkin workspace (typically, inside the **catkin_ws/src/** folder) and clone the SMACH package inside it:
 ```
-$ gedit .bashrc
+$ git clone https://github.com/ros/executive_smach.git 
 ```
-And add at the end of the file the lines:
-```
-source /opt/ros/kinetic/setup.bash
-source ~/catkin_ws/devel/setup.bash
-```
-
-## Install mySQL
-In a terminal tab:
-```
-$ sudo apt update
-$ sudo apt install mysql-server
-```
-
-## Install mysql-connector-python
-Install pip (to check if you already have it, type `pip --version`):
-```
-$ sudo apt install python-pip
-```
-Then:
-```
-$ pip install mysql-connector-python
-```
-If the above command gives you an error (too low version of pip), upgrade pip:
-```
-$ pip install --upgrade pip
-```
-and then issue the command again. If you get a warning (wrapper too old), just restart the computer and it should disappear.
-
-## Create the temporary fakeDynamico database and set access rules
-Launch the mySQL service from terminal (insert password when prompted):
-```
-$ sudo mysql -u root -p
-```
-
-You will see the following output on the terminal:
-```
-Welcome to the MySQL monitor.  Commands end with ; or \g.
-Your MySQL connection id is 2
-Server version: 5.7.30-0ubuntu0.18.04.1 (Ubuntu)
-
-Copyright (c) 2000, 2020, Oracle and/or its affiliates. All rights reserved.
-
-Oracle is a registered trademark of Oracle Corporation and/or its
-affiliates. Other names may be trademarks of their respective
-owners.
-
-Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
-
-mysql>
-```
-
-FakeDynamico uses a local SQL database to store its data. Create it with:
-```
-mysql> CREATE DATABASE fakedynamico;
-```
-
-Grant to user *dynamico* all rights on the database *fakedynamico*:
-```
-mysql> GRANT ALL PRIVILEGES ON fakedynamico.* TO 'dynamico'@'localhost' IDENTIFIED BY 'dynamicopw';
-```
-
-Exit the mySQL console:
-```
-mysql> exit
-```
-
-## Install Pandas
-```
-$ pip install pandas
-```
-
-## Configure your ROS Environment for QTrobot
-```
-$ git clone https://github.com/luxai-qtrobot/software.git
-```
-
-Browse inside the cloned folder (called *software*), then copy the content of the *headers* folder into your catkin *devel* folder:
-```
-$ cp -r headers/* ~/catkin_ws/devel/
-```
-
-Make sure the QTrobot is plugged and on and connect your laptop to the WiFi network of the robot (for the CHILI robot, the network SSID is *QT109* and the password is written on the index page of the QTrobot User Manual).
-
-In a terminal tab, get the IP ADDRESS of your laptop (it should be something like 10.42.0.***):
-```
-$ ifconfig
-```
-
-Update your *.bash_aliases* file to use the roscore of QTrobot:
-```
-$ gedit ~/.bash_aliases
-```
-And add at the end of the file the lines:
-```
-source /opt/ros/kinetic/setup.bash
-source ~/catkin_ws/devel/setup.bash
-
-## QTrobot
-export ROS_IP=<your IP address>
-export ROS_MASTER_URI=http://192.168.100.1:11311
-```
-
-**IMPORTANT** The above exports make your ROS **always** use the roscore of QTrobot. If you want to use your own roscore, comment those lines.
-
-To check that the environment is setup correctly, in a new terminal tab list all the active ROS topics:
-```
-$ rostopic list
-```
-
-If you setup the system correctly, you should see all the robot's topics:
-```
-/add_file_to_robot
-/camera/color/image_raw
-/find_object/objects
-/info
-/interactive_interface_notes
-/kid_tablet_images
-/objectsStamped
-/qt_robot/audio/play
-/qt_robot/behavior/talkAudio
-/qt_robot/behavior/talkText
-/qt_robot/emotion/show
-/qt_robot/gesture/play
-/qt_robot/head_position/command
-/qt_robot/joints/state
-/qt_robot/left_arm_position/command
-/qt_robot/motors/states
-/qt_robot/right_arm_position/command
-/qt_robot/speech/say
-/robAPL_input_events
-/robAPL_input_game
-/robot_add_file_request
-/robot_add_file_response
-/rosout
-/rosout_agg
-/tf
-```
-and you can call them directly from terminal, e.g.:
-```
-$ rostopic pub /qt_robot/speech/say std_msgs/String "data: 'Success'"
-```
-
-If you have problems in sending command to QTrobot (and you did all the above steps correctly), try disabling your firewall:
-```
-$ sudo ufw disable
-```
-
-## Set up the iReCHeCk ROS package
-Clone the content of this repo inside your catkin workspace (typically, inside the **catkin_ws/src/** folder).
-
-ROS services rely on autogenerated C++ code (yep, even if you're only programming in Python), that is created by catkin_make:
+Run catkin_make to generate SMACH messages and services:
 ```
 $ cd ~/catkin_ws
 $ catkin_make
 ```
 
-iReCHeCk keeps all data collected at run-time in a Pandas dataframe, which is exported to a .csv file at the end of the session.
+## Set up the irecheck package
+The **irecheck** package runs the Finite State Machine managing the robot's autonomous behaviour and keeps all data collected at run-time in a Pandas dataframe, which is exported to a .csv file at the end of the session.
 
-As specified in the script *irecheckWorld.py*, the .csv file is saved inside the **~/Documents/iReCHeCk_logs/** folder.
+The .csv file is saved inside the **~/Documents/iReCHeCk_logs/** folder.
 
-Create the folder before running the package, or change the path.
+If you haven't done it already, create the folder before running the package, or change the path.
 
 # Package overview (TO BE UPDATED)
-The overall iReCHeCk architecture is sketched in the file SWarchitecture.png.
-
-The iReCHeCk ROS package includes the following nodes:
-* **dbListener** - monitors the **myirecheck** database and publishes every new record inserted in the database as a ROS message
+The **irecheck** ROS package includes the following nodes:
 * **coreEngine** - master controller: it receives the record updates, the Autonomous Mode commands and the Wizard commands (when available) and appropriately dispatches commands for the robot
 * **wozInterface** - it receives the record updates, displays them to the Wizard and publishes Wizard commands for the coreEngine
 * **autonomousMode** - it receives the record updates, processed them and publishes Autonomous Mode commands for the coreEngine
@@ -196,27 +32,8 @@ The iReCHeCk ROS package includes the following nodes:
 In the final scenario, records will be written into the **myirecheck** database by the Dynamico application, as the child interacts with it.
 For easy development and debugging, the script **fakeDynamico** emulates the Dynamico app and allows to add records onto the **myirecheck** database.
 
-# Usage Guide
-
-Open a terminal tab, browse to its folder and launch the **fakeDynamico** script:
-```
-$ python fakeDynamico.py
-```
-
-Use the displayed commands to act upon the database.
-
-To launch all the nodes in the iReCHeCk architecture at once, you can use the *irecheck.launch* launchfile.
-The launchfile accepts an argument in input to specify whether it should launch the interface for the wizard (default), or the debug interface.
-
-To launch the default wizard interface, **in a new terminal tab**:
-```
-$ roslaunch irecheck irecheck.launch debug:="0"
-```
-
-To launch the debug interface, **in a new terminal tab**:
-```
-$ roslaunch irecheck irecheck.launch debug:="1"
-```
+# Usage Guide (TO BE UPDATED)
+To launch all the nodes in the iReCHeCk package at once, you can use the *irecheck.launch* launchfile.
 
 When using a launchfile, you don't see the ROS nodes in different terminal tabs.
 In this case, you might want to make sure that the topics are correctly published by the nodes, by echoing them.
@@ -237,33 +54,11 @@ In this case, **in a new terminal tab**, start with launching the *roscore*:
 $ roscore
 ```
 
-Then, for each node to launch (e.g., **dbListener**), **in a new terminal tab**:
+Then, for each node to launch (e.g., **irecheckWorldManager**), **in a new terminal tab**:
 ```
-$ rosrun irecheck dbListener.py
+$ rosrun irecheck irecheckWorldManager.py
 ```
 
 # Tips & Tricks
 
-1. To make a python script executable (e.g. "scripts/dbListener.py"): 
-```
-$ chmod +x scripts/dbListener.py
-```
-
-2. Whenever you create a new ROS message or ROS service in your package, you need to update CMakeLists.txt (and possibly package.xml as well) accordingly, and then re-run catkin_make. Refer to the ROS Tutorial http://wiki.ros.org/ROS/Tutorials/CreatingMsgAndSrv for instructions on how to do so.
-
-3. When you delete the table you need to rerun the code
-
-4. If you want to slow down the movement of the QT to make idle movement more natural run the following commands:
-
-rosservice call /qt_robot/motors/setVecity "parts:
-- 'left_arm'
-velocity: 4"
-
-rosservice call /qt_robot/motors/setVecity "parts:
-- 'right_arm'
-velocity: 4"
-
-5. To clone7pull/push from or to a branch, the syntax for the git command is:
-```
-$ git clone -b dorsa ssh://git@c4science.ch/source/iReCHeCk_repo.git
-```
+1. When you delete the table you need to rerun the code

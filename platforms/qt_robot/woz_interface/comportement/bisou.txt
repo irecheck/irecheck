@@ -1,0 +1,2 @@
+"QT/kiss";1;
+"QT/kiss2";"Je peux t'envoyer un bisou?"

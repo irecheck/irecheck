@@ -1,0 +1,3 @@
+"QT/so_what";0.85;
+"";"C'est pas grave, ça arrive";
+"";self.fname + "Ce n'est pas grave";
