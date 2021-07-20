@@ -2,9 +2,11 @@
 
 import rospy
 import smach
+import pandas as pd
 import roslib; roslib.load_manifest('smach')
 from std_msgs.msg import String
-from qt_nuitrack_app.msg import *
+#from qt_nuitrack_app.msg import *
+from datetime import datetime
 
 # define state Sleeping
 class Sleeping(smach.State):
@@ -23,7 +25,7 @@ class Sleeping(smach.State):
         # transition to the next state
         userdata.continueKey = False
         #msg = 'bonjour'
-        msg = 'Bonjour !'
+        msg = 'Bonjour ! Allons-y! Jouons un niveau de votre activité Dynamico préférée!'
         rospy.loginfo(msg)
         userdata.pubMsg.publish(msg)   
         return 'proceed'
@@ -44,7 +46,7 @@ class Activity(smach.State):
         # transition to the next state
         userdata.continueKey = False
         #msg = 'bravo'
-        msg = 'Bravo !'
+        msg = 'Bravo ! Jouons un autre niveau!'
         rospy.loginfo(msg)
         userdata.pubMsg.publish(msg)   
         return 'proceed'
@@ -93,12 +95,14 @@ class Goodbye(smach.State):
 
 class IrecheckManager():
     def __init__(self):
+        self.world = pd.DataFrame()     # dataframe storing all info of relevance for iReCHeCk (sources: Dynamico)
+
         # initialize ROS node
         rospy.init_node('irecheckmanager', anonymous=True)
         # initialize subscribers
         rospy.Subscriber('dynamicomsg', String, self.dynamicoCallback)
-        rospy.Subscriber('/qt_nuitrack_app/faces', Faces, self.nuitrackCallback)
-        
+        #rospy.Subscriber('/qt_nuitrack_app/faces', Faces, self.nuitrackCallback)
+
         # create a SMACH state machine
         self.sm = smach.StateMachine(outcomes=['end'])
         # create and initialize the variables to be passed to states
@@ -112,9 +116,9 @@ class IrecheckManager():
             # Add states to the container
             smach.StateMachine.add('SLEEPING', Sleeping(), 
                                 transitions={'proceed':'ACTIVITY'},
-                                remapping={'continueKey':'faceKey',
+                                remapping={'continueKey':'dynamicoKey',
                                             'pubMsg':'pubMsg', 
-                                            'continueKey':'faceKey',
+                                            'continueKey':'dynamicoKey',
                                             'pubMsg':'pubMsg'})
             smach.StateMachine.add('ACTIVITY', Activity(), 
                                 transitions={'proceed':'ASSESSMENT'},
@@ -143,6 +147,16 @@ class IrecheckManager():
         rospy.loginfo(rospy.get_caller_id() + '- received %s', data.data)
         # notify the FSM of the arrival of new dynamico data
         self.sm.userdata.dynamicoKey = True
+        # extract the data in the message and convert it in dataframe format
+        df = pd.read_json(data.data, orient='records')
+        # # DEBUG ONLY
+        # print(df)
+        # append the new record to the dataframe
+        self.world = self.world.append(df)
+        # fill the empty values with the latest known value for that key
+        self.world.fillna( method ='ffill', inplace = True)
+        # # [DEBUG ONLY]
+        # print(self.world)
 
     # callback on nuitrack/faces
     def nuitrackCallback(self, data):
@@ -151,6 +165,14 @@ class IrecheckManager():
         rospy.loginfo(rospy.get_caller_id() + '- received face')
         # notify the FSM of the detection of a face
         self.sm.userdata.faceKey = True
+    
+    # save the world dataFrame in a CSV file at the end of the session
+    def save2csv(self):
+        # backup the dataframe as a CSV file (use current date and time for the file name)
+        now = datetime.now()
+        dt_string = now.strftime("%d-%m-%Y_%H-%M-%S")
+        filename = '~/Documents/iReCHeCk_logs/' + dt_string + '.csv'
+        self.world.to_csv(filename)
 
 
 
@@ -160,3 +182,5 @@ if __name__ == "__main__":
         myIrecheckManager = IrecheckManager()
     except rospy.ROSInterruptException:
         pass
+    finally:
+        myIrecheckManager.save2csv()
