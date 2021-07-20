@@ -1,3 +1,0 @@
-"QT/handclap";1;
-"QT/happy";"C'était une super séance," + self.fname;
-"QT/happy";"nous avons bien travaillé aujourd'hui";

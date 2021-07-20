@@ -1,5 +1,0 @@
-"QT/show_tablet";1;
-"QT/talking";"Mon mot \sel=alt=p-20\ \Rspd=80\ ressemble \Rspd=100\ à ce que tu as écrit?"
-"QT/talking";"Est-ce que j'écris aussi bien que toi?"
-"QT/talking";"J'écris bien comme toi?"
-"QT/talking";"Mon mot est aussi beau que le tien?"

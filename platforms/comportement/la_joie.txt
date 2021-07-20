@@ -1,4 +1,0 @@
-"QT/so";1;
-"QT/happy";"Quelle mine joyeuse,"
-"QT/happy";"Quel booo  sourire"
-"QT/happy";"Quel enthousiassme?"

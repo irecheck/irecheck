@@ -1,4 +1,0 @@
-"QT/hi";1;
-"QT/showing_smile";"Au revoir,"+ self.fname + " !";
-"QT/showing_smile";"À bientôt!";
-"QT/showing_smile";"À la prochaine!";

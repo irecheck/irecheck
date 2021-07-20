@@ -1,2 +1,0 @@
-"QT/bored";0.6;
-"QT/talkinglongrepeat";" Tu m'entraines à écrire. Clique sur le rond a b c en haut de l'écran, pour choisir le mot que tu veux m'apprendre. Ensuite, Je vais écrire, puis tu me montreras comment m'améliorer. "

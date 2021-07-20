@@ -1,2 +1,0 @@
-"QT/bored";0.75;
-"QT/talkinglong";"Je me suis transformé en sous-marin. Appuie ton stylo plus ou moins fort pour me piloter. Attention aux obstacles." 

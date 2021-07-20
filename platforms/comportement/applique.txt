@@ -1,4 +1,0 @@
-"QT/thanks";1
-"QT/one_eye_wink";"tu travaille très bien"
-"QT/one_eye_wink";"tu t'applique très bien!"
-"QT/one_eye_wink";"tu est bien appliqué"

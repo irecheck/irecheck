@@ -1,2 +1,0 @@
-"QT/yes";0.9
-"";"Ok, alors on essaye plus tard"

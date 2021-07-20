@@ -1,4 +1,0 @@
-"";1;
-"QT/sad";"Je ne suis pas content de moi";
-"QT/sad";"Ce n'est pas beau ce que j'ai fait";
-"QT/sad";"ça ne me plait pas ce que j'ai fait";

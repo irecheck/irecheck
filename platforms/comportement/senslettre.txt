@@ -1,2 +1,0 @@
-"";1;
-"QT/talking";"Est-ce que je fais mes lettres en tournant dans le bon sens?"

@@ -1,4 +1,0 @@
-"";1
-"QT/talking";"Est-ce que mes lettres sont bien fermés?"
-"QT/talking";"Est-ce que j'ai bien fermés mes lettres?"
-"QT/talking";"Mes lettres sont fermés comme il faut?"

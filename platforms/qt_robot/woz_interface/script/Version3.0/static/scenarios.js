@@ -44,7 +44,7 @@ var commandsList = [
 					["Il est l'heure", "il_est_lheure",10],
 					["On arrête", "arrete",10],
 					["Au revoir", "au_revoir",8]	]	],
-	["#e0b1f9",		[	["Courte pause après un niveau?","pause",10],
+	["#e0b1f9",	[	["Courte pause après un niveau?","pause",10],
 					["On change de jeu?","change_jeu",8],
 					["Tu choisis le jeu?","choisis_jeu",8] ]		],
 	["#f5e0c4", [	["Première rencontre", "je_mappelle_qt",11],

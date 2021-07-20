@@ -1,3 +1,0 @@
-"QT/show_tablet";0.8;
-"QT/talking";"Démarre le jeu qui s'appelle Twister"
-"QT/talking";"Clique sur Twister"

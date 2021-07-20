@@ -1,14 +1,12 @@
-#! /usr/bin/env python
-# -*- coding: utf-8 -*-
+#! /usr/bin/env python3
+# -*- coding: latin-1 -*-
 
 """
 Platforms package
 Date: 2020/12/04
 Author: Jianling ZOU 
 """
-import sys
-reload(sys)
-sys.setdefaultencoding('utf-8')
+
 import copy
 import rospy
 import random
@@ -54,7 +52,7 @@ class RobotBehavior(object):
 		self.fname = fname
 		self.fname2 = fname2
 		# import the file of behaviours
-		f = open("/home/qtrobot/catkin_ws/src/woz_interface/comportement/"+name+".txt", "r") 
+		f = open("/home/jennie/irecheck_ws/src/irecheck/platforms/qtrobot/woz_interface/comportement/"+name+".txt", "r") 
 		# Save information
 		# first line of file is infomation of gesture 
 		line = f.readline()

@@ -1,2 +1,0 @@
-"QT/thanks";1;
-"QT/sad";"Pourquoi ça n'a pas marché?"

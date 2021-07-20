@@ -1,3 +1,0 @@
-"QT/yes";0.8;
-"QT/showing_smile";"Tu es fier de ton travail ?	"
-"QT/showing_smile";"Tu as l'air fier de ton travail"

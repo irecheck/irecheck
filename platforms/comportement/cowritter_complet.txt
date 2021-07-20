@@ -1,2 +1,0 @@
-"QT/bored_long";0.8;
-"QT/talkinglong";"\sel=alt=p-70\Rappelle-toi \pau=130\ Tu m'apprends à écrire. Mieux tu me montre, mieux j'apprends. À la fin on verra ma note."

@@ -1,2 +1,0 @@
-"QT/hi";0.8;
-"QT/talkinglongadapted";"Bonjour, je m'appelle kyuti. Et toi, comment tu t'appelles?"

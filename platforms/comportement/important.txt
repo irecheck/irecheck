@@ -1,3 +1,0 @@
-"QT/challenge";0.8
-"QT/talking";"Qu'est-ce qu'on a fait qui est le plus important?"
-"QT/talking";"C'est quoi le plus important dans ce qu'on a fait,"

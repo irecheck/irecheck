@@ -1,4 +1,0 @@
-"QT/head_scratch";1;
-"QT/confused";"Tu es sûr?"
-"QT/confused";"Tu es sûr de toi?"
-"QT/confused";"Je ne suis pas sûr"

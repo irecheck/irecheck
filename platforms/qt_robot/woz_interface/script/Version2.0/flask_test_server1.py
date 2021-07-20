@@ -1,11 +1,7 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
 # * Running on http://127.0.0.1:5000/
 
 from flask import Flask, jsonify, render_template, request, redirect, session
 import sys
-reload(sys)
-sys.setdefaultencoding('utf-8')
 import copy
 import rospy
 from std_msgs.msg import String
@@ -13,7 +9,7 @@ from std_msgs.msg import Float64MultiArray
 from std_msgs.msg import Float64
 from std_msgs.msg import Int32
 from platforms.msg import NameInfo
-sys.path.append(r'/home/qtrobot/catkin_ws/src/woz_interface/script/Version2.0')  
+sys.path.append(r'/home/jennie/irecheck_ws/src/irecheck/platforms/qtrobot/woz_interface/script/Version2.0')  
 #from control_publisher import RobotBehavior
 from qtrobot1 import RobotBehavior
 from threading import Thread
@@ -38,7 +34,7 @@ def login(name=None):
             print("error")
             return render_template('login.html', name=name)
         else:
-            state.publish("true")
+            # state.publish("true")
             print(request.form)
             session['user_name'] = request.form.get('fname')
             session['user_surname'] = request.form.get('lname')
@@ -83,7 +79,6 @@ def woz_command(button,prenom,nom,prenom2):
     button.publish(payload['command'])
     behaviour = RobotBehavior()
     behaviour.load_info(payload['command'],prenom,nom,prenom2)
-    #behaviour.realisation(say,emo)
     return ("")
 
 	
