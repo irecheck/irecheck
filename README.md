@@ -253,10 +253,6 @@ The options of behavior are:
 
 **NOTE**: All the behavior are in French!
 
-
-# System overview (TO BE UPDATED)
-The overall iReCHeCk architecture is sketched in the file SWarchitecture.png.
-
 # Usage Guide
 Refer to the **README** guides of the single packages.
 

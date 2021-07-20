@@ -1,6 +1,7 @@
 # System Requirements (package specific)
 
 * SMACH (ROS package for Finite State Machine management)
+* qt_nuitrack_app
 
 # Preliminary Operations
 
