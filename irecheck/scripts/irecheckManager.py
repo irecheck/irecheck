@@ -1,11 +1,12 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3
 
 import rospy
 import smach
 import pandas as pd
 import roslib; roslib.load_manifest('smach')
 from std_msgs.msg import String
-from qt_nuitrack_app.msg import *
+#from qt_nuitrack_app.msg import *
+from behavior_control.srv import *
 from datetime import datetime
 
 # define state Sleeping
@@ -25,7 +26,7 @@ class Sleeping(smach.State):
         # transition to the next state
         userdata.continueKey = False
         #msg = 'bonjour'
-        msg = 'Bonjour !'
+        msg = 'Bonjour ! Allons-y! Jouons un niveau de votre activité Dynamico préférée!'
         rospy.loginfo(msg)
         userdata.pubMsg.publish(msg)   
         return 'proceed'
@@ -46,7 +47,7 @@ class Activity(smach.State):
         # transition to the next state
         userdata.continueKey = False
         #msg = 'bravo'
-        msg = 'Bravo !'
+        msg = 'Bravo ! Jouons un autre niveau!'
         rospy.loginfo(msg)
         userdata.pubMsg.publish(msg)   
         return 'proceed'
@@ -101,8 +102,13 @@ class IrecheckManager():
         rospy.init_node('irecheckmanager', anonymous=True)
         # initialize subscribers
         rospy.Subscriber('dynamicomsg', String, self.dynamicoCallback)
-        rospy.Subscriber('/qt_nuitrack_app/faces', Faces, self.nuitrackCallback)
-        
+        #rospy.Subscriber('/qt_nuitrack_app/faces', Faces, self.nuitrackCallback)
+        # initialize services (client)
+        rospy.wait_for_service('behavior_control')
+        # test the service
+        serviceBehaviours = rospy.ServiceProxy('behavior_control', behavior_control)
+        serviceBehaviours('bonjour')
+
         # create a SMACH state machine
         self.sm = smach.StateMachine(outcomes=['end'])
         # create and initialize the variables to be passed to states
@@ -116,9 +122,9 @@ class IrecheckManager():
             # Add states to the container
             smach.StateMachine.add('SLEEPING', Sleeping(), 
                                 transitions={'proceed':'ACTIVITY'},
-                                remapping={'continueKey':'faceKey',
+                                remapping={'continueKey':'dynamicoKey',
                                             'pubMsg':'pubMsg', 
-                                            'continueKey':'faceKey',
+                                            'continueKey':'dynamicoKey',
                                             'pubMsg':'pubMsg'})
             smach.StateMachine.add('ACTIVITY', Activity(), 
                                 transitions={'proceed':'ASSESSMENT'},
