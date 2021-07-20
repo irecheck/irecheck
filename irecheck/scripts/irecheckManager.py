@@ -6,7 +6,6 @@ import pandas as pd
 import roslib; roslib.load_manifest('smach')
 from std_msgs.msg import String
 #from qt_nuitrack_app.msg import *
-from behavior_control.srv import *
 from datetime import datetime
 
 # define state Sleeping
@@ -103,11 +102,6 @@ class IrecheckManager():
         # initialize subscribers
         rospy.Subscriber('dynamicomsg', String, self.dynamicoCallback)
         #rospy.Subscriber('/qt_nuitrack_app/faces', Faces, self.nuitrackCallback)
-        # initialize services (client)
-        rospy.wait_for_service('behavior_control')
-        # test the service
-        serviceBehaviours = rospy.ServiceProxy('behavior_control', behavior_control)
-        serviceBehaviours('bonjour')
 
         # create a SMACH state machine
         self.sm = smach.StateMachine(outcomes=['end'])
