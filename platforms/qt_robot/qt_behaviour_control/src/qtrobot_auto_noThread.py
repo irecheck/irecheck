@@ -10,6 +10,7 @@ import sys
 reload(sys)
 sys.setdefaultencoding('utf-8')
 import copy
+import os
 import rospy
 import random
 from std_msgs.msg import String
@@ -30,18 +31,35 @@ class RobotBehavior(object):
 	def __init__(self):
 		rospy.init_node('behavior_control',anonymous=True)
 		rospy.wait_for_service('/qt_robot/motors/home')
+		
 		# Name of gesture 
-		self.gesture_name= ""
+		# self.gesture_name= ""
+		self.gesture_name= {}
 		# list for emotions
-		self.emotion = []
+		self.emotion ={}
 		# list for sentences of speech
-		self.speech = []
+		self.speech = {}
+		
+		# time for the speech to wait to run to synchronize with gesture and emotion
+		self.sync_time = 0 #in seconds
+
 		# first name of patient
-		self.fname = "Thomas"   # here we need to change to a subscriber for patient's name
+		# self.fname = "Thomas"   # here we need to change to a subscriber for patient's name
+		self.fname =  str(sys.argv[1])  # here we need to change to a subscriber for patient's name
+		self.fname2 =  str(sys.argv[2])  # here we need to change to a subscriber for patient's name
+		
 		# Create ROS topic publishers for emotion and speech and gesture
 		self.speech_pub = rospy.Publisher('/qt_robot/speech/say', String, queue_size=10)
 		self.emotion_pub = rospy.Publisher('/qt_robot/emotion/show',String, queue_size=10)
 		self.gesture_pub = rospy.Publisher('/qt_robot/gesture/play',String,queue_size=10)
+
+
+		print 'Child name:', self.fname
+		print 'Therapist name:', self.fname2
+
+		self.load_files()
+
+
 
 	def load_info(self,data):		
 		"""
@@ -54,32 +72,95 @@ class RobotBehavior(object):
 			data: The button name
 		"""
 
-		f = open("/home/qtrobot/catkin_ws/src/woz_interface/comportement/"+ data.data +".txt", "r")  # you need to change the path here
-		# Save information
-		# first line of file is infomation of gesture 
-		line = f.readline()
-		a=line.split(";")
-		self.gesture_name = eval(a[0])
-		# next lines are info of speech, emotion 
-		line = f.readline()
-		# save information of emotions and speech
-		while line:
-			a = line.split(";")
-			self.emotion.append(eval(a[0]))
-			self.speech.append(eval(a[1]))	
-			line = f.readline()
-		# close the file
-		f.close()
+		print ("Data:", data.data)
 
+		# f = open("/home/qtrobot/catkin_ws/src/woz_interface/comportement/"+ data.data +".txt", "r")  # you need to change the path here
+		# # Save information
+		# # first line of file is infomation of gesture 
+		# line = f.readline()
+		# a=line.split(";")
+		# self.gesture_name = eval(a[0])
+		# # next lines are info of speech, emotion 
+		# line = f.readline()
+		# # save information of emotions and speech
+		# while line:
+		# 	a = line.split(";")
+		# 	self.emotion.append(eval(a[0]))
+		# 	self.speech.append(eval(a[1]))	
+		# 	line = f.readline()
+		# # close the file
+		# f.close()
+		self.speech_emotion()
 		#return True
 
-	def listener(self):
-		# Create a button name subscriber
-		#Server = rospy.Service('/irecheck/buttonName', behavior_control, self.load_info) # Create Service Server
-		rospy.Subscriber("/irecheck/button_name", String, self.load_info)
-		rospy.spin()
 
-	def speech_emotion(self):
+
+
+	def load_files(self):
+		"""
+		Function for load the files with the used behavior. 
+		 
+		Args:
+			self: The object pointer
+		
+		"""
+
+		files_path =  "/home/qtrobot/catkin_ws/src/woz_interface/comportement/"
+		
+		print ("FILE NAMES")
+		
+		for file_name in os.listdir(files_path):
+			file_name=file_name.rsplit('.', 1)[0]
+			print "FILE NAME: ", file_name
+			
+			# return
+			f = open("/home/qtrobot/catkin_ws/src/woz_interface/comportement/"+ file_name +".txt", "r")  # you need to change the path here
+			# Save information
+			# first line of file is infomation of gesture 
+			line = f.readline()
+			a=line.split(";")
+			
+			self.gesture_name[file_name] = eval(a[0])
+			# next lines are info of speech, emotion 
+			line = f.readline()
+			
+			emotion_options = []
+			speech_options = []
+			# save information of emotions and speech
+			while line:
+				a = line.split(";")
+				emotion_options.append(eval(a[0]))
+				speech_options.append(eval(a[1]))	
+				line = f.readline()
+			
+			self.emotion[file_name] = emotion_options
+			self.speech[file_name] = speech_options
+		
+			# close the file
+			f.close()
+			
+		#--- End of for
+		
+		# print "Printing Dictionaries"
+
+		# print "\nGesture:"
+		# print self.gesture_name
+
+		# print "\nEmo:"
+		# print self.emotion
+
+		# print "\nSpecch:"
+		# print self.speech
+
+
+		# return 
+
+		
+
+
+
+
+	def speech_emotion(self, data):
 		"""
 		Function for publish information that we get from the load_info function.
 		If there are more than one choice of speech and emotion, it will choose one of them by random way
@@ -87,28 +168,57 @@ class RobotBehavior(object):
 		Args:
 		self: The object pointer
 		"""
+
+		behavior_type = data.data
+
+		print "Executing behavior type: ", behavior_type
+
 		# command emotion, speech
 		try:
-			if len(self.emotion) == 1:
+			if len(self.emotion[behavior_type]) == 1:
 				#rospy.sleep(1) # for sychonize with the gesture
-				self.emotion_pub.publish(self.emotion[0])
-				self.speech_pub.publish(self.speech[0])
-				self.gesture_pub.publish(self.gesture_name)
+				self.emotion_pub.publish(self.emotion[behavior_type][0])
+				self.gesture_pub.publish(self.gesture_name[behavior_type])
+				rospy.sleep(self.sync_time)
+
+				self.speech_pub.publish(self.speech[behavior_type][0])
+				# print("RESULT 1:", self.speech[behavior_type][0])
 				# go back to home pose
 				home_pose = rospy.ServiceProxy('/qt_robot/motors/home',home)
 				res_home = home_pose(['head','left_arm','right_arm'])
 			else :
-				i = random.randint(0,len(self.emotion)-1) # choose in random way the sentence of speech and the emotion
+				i = random.randint(0,len(self.emotion[behavior_type])-1) # choose in random way the sentence of speech and the emotion
 				#rospy.sleep(1)
-				self.emotion_pub.publish(self.emotion[i])
-				self.speech_pub.publish(self.speech[i])
-				self.gesture_pub.publish(self.gesture_name)
+				self.emotion_pub.publish(self.emotion[behavior_type][i])
+				self.gesture_pub.publish(self.gesture_name[behavior_type])
+				rospy.sleep(self.sync_time)
+				
+				self.speech_pub.publish(self.speech[behavior_type][i])
+				# print("RESULT <", i, ":>", self.speech[behavior_type][i])
 				# go back to home pose
 				home_pose = rospy.ServiceProxy('/qt_robot/motors/home',home)
 				res_home = home_pose(['head','left_arm','right_arm'])
 		except rospy.ServiceException as e:
 			print("Service call failed: %s." % e)
 
+
+		# print ("VARIABLES")
+		# print ("Speech: ",  self.speech)
+		# print ("Emotion: ", self.emotion)
+		# print ("Gesture: ", self.gesture_name)
+		# print ("\n\n")
+
+		# self.speech = []
+		# self.emotion = []
+		# self.gesture_name = []
+
+
+
+	def listener(self):
+		# Create a button name subscriber
+		#Server = rospy.Service('/irecheck/buttonName', behavior_control, self.load_info) # Create Service Server
+		rospy.Subscriber("/irecheck/button_name", String, self.speech_emotion)
+		rospy.spin()
 
 if __name__ == "__main__":
 	behavior = RobotBehavior()
