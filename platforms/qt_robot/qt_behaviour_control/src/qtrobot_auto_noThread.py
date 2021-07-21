@@ -71,6 +71,8 @@ class RobotBehavior(object):
 		# close the file
 		f.close()
 
+		self.speech_emotion()
+
 		#return True
 
 	def listener(self):
