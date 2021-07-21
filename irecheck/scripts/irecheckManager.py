@@ -13,8 +13,8 @@ class Sleeping(smach.State):
     def __init__(self):
         smach.State.__init__(self, 
                              outcomes=['proceed'],
-                             input_keys=['continueKey','pubMsg'],
-                             output_keys=['continueKey','pubMsg'])
+                             input_keys=['continueKey','pubBehMsg','pubMsg'],
+                             output_keys=['continueKey','pubBehMsg','pubMsg'])
 
 
     def execute(self, userdata):
@@ -22,10 +22,12 @@ class Sleeping(smach.State):
         # stay here until the condition for transitioning is met
         while(userdata.continueKey != True):
             pass
-        # transition to the next state
+        # transition to the next state (react the the event and say a proactive sentence)
         userdata.continueKey = False
-        #msg = 'bonjour'
-        msg = 'Bonjour ! Allons-y! Jouons un niveau de votre activité Dynamico préférée!'
+        msg = 'bonjour'
+        rospy.loginfo(msg)
+        userdata.pubBehMsg.publish(msg) 
+        msg = 'Allons-y! Jouons un niveau de votre activité Dynamico préférée!'
         rospy.loginfo(msg)
         userdata.pubMsg.publish(msg)   
         return 'proceed'
@@ -35,18 +37,20 @@ class Activity(smach.State):
     def __init__(self):
         smach.State.__init__(self, 
                              outcomes=['proceed'],
-                             input_keys=['continueKey','pubMsg'],
-                             output_keys=['continueKey','pubMsg'])
+                             input_keys=['continueKey','pubBehMsg','pubMsg'],
+                             output_keys=['continueKey','pubBehMsg','pubMsg'])
 
     def execute(self, userdata):
         rospy.loginfo('Executing state ACTIVITY')
         # stay here until the condition for transitioning is met
         while(userdata.continueKey != True):
             pass
-        # transition to the next state
+        # transition to the next state (react the the event and say a proactive sentence)
         userdata.continueKey = False
-        #msg = 'bravo'
-        msg = 'Bravo ! Jouons un autre niveau!'
+        msg = 'bravo'
+        rospy.loginfo(msg)
+        userdata.pubBehMsg.publish(msg) 
+        msg = 'Jouons un autre niveau!'
         rospy.loginfo(msg)
         userdata.pubMsg.publish(msg)   
         return 'proceed'
@@ -56,20 +60,19 @@ class Assessment(smach.State):
     def __init__(self):
         smach.State.__init__(self, 
                              outcomes=['proceed'],
-                             input_keys=['continueKey','pubMsg'],
-                             output_keys=['continueKey','pubMsg'])
+                             input_keys=['continueKey','pubBehMsg','pubMsg'],
+                             output_keys=['continueKey','pubBehMsg','pubMsg'])
 
     def execute(self, userdata):
         rospy.loginfo('Executing state ASSESSMENT')
         # stay here until the condition for transitioning is met
         while(userdata.continueKey != True):
             pass
-        # transition to the next state
+        # transition to the next state (react the the event and say a proactive sentence)
         userdata.continueKey = False
-        #msg = 'bravo'
-        msg = 'Bravo !'
+        msg = 'bravo'
         rospy.loginfo(msg)
-        userdata.pubMsg.publish(msg)   
+        userdata.pubBehMsg.publish(msg)  
         return 'proceed'
 
 # define state Goodbye
@@ -77,18 +80,17 @@ class Goodbye(smach.State):
     def __init__(self):
         smach.State.__init__(self, 
                              outcomes=['proceed'],
-                             input_keys=['pubMsg'],
-                             output_keys=['pubMsg'])
+                             input_keys=['pubBehMsg','pubMsg'],
+                             output_keys=['pubBehMsg','pubMsg'])
         
     def execute(self, userdata):
         rospy.loginfo('Executing state GOODBYE')
         # wait some time
         rospy.sleep(5)
         # transition to the next state (end)
-        #msg = 'au_revoir'
-        msg = 'Au revoir !'
+        msg = 'au_revoir'
         rospy.loginfo(msg)
-        userdata.pubMsg.publish(msg)   
+        userdata.pubBehMsg.publish(msg)   
         return 'proceed'
 
 
@@ -108,7 +110,7 @@ class IrecheckManager():
         # create and initialize the variables to be passed to states
         self.sm.userdata.dynamicoKey = False
         self.sm.userdata.faceKey = False
-        #self.sm.userdata.pubMsg = rospy.Publisher('/irecheck/button_name', String, queue_size=1)
+        self.sm.userdata.pubBehMsg = rospy.Publisher('/irecheck/button_name', String, queue_size=1)
         self.sm.userdata.pubMsg = rospy.Publisher('/qt_robot/speech/say', String, queue_size=1)
 
         # open the container
@@ -117,24 +119,32 @@ class IrecheckManager():
             smach.StateMachine.add('SLEEPING', Sleeping(), 
                                 transitions={'proceed':'ACTIVITY'},
                                 remapping={'continueKey':'dynamicoKey',
+                                            'pubBehMsg':'pubBehMsg',
                                             'pubMsg':'pubMsg', 
                                             'continueKey':'dynamicoKey',
+                                            'pubBehMsg':'pubBehMsg',
                                             'pubMsg':'pubMsg'})
             smach.StateMachine.add('ACTIVITY', Activity(), 
                                 transitions={'proceed':'ASSESSMENT'},
                                 remapping={'continueKey':'dynamicoKey',
+                                            'pubBehMsg':'pubBehMsg',
                                             'pubMsg':'pubMsg', 
                                             'continueKey':'dynamicoKey',
+                                            'pubBehMsg':'pubBehMsg',
                                             'pubMsg':'pubMsg'})
             smach.StateMachine.add('ASSESSMENT', Assessment(), 
                                 transitions={'proceed':'GOODBYE'},
                                 remapping={'continueKey':'dynamicoKey',
+                                            'pubBehMsg':'pubBehMsg',
                                             'pubMsg':'pubMsg', 
                                             'continueKey':'dynamicoKey',
+                                            'pubBehMsg':'pubBehMsg',
                                             'pubMsg':'pubMsg'})
             smach.StateMachine.add('GOODBYE', Goodbye(), 
                                 transitions={'proceed':'end'},
-                                remapping={'pubMsg':'pubMsg', 
+                                remapping={'pubBehMsg':'pubBehMsg',
+                                            'pubMsg':'pubMsg',
+                                            'pubBehMsg':'pubBehMsg', 
                                             'pubMsg':'pubMsg'})
         
         # execute SMACH plan
