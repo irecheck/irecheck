@@ -209,7 +209,7 @@ Create the folder before running the package, or change the path.
 
 Copy the packages of the path «path_of_inseders_packages», present in this repo, inside the rotobt (head) in the path "~/catkin_ws/src" with the comand:
 ```
-scp -r irecheck/platforms/qt_robot/«package_name»/ qtrobot@10.42.0.1
+scp -r irecheck/platforms/qt_robot/«package_name»/ qtrobot@10.42.0.1:~/catkin_ws/src/
 ```
 List of packages:
 - qt_behaviour_control
