@@ -27,6 +27,8 @@ class Sleeping(smach.State):
         msg = 'bonjour'
         rospy.loginfo(msg)
         userdata.pubBehMsg.publish(msg) 
+        rospy.sleep(2)
+
         msg = 'Allons-y! Jouons un niveau de votre activité Dynamico préférée!'
         rospy.loginfo(msg)
         userdata.pubMsg.publish(msg)   
@@ -50,6 +52,9 @@ class Activity(smach.State):
         msg = 'bravo'
         rospy.loginfo(msg)
         userdata.pubBehMsg.publish(msg) 
+
+        rospy.sleep(6)
+
         msg = 'Jouons un autre niveau!'
         rospy.loginfo(msg)
         userdata.pubMsg.publish(msg)   

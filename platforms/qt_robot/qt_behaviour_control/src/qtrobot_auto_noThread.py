@@ -17,7 +17,7 @@ from std_msgs.msg import String
 from std_msgs.msg import Float64MultiArray
 from std_msgs.msg import Float64
 from std_msgs.msg import Int32
-#from qt_gesture_controller.srv import *
+from qt_gesture_controller.srv import *
 from qt_motors_controller.srv import *
 #from qt_behaviour_control.srv import *
 #from threading import Thread
@@ -54,10 +54,14 @@ class RobotBehavior(object):
 		self.gesture_pub = rospy.Publisher('/qt_robot/gesture/play',String,queue_size=10)
 
 
+		print "\n\nInitializing behavior handler!"
 		print 'Child name:', self.fname
 		print 'Therapist name:', self.fname2
 
+		print "\nLoading behavior from files"
 		self.load_files()
+		print "\n\nDone! Script is ready and waiting for requests to run the behavior :D \n"
+		print "--"
 
 
 
@@ -107,11 +111,10 @@ class RobotBehavior(object):
 
 		files_path =  "/home/qtrobot/catkin_ws/src/woz_interface/comportement/"
 		
-		print ("FILE NAMES")
 		
 		for file_name in os.listdir(files_path):
 			file_name=file_name.rsplit('.', 1)[0]
-			print "FILE NAME: ", file_name
+			# print "FILE NAME: ", file_name
 			
 			# return
 			f = open("/home/qtrobot/catkin_ws/src/woz_interface/comportement/"+ file_name +".txt", "r")  # you need to change the path here
@@ -138,7 +141,9 @@ class RobotBehavior(object):
 		
 			# close the file
 			f.close()
-			
+
+		print "Loaded ", len(self.speech) ," files of behavior"
+
 		#--- End of for
 		
 		# print "Printing Dictionaries"
@@ -176,28 +181,43 @@ class RobotBehavior(object):
 		# command emotion, speech
 		try:
 			if len(self.emotion[behavior_type]) == 1:
+				i=0
 				#rospy.sleep(1) # for sychonize with the gesture
-				self.emotion_pub.publish(self.emotion[behavior_type][0])
-				self.gesture_pub.publish(self.gesture_name[behavior_type])
-				rospy.sleep(self.sync_time)
+				# self.emotion_pub.publish(self.emotion[behavior_type][0])
+				# self.gesture_pub.publish(self.gesture_name[behavior_type])
+				# rospy.sleep(self.sync_time)
 
-				self.speech_pub.publish(self.speech[behavior_type][0])
-				# print("RESULT 1:", self.speech[behavior_type][0])
-				# go back to home pose
-				home_pose = rospy.ServiceProxy('/qt_robot/motors/home',home)
-				res_home = home_pose(['head','left_arm','right_arm'])
+				# self.speech_pub.publish(self.speech[behavior_type][0])
+				# rospy.sleep(5)
+
+
+				# # print("RESULT 1:", self.speech[behavior_type][0])
+				# # go back to home pose
+				# home_pose = rospy.ServiceProxy('/qt_robot/motors/home',home)
+				# res_home = home_pose(['head','left_arm','right_arm'])
 			else :
 				i = random.randint(0,len(self.emotion[behavior_type])-1) # choose in random way the sentence of speech and the emotion
 				#rospy.sleep(1)
-				self.emotion_pub.publish(self.emotion[behavior_type][i])
-				self.gesture_pub.publish(self.gesture_name[behavior_type])
-				rospy.sleep(self.sync_time)
-				
-				self.speech_pub.publish(self.speech[behavior_type][i])
-				# print("RESULT <", i, ":>", self.speech[behavior_type][i])
-				# go back to home pose
-				home_pose = rospy.ServiceProxy('/qt_robot/motors/home',home)
-				res_home = home_pose(['head','left_arm','right_arm'])
+			
+			self.emotion_pub.publish(self.emotion[behavior_type][i])
+			self.speech_pub.publish(self.speech[behavior_type][i])
+			rospy.sleep(5)
+			# self.gesture_pub.publish(self.gesture_name[behavior_type])
+			gesture = rospy.ServiceProxy('/qt_robot/gesture/play', gesture_play)
+			gesture_exec = gesture('adieu',1)
+			
+			print "Gesture flag", gesture_exec
+
+			# rospy.sleep(self.sync_time)
+			
+			# print("RESULT <", i, ":>", self.speech[behavior_type][i])
+			# go back to home pose
+			print "Calling the function home"
+			home_pose = rospy.ServiceProxy('/qt_robot/motors/home',home)
+			res_home = home_pose(['head','left_arm','right_arm'])
+			
+			print "RES_HOME", res_home
+
 		except rospy.ServiceException as e:
 			print("Service call failed: %s." % e)
 
