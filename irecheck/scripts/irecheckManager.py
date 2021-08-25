@@ -5,7 +5,7 @@ import smach
 import pandas as pd
 import roslib; roslib.load_manifest('smach')
 from std_msgs.msg import String
-#from qt_nuitrack_app.msg import *
+from qt_nuitrack_app.msg import *
 from datetime import datetime
 
 # define state Sleeping
@@ -108,7 +108,7 @@ class IrecheckManager():
         rospy.init_node('irecheckmanager', anonymous=True)
         # initialize subscribers
         rospy.Subscriber('dynamicomsg', String, self.dynamicoCallback)
-        #rospy.Subscriber('/qt_nuitrack_app/faces', Faces, self.nuitrackCallback)
+        rospy.Subscriber('/qt_nuitrack_app/faces', Faces, self.nuitrackCallback)
 
         # create a SMACH state machine
         self.sm = smach.StateMachine(outcomes=['end'])
@@ -123,10 +123,10 @@ class IrecheckManager():
             # Add states to the container
             smach.StateMachine.add('SLEEPING', Sleeping(), 
                                 transitions={'proceed':'ACTIVITY'},
-                                remapping={'continueKey':'dynamicoKey',
+                                remapping={'continueKey':'faceKey',
                                             'pubBehMsg':'pubBehMsg',
                                             'pubMsg':'pubMsg', 
-                                            'continueKey':'dynamicoKey',
+                                            'continueKey':'faceKey',
                                             'pubBehMsg':'pubBehMsg',
                                             'pubMsg':'pubMsg'})
             smach.StateMachine.add('ACTIVITY', Activity(), 
