@@ -34,32 +34,6 @@ class Sleeping(smach.State):
         userdata.pubMsg.publish(msg)   
         return 'proceed'
 
-# define state Activity
-class Activity(smach.State):
-    def __init__(self):
-        smach.State.__init__(self, 
-                             outcomes=['proceed'],
-                             input_keys=['continueKey','pubBehMsg','pubMsg'],
-                             output_keys=['continueKey','pubBehMsg','pubMsg'])
-
-    def execute(self, userdata):
-        rospy.loginfo('Executing state ACTIVITY')
-        # stay here until the condition for transitioning is met
-        while(userdata.continueKey != True):
-            pass
-        # transition to the next state (react the the event and say a proactive sentence)
-        userdata.continueKey = False
-        msg = 'bravo'
-        rospy.loginfo(msg)
-        userdata.pubBehMsg.publish(msg) 
-
-        rospy.sleep(6)
-
-        msg = 'Jouons un autre niveau!'
-        rospy.loginfo(msg)
-        userdata.pubMsg.publish(msg)   
-        return 'proceed'
-
 # define state Assessment
 class Assessment(smach.State):
     def __init__(self):
@@ -78,6 +52,23 @@ class Assessment(smach.State):
         msg = 'bravo'
         rospy.loginfo(msg)
         userdata.pubBehMsg.publish(msg)  
+        return 'proceed'
+
+# define state Activity
+class Activity(smach.State):
+    def __init__(self):
+        smach.State.__init__(self, 
+                             outcomes=['proceed'],
+                             input_keys=['continueKey','pubBehMsg','pubMsg'],
+                             output_keys=['continueKey','pubBehMsg','pubMsg'])
+
+    def execute(self, userdata):
+        rospy.loginfo('Executing state ACTIVITY')
+        # stay here until the condition for transitioning is met
+        while(userdata.continueKey != True):
+            pass
+        # transition to the next state (react the the event and say a proactive sentence)
+        userdata.continueKey = False 
         return 'proceed'
 
 # define state Goodbye
@@ -107,14 +98,16 @@ class IrecheckManager():
         # initialize ROS node
         rospy.init_node('irecheckmanager', anonymous=True)
         # initialize subscribers
-        rospy.Subscriber('dynamicomsg', String, self.dynamicoCallback)
         rospy.Subscriber('/qt_nuitrack_app/faces', Faces, self.nuitrackCallback)
+        rospy.Subscriber('dynamicomsg', String, self.dynamicoCallback)
+        rospy.Subscriber('autodecisions', String, self.decisionsCallback)
 
         # create a SMACH state machine
         self.sm = smach.StateMachine(outcomes=['end'])
         # create and initialize the variables to be passed to states
-        self.sm.userdata.dynamicoKey = False
         self.sm.userdata.faceKey = False
+        self.sm.userdata.dynamicoKey = False
+        self.sm.userdata.decisionsKey = False
         self.sm.userdata.pubBehMsg = rospy.Publisher('/irecheck/button_name', String, queue_size=1)
         self.sm.userdata.pubMsg = rospy.Publisher('/qt_robot/speech/say', String, queue_size=1)
 
@@ -122,27 +115,27 @@ class IrecheckManager():
         with self.sm:
             # Add states to the container
             smach.StateMachine.add('SLEEPING', Sleeping(), 
-                                transitions={'proceed':'ACTIVITY'},
+                                transitions={'proceed':'ASSESSMENT'},
                                 remapping={'continueKey':'faceKey',
                                             'pubBehMsg':'pubBehMsg',
                                             'pubMsg':'pubMsg', 
                                             'continueKey':'faceKey',
                                             'pubBehMsg':'pubBehMsg',
                                             'pubMsg':'pubMsg'})
-            smach.StateMachine.add('ACTIVITY', Activity(), 
-                                transitions={'proceed':'ASSESSMENT'},
+            smach.StateMachine.add('ASSESSMENT', Assessment(), 
+                                transitions={'proceed':'ACTIVITY'},
                                 remapping={'continueKey':'dynamicoKey',
                                             'pubBehMsg':'pubBehMsg',
                                             'pubMsg':'pubMsg', 
                                             'continueKey':'dynamicoKey',
                                             'pubBehMsg':'pubBehMsg',
                                             'pubMsg':'pubMsg'})
-            smach.StateMachine.add('ASSESSMENT', Assessment(), 
+            smach.StateMachine.add('ACTIVITY', Activity(), 
                                 transitions={'proceed':'GOODBYE'},
-                                remapping={'continueKey':'dynamicoKey',
+                                remapping={'continueKey':'decisionsKey',
                                             'pubBehMsg':'pubBehMsg',
                                             'pubMsg':'pubMsg', 
-                                            'continueKey':'dynamicoKey',
+                                            'continueKey':'decisionsKey',
                                             'pubBehMsg':'pubBehMsg',
                                             'pubMsg':'pubMsg'})
             smach.StateMachine.add('GOODBYE', Goodbye(), 
@@ -180,6 +173,14 @@ class IrecheckManager():
         rospy.loginfo(rospy.get_caller_id() + '- received face')
         # notify the FSM of the detection of a face
         self.sm.userdata.faceKey = True
+
+    # callback on autodecisions
+    def decisionsCallback(self, data):
+        # log the reception of the message
+        rospy.loginfo(rospy.get_caller_id() + '- received %s', data.data)
+        # notify the FSM of the arrival of new decisions data
+        # (for now, it means we should end the session)
+        self.sm.userdata.decisionsKey = True
     
     # save the world dataFrame in a CSV file at the end of the session
     def save2csv(self):
