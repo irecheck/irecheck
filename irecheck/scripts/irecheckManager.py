@@ -29,7 +29,7 @@ class Sleeping(smach.State):
         userdata.pubBehMsg.publish(msg) 
         rospy.sleep(2)
 
-        msg = 'Allons-y! Jouons un niveau de votre activité Dynamico préférée!'
+        msg = 'Commençons par dessiner un chat!'
         rospy.loginfo(msg)
         userdata.pubMsg.publish(msg)   
         return 'proceed'
@@ -48,10 +48,7 @@ class Assessment(smach.State):
         while(userdata.continueKey != True):
             pass
         # transition to the next state (react the the event and say a proactive sentence)
-        userdata.continueKey = False
-        msg = 'bravo'
-        rospy.loginfo(msg)
-        userdata.pubBehMsg.publish(msg)  
+        userdata.continueKey = False 
         return 'proceed'
 
 # define state Activity
@@ -124,10 +121,10 @@ class IrecheckManager():
                                             'pubMsg':'pubMsg'})
             smach.StateMachine.add('ASSESSMENT', Assessment(), 
                                 transitions={'proceed':'ACTIVITY'},
-                                remapping={'continueKey':'dynamicoKey',
+                                remapping={'continueKey':'decisionsKey',
                                             'pubBehMsg':'pubBehMsg',
                                             'pubMsg':'pubMsg', 
-                                            'continueKey':'dynamicoKey',
+                                            'continueKey':'decisionsKey',
                                             'pubBehMsg':'pubBehMsg',
                                             'pubMsg':'pubMsg'})
             smach.StateMachine.add('ACTIVITY', Activity(), 
@@ -179,7 +176,7 @@ class IrecheckManager():
         # log the reception of the message
         rospy.loginfo(rospy.get_caller_id() + '- received %s', data.data)
         # notify the FSM of the arrival of new decisions data
-        # (for now, it means we should end the session)
+        # for now it makes the FSM proceed to the next state
         self.sm.userdata.decisionsKey = True
     
     # save the world dataFrame in a CSV file at the end of the session
