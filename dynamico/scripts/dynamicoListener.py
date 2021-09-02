@@ -95,6 +95,8 @@ class DynamicoListener():
         
         print("LEN   " + self.listening_collection + " : ", len(changes)) 
         
+
+
         if len(changes)==1:
 
             # Getting data as dictionary             
@@ -108,8 +110,16 @@ class DynamicoListener():
                 print ("ITEM->", item ) 
 
             except:
-                print("It is not a writing analysis.")
+                # print("It is not a writing analysis.")
                 pass
+           
+            # Addind the type of dynamico message
+            # item['type'] =  # ['activity', 'assessment']
+
+            if self.listening_collection == 'scores':
+                item['type'] =  'activity'
+            elif self.listening_collection == 'writingDiagnoses':
+                item['type'] =  'assessment'
 
             # correct Google's stupidity of DateTime with Nanoseconds .... (why god???)
             # NOTE again -> Google's server time is different from Switzerland timezone
@@ -118,6 +128,8 @@ class DynamicoListener():
             utc_time  = "%s-%s-%s %s:%s:%s"%(year, month, day,hour,minute,second) 
             item['createdAt']=utc_time
             final = pd.DataFrame(item, index=[0])
+            
+            
 
             # convert the dataframe in a json string and publish it as a ROS message
             msg = final.to_json(orient='records')
