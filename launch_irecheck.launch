@@ -1,0 +1,22 @@
+<launch>
+  <!-- local machine already has a definition by default.
+       This tag overrides the default definition with
+       specific ROS_ROOT and ROS_PACKAGE_PATH values
+  <machine name="local_alt" address="localhost" default="true" ros-root="/u/user/ros/ros/" ros-package-path="/u/user/ros/ros-pkg" />
+   -->
+   
+   <!-- rosrun dynamico dynamicoListener.py-->
+  <node name="dynamicoListener" pkg="dynamico" type="dynamicoListener.py" />
+  
+  <!-- rosrun qt_behaviour_control qtrobot_auto.py Student Therapist -->
+  <node name="qt_behavior" pkg="qt_behaviour_control" type="qtrobot_auto.py" args="Student Therapist" />
+  
+  <!-- rosrun irecheck decisionMaker.py -->
+  <node name="decisionMaker" pkg="irecheck" type="decisionMaker.py" />
+  
+  <!-- rosrun irecheck irecheckManager.py  -->
+  <node name="manager" pkg="irecheck" type="irecheckManager.py" />
+  
+  
+</launch>
+
