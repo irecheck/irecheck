@@ -55,18 +55,24 @@ class Assessment(smach.State):
 class Activity(smach.State):
     def __init__(self):
         smach.State.__init__(self, 
-                             outcomes=['proceed'],
-                             input_keys=['continueKey','pubBehMsg','pubMsg'],
-                             output_keys=['continueKey','pubBehMsg','pubMsg'])
+                             outcomes=['proceed','getBack'],
+                             input_keys=['continueKey','getBackKey','pubBehMsg','pubMsg'],
+                             output_keys=['continueKey','getBackKey','pubBehMsg','pubMsg'])
 
     def execute(self, userdata):
         rospy.loginfo('Executing state ACTIVITY')
         # stay here until the condition for transitioning is met
-        while(userdata.continueKey != True):
+        while((userdata.continueKey == False) & (userdata.getBackKey == False)):
             pass
         # transition to the next state (react the the event and say a proactive sentence)
-        userdata.continueKey = False 
-        return 'proceed'
+        # case 1: move on to GOODBYE
+        if (userdata.continueKey == True):
+            userdata.continueKey = False 
+            return 'proceed'
+        # case 2: get back to ASSESSMENT
+        else:
+            userdata.getBackKey = False 
+            return 'getBack'
 
 # define state Goodbye
 class Goodbye(smach.State):
@@ -104,7 +110,8 @@ class IrecheckManager():
         # create and initialize the variables to be passed to states
         self.sm.userdata.faceKey = False
         self.sm.userdata.dynamicoKey = False
-        self.sm.userdata.decisionsKey = False
+        self.sm.userdata.moveOnKey = False
+        self.sm.userdata.goToAssessmentKey = False
         self.sm.userdata.pubBehMsg = rospy.Publisher('/irecheck/button_name', String, queue_size=1)
         self.sm.userdata.pubMsg = rospy.Publisher('/qt_robot/speech/say', String, queue_size=1)
 
@@ -121,18 +128,21 @@ class IrecheckManager():
                                             'pubMsg':'pubMsg'})
             smach.StateMachine.add('ASSESSMENT', Assessment(), 
                                 transitions={'proceed':'ACTIVITY'},
-                                remapping={'continueKey':'decisionsKey',
+                                remapping={'continueKey':'moveOnKey',
                                             'pubBehMsg':'pubBehMsg',
                                             'pubMsg':'pubMsg', 
-                                            'continueKey':'decisionsKey',
+                                            'continueKey':'moveOnKey',
                                             'pubBehMsg':'pubBehMsg',
                                             'pubMsg':'pubMsg'})
             smach.StateMachine.add('ACTIVITY', Activity(), 
-                                transitions={'proceed':'GOODBYE'},
-                                remapping={'continueKey':'decisionsKey',
+                                transitions={'proceed':'GOODBYE',
+                                             'getBack': 'ASSESSMENT'},
+                                remapping={'continueKey':'moveOnKey',
+                                            'getBackKey':'goToAssessmentKey',
                                             'pubBehMsg':'pubBehMsg',
                                             'pubMsg':'pubMsg', 
-                                            'continueKey':'decisionsKey',
+                                            'continueKey':'moveOnKey',
+                                            'getBackKey':'goToAssessmentKey',
                                             'pubBehMsg':'pubBehMsg',
                                             'pubMsg':'pubMsg'})
             smach.StateMachine.add('GOODBYE', Goodbye(), 
@@ -176,8 +186,12 @@ class IrecheckManager():
         # log the reception of the message
         rospy.loginfo(rospy.get_caller_id() + '- received %s', data.data)
         # notify the FSM of the arrival of new decisions data
-        # for now it makes the FSM proceed to the next state
-        self.sm.userdata.decisionsKey = True
+        if (data.data == 'moveOn'):
+            self.sm.userdata.moveOnKey = True
+            self.sm.userdata.goToAssessmentKey = False
+        elif (data.data == 'goToAssessment'):
+            self.sm.userdata.moveOnKey = False
+            self.sm.userdata.goToAssessmentKey = True
     
     # save the world dataFrame in a CSV file at the end of the session
     def save2csv(self):
