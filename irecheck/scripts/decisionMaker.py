@@ -51,7 +51,7 @@ class DecisionMaker():
                 msg = 'Jouons au jeu apprentice!'
                 rospy.loginfo(msg)
                 self.pubSayMsg.publish(msg)
-            msg = 'goToActivity'
+            msg = 'moveOn'
             rospy.loginfo(msg)
             self.pubFSMMsg.publish(msg)  
         # if ACTIVITY
