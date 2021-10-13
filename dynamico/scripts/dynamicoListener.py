@@ -38,6 +38,7 @@ class DynamicoListener():
         # with open(path + '/DYNAMICO_CREDENTIALS_PARIS.txt') as f:
             data = json.load(f)
 
+        print ("DATA> \n", data)
         print(f"Initialing listener to collection: <<{listening_collection_1}>>")
 
         self.email = data['EMAIL']
