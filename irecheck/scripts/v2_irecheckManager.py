@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+ 
 import rospy
 import smach
 import pandas as pd
@@ -111,12 +112,17 @@ class IrecheckManager():
         # create and initialize the variables to be passed to states
         self.sm.userdata.faceKey = False
         self.sm.userdata.dynamicoKey = False
-        self.sm.userdata.moveOnKey = False
         self.sm.userdata.goToActivityKey = False
-        self.sm.userdata.goToAssessmentKey = False
+        self.sm.userdata.decisionsKey = False
         self.sm.userdata.pubBehMsg = rospy.Publisher('/irecheck/button_name', String, queue_size=1)
-        self.sm.userdata.pubMsg = rospy.Publisher('/qt_robot/speech/say', String, queue_size=1)
+        self.sm.userdata.robotSay = rospy.Publisher('/qt_robot/speech/say', String, queue_size=1)
 
+        # use the initial time as the filename to save the .csv 
+        now = datetime.now()
+        dt_string = now.strftime("%d-%m-%Y_%H-%M-%S")
+        self.filename = '~/Documents/iReCHeCk_logs/' + dt_string + '.csv'
+        
+        
         # open the container
         with self.sm:
             # Add states to the container
@@ -158,6 +164,8 @@ class IrecheckManager():
         outcome = self.sm.execute()
         rospy.loginfo("OUTCOME: " + outcome)
  
+    
+    
     # callback on dynamicomsg
     def dynamicoCallback(self, data):
         # log the reception of the message
@@ -174,6 +182,9 @@ class IrecheckManager():
         self.world.fillna( method ='ffill', inplace = True)
         # # [DEBUG ONLY]
         # print(self.world)
+        self.save2csv()
+        # self.shareWorld()
+
 
     # callback on nuitrack/faces
     def nuitrackCallback(self, data):
@@ -185,7 +196,7 @@ class IrecheckManager():
 
     # callback on autodecisions
     def decisionsCallback(self, data):
-        # log the reception of the message
+         # log the reception of the message
         rospy.loginfo(rospy.get_caller_id() + '- received %s', data.data)
         # notify the FSM of the arrival of new decisions data
         if (data.data == 'moveOn'):
@@ -203,23 +214,22 @@ class IrecheckManager():
             self.sm.userdata.moveOnKey = False
             self.sm.userdata.goToAssessmentKey = False
             self.sm.userdata.goToActivityKey = True
-            print(self.sm.userdata.goToActivityKey)
+            # print(self.sm.userdata.goToActivityKey)
 
-    
+
     # save the world dataFrame in a CSV file at the end of the session
     def save2csv(self):
         # backup the dataframe as a CSV file (use current date and time for the file name)
-        now = datetime.now()
-        dt_string = now.strftime("%d-%m-%Y_%H-%M-%S")
-        filename = '~/Documents/iReCHeCk_logs/' + dt_string + '.csv'
-        self.world.to_csv(filename)
-
-
-    # save the world dataFrame in a CSV file at the end of the session
-    def shareWorld(self):
+        # now = datetime.now()
+        # dt_string = now.strftime("%d-%m-%Y_%H-%M-%S")
+        # filename = '~/Documents/iReCHeCk_logs/' + dt_string + '.csv'
         
-        print(self.world.to_json())
+        self.world.to_csv(self.filename, index=False)
 
+    # # save the world dataFrame in a CSV file at the end of the session
+    # def shareWorld(self):
+
+    #     print("JSON---------->", self.world.to_json(orient='records'))
 
 
 

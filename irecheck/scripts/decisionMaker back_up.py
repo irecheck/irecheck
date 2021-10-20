@@ -23,146 +23,53 @@ class PositiveStreak(smach.State):
                              output_keys=['continueKey','timerKey','pubBehMsg','pubMsg'])
 
     def execute(self, userdata):
-        rospy.loginfo('Executing state POSITIVE WIN')
+        rospy.loginfo('Executing state POSITIVE STREAK')
         # stay here until the condition for transitioning is met
         while(userdata.continueKey != True):
             pass 
 
-        # transition to final state due to time up
+        # transition to the next state (react the the event and say a proactive sentence)
+
         if (userdata.timerKey is True):
             userdata.timerKey = False
+            userdata.continueKey = False 
             #say good bye
             return 'end'
 
-        # Move to positive Streak state
         if userdata.performance > 1:
-            # insert code to stay here
             userdata.continueKey = False 
-            userdata.positiveStreakCounter +=1
-            print("Good score! Let's play the next available level", userdata.activityOnFocus)
-            # ret = 'positiveStreak'
-        
-        # Move to single loss state
-        if userdata.performance < 1:
-            userdata.positiveStreakCounter =0
-            print("So bad! Lets try again")
-            return 'loss'
-
-        # set the variables and finalize the state
-        userdata.continueKey = False 
-        # return ret
-
-
-
-# define state Win
-class Win(smach.State):
-    def __init__(self):
-        smach.State.__init__(self, 
-                             outcomes=['loss', 'end', 'positiveStreak'],
-                             input_keys=['continueKey','timerKey','pubBehMsg','pubMsg'],
-                             output_keys=['continueKey','timerKey','pubBehMsg','pubMsg'])
-
-    def execute(self, userdata):
-        rospy.loginfo('Executing state SINGLE WIN')
-        # stay here until the condition for transitioning is met
-        while(userdata.continueKey != True):
-            pass 
-
-        # transition to final state due to time up
-        if (userdata.timerKey is True):
-            userdata.timerKey = False
-            #say good bye
-            ret = 'end'
-
-        # Move to positive Streak state
-        if userdata.performance > 1:
             # insert code to stay here
             print("Good score")
-            ret = 'positiveStreak'
         
-        # Move to single loss state
-        if userdata.performance < 1:
-            ret = 'loss'
-
-        # set the variables and finalize the state
-        userdata.continueKey = False 
-        return ret
-
-
-# define state Loss
-class Loss(smach.State):
-    def __init__(self):
-        smach.State.__init__(self, 
-                             outcomes=['win', 'end', 'negativeStreak'],
-                             input_keys=['continueKey','timerKey','pubBehMsg','pubMsg'],
-                             output_keys=['continueKey','timerKey','pubBehMsg','pubMsg'])
-
-    def execute(self, userdata):
-        rospy.loginfo('Executing state SINGLE LOSS')
-        # stay here until the condition for transitioning is met
-        while(userdata.continueKey != True):
-            pass 
-
-        # transition to final state due to time up
-        if (userdata.timerKey is True):
-            userdata.timerKey = False
-            #say good bye
-            ret = 'end'
-
-        # Move to negative Streak state
-        if userdata.performance < 1:
-            # insert code to stay here
-            print("Bad score")
-            ret = 'negativeStreak'
         
-        # Move to single win state
-        if userdata.performance > 1:
-            ret = 'win'
+        if userdata.performance < 1:
+            return 'loss'
+       
+       
+        #return 'proceed'
 
-        # set the variables and finalize the state
-        userdata.continueKey = False 
-        return ret
-
-
-
-# define state Negative Streak
+# define state Activity
 class NegativeStreak(smach.State):
     def __init__(self):
         smach.State.__init__(self, 
-                             outcomes=['win', 'end'],
-                             input_keys=['continueKey','timerKey','pubBehMsg','pubMsg'],
-                             output_keys=['continueKey','timerKey','pubBehMsg','pubMsg'])
+                             outcomes=['win'],
+                             input_keys=['continueKey','getBackKey','pubBehMsg','pubMsg'],
+                             output_keys=['continueKey','getBackKey','pubBehMsg','pubMsg'])
 
     def execute(self, userdata):
-        rospy.loginfo('Executing state NEGATIVE WIN')
+        rospy.loginfo('Executing state ACTIVITY')
         # stay here until the condition for transitioning is met
-        while(userdata.continueKey != True):
-            pass 
-
-        userdata.continueKey = False 
-        # transition to final state due to time up
-        if (userdata.timerKey is True):
-            userdata.timerKey = False
-            #say good bye
-            return 'end'
-
-        # keeps in Negative Streak state
-        if userdata.performance < 1:
-            # insert code to stay here
-            # userdata.continueKey = False 
-            userdata.negativeStreakCounter +=1
-            print("Bad score again! Let's play the previous level of ", userdata.activityOnFocus)
-            # ret = 'positiveStreak'
-        
-        # Move to single win state
-        if userdata.performance > 1:
-            userdata.positiveStreakCounter =0
-            print("Well done! Lets try to keep the good performance")
-            return 'win'
-
-        # set the variables and finalize the state
-        # return ret
-
+        while((userdata.continueKey == False) & (userdata.getBackKey == False)):
+            pass
+        # transition to the next state (react the the event and say a proactive sentence)
+        # case 1: move on to GOODBYE
+        if (userdata.continueKey == True):
+            userdata.continueKey = False 
+            return 'proceed'
+        # case 2: get back to ASSESSMENT
+        else:
+            userdata.getBackKey = False 
+            return 'getBack'
 
 # define state Goodbye
 class Goodbye(smach.State):
@@ -202,69 +109,7 @@ class DecisionMaker():
         self.pubSayMsg = rospy.Publisher('/qt_robot/speech/say', String, queue_size=1)
         self.world = pd.DataFrame()
         self.round_counter = 0
-
-        # create a SMACH state machine
-        self.sm = smach.StateMachine(outcomes=['end'])
-        # create and initialize the variables to be passed to states
-        self.sm.userdata.dynamicoKey = False
-        self.userdata.timerKey = False
-        self.sm.userdata.performance = 0
-        self.sm.userdata.positiveStreakCounter = 0
-        self.sm.userdata.negativeStreakCounter = 0
-        self.sm.userdata.activityOnFocus = "Select an activity"
         
-        with self.sm:
-            # Add states to the container
-            
-            smach.StateMachine.add('WIN', Win(), 
-                                transitions={'positiveStreak':'POSITIVESTREAK',
-                                             'loss': 'LOSS',
-                                             'end': 'end'},
-                                remapping={'continueKey':'dinamicoKey',
-                                            'getBackKey':'goToAssessmentKey',
-                                            'pubBehMsg':'pubBehMsg',
-                                            'pubMsg':'pubMsg', 
-                                            'continueKey':'dinamicoKey',
-                                            'getBackKey':'goToAssessmentKey',
-                                            'pubBehMsg':'pubBehMsg',
-                                            'pubMsg':'pubMsg'})
-            
-            
-            smach.StateMachine.add('LOSS', Loss(), 
-                                transitions={'win':'WIN',
-                                             'loss': 'NEGATIVESTREAK'},
-                                remapping={'continueKey':'dinamicoKey',
-                                            'getBackKey':'goToAssessmentKey',
-                                            'pubBehMsg':'pubBehMsg',
-                                            'pubMsg':'pubMsg', 
-                                            'continueKey':'dinamicoKey',
-                                            'getBackKey':'goToAssessmentKey',
-                                            'pubBehMsg':'pubBehMsg',
-                                            'pubMsg':'pubMsg'})
-            
-            smach.StateMachine.add('POSITIVESTREAK', PositiveStreak(), 
-                                transitions={'loss': 'LOSS'},
-                                remapping={'continueKey':'dinamicoKey',
-                                            'pubBehMsg':'pubBehMsg',
-                                            'pubMsg':'pubMsg', 
-                                            'continueKey':'dinamicoKey',
-                                            'pubBehMsg':'pubBehMsg',
-                                            'pubMsg':'pubMsg'})
-            
-            smach.StateMachine.add('NEGATIVESTREAK', NegativeStreak(), 
-                                transitions={'success':'WIN'},
-                                remapping={'continueKey':'dinamicoKey',
-                                            'pubBehMsg':'pubBehMsg',
-                                            'pubMsg':'pubMsg', 
-                                            'continueKey':'dinamicoKey',
-                                            'pubBehMsg':'pubBehMsg',
-                                            'pubMsg':'pubMsg'})
-        
-        # execute SMACH plan
-        outcome = self.sm.execute()
-        rospy.loginfo("OUTCOME: " + outcome)
- 
-
         counter = threading.Thread(target=self.countdown, args=(1,))
         
         counter.start()
@@ -290,9 +135,7 @@ class DecisionMaker():
             msg = 'moveOn'
             rospy.loginfo(msg)
             self.pubFSMMsg.publish(msg)
-            self.userdata.timerKey = True
-            
-            # exit()
+            exit()
             return
         else:
             print("There is still Time")
@@ -303,6 +146,10 @@ class DecisionMaker():
             print("First entrance. Suggesting based on assessment")
             self.choose_based_on_assessment(df)
         
+        elif(len(self.world.index)) > 3:
+            self.analyze_streak(3)
+
+
         else:
             if (df.at[0, 'score'] > 50 ):
                 msg = 'bravo'
@@ -317,11 +164,7 @@ class DecisionMaker():
                 self.pubBehMsg.publish(msg)
 
 
-        self.sm.datauser.dynamicoKey = True
 
-
-
-        return 
 
         userInput = ''
         
