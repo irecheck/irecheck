@@ -11,6 +11,7 @@ import smach
 # import the time module
 import time
   
+MINUTES_PER_SESSION = 5
 
 # define state Assessment
 class PositiveStreak(smach.State):
@@ -41,7 +42,7 @@ class PositiveStreak(smach.State):
         if (userdata.timerKey is True):
             userdata.timerKey = False
             #say good bye
-            msg = 'goToAssessment'
+            msg = 'goToEndAssessment'
             userdata.pubMsg.publish(msg)
             return 'end'
 
@@ -73,7 +74,7 @@ class Win(smach.State):
 
         msg = 'moveOn'
         userdata.pubMsg.publish(msg)
-        print("Good job! Select the next activity")
+        print("Good job! Select the next level of the game")
 
         # wait untill the previous activity is finished
         while(userdata.continueKey != True):
@@ -84,7 +85,7 @@ class Win(smach.State):
         if (userdata.timerKey is True):
             userdata.timerKey = False
             #say good bye
-            msg = 'goToAssessment'
+            msg = 'goToEndAssessment'
             userdata.pubMsg.publish(msg)
             return 'end'
 
@@ -124,7 +125,7 @@ class Loss(smach.State):
         if (userdata.timerKey is True):
             userdata.timerKey = False
             #say good bye
-            msg = 'goToAssessment'
+            msg = 'goToEndAssessment'
             userdata.pubMsg.publish(msg)
             return 'end'
 
@@ -169,7 +170,7 @@ class NegativeStreak(smach.State):
         if (userdata.timerKey is True):
             userdata.timerKey = False
             #say good bye
-            msg = 'goToAssessment'
+            msg = 'goToEndAssessment'
             userdata.pubMsg.publish(msg)
             return 'end'
 
@@ -206,7 +207,7 @@ class Idle(smach.State):
         if (userdata.timerKey is True):
             userdata.timerKey = False
             #say good bye
-            ret = 'end'
+            return 'end'
 
         # Move to positive Streak state
         if userdata.performance > 1:
@@ -229,8 +230,8 @@ class DecisionMaker():
         # initialize ROS node
         rospy.init_node('decisionmaker', anonymous=True)
         # initialize publishers/subscribers
-        # rospy.Subscriber('dynamicomsg', String, self.dynamicoCallback)
-        rospy.Subscriber('dynamicomsg', String, self.fakeDynamicoCallback)
+        rospy.Subscriber('dynamicomsg', String, self.dynamicoCallback)
+        # rospy.Subscriber('dynamicomsg', String, self.fakeDynamicoCallback)
         self.pubFSMMsg = rospy.Publisher('autodecisions', String, queue_size=10)
         self.pubBehMsg = rospy.Publisher('/irecheck/button_name', String, queue_size=1)
         self.pubSayMsg = rospy.Publisher('/qt_robot/speech/say', String, queue_size=1)
@@ -325,7 +326,7 @@ class DecisionMaker():
         self.sm.set_initial_state(['IDLE'])
 
         # start counter
-        counter = threading.Thread(target=self.countdown, args=(1,))
+        counter = threading.Thread(target=self.countdown, args=(MINUTES_PER_SESSION,))
         counter.start()
         # execute SMACH plan
         outcome = self.sm.execute()
@@ -351,7 +352,7 @@ class DecisionMaker():
         # TODO: what to suggest
         
         # log the reception of the message
-        # rospy.loginfo(rospy.get_caller_id() + '- received %s', data.data)
+        rospy.loginfo(rospy.get_caller_id() + '- received %s', data.data)
         
         # extract the data in the message and convert it in dataframe format
         df = pd.read_json(data.data, orient='records')
@@ -361,9 +362,15 @@ class DecisionMaker():
 
             print("First entrance. Suggesting based on assessment")
             self.choose_based_on_assessment(df)
-        
+            print("Let's focus on game: ", self.sm.userdata.activityOnFocus)
+            self.sm.userdata.dynamicoKey = False # don't execute the state transition for the first assesement
+
+            # inform the irecheck manager to start the activity
+            msg = "goToActivity"
+            self.pubFSMMsg.publish(msg)
+
         else:
-            if (df.at[0, 'score'] > 50 ):
+            if (df.at[0, 'score'] > 85 ):
                 msg = 'bravo'
                 # rospy.loginfo(msg)
                 self.pubBehMsg.publish(msg)
@@ -373,9 +380,7 @@ class DecisionMaker():
                 # rospy.loginfo(msg)
                 self.pubBehMsg.publish(msg)
                 self.sm.userdata.performance = 0
-
-
-        self.sm.datauser.dynamicoKey = True
+            self.sm.userdata.dynamicoKey = True
 
     def choose_based_on_assessment(self,df):
         # implement a simple logic to determine what to suggest next
