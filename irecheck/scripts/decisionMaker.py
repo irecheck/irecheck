@@ -18,8 +18,8 @@ class PositiveStreak(smach.State):
     def __init__(self):
         smach.State.__init__(self, 
                              outcomes=['loss', 'end', 'stay'],
-                             input_keys=['continueKey','timerKey', 'performance', 'pubBehMsg','pubMsg'],
-                             output_keys=['continueKey','timerKey','pubBehMsg','pubMsg'])
+                             input_keys=['continueKey','timerKey', 'performance', 'pubBehMsg','pubMsg', 'pubSayMsg'],
+                             output_keys=['continueKey','timerKey','pubBehMsg','pubMsg', 'pubSayMsg'])
         self.positiveStreakCounter = 0
 
     def execute(self, userdata):
@@ -28,10 +28,15 @@ class PositiveStreak(smach.State):
         msg = 'moveOn'
         userdata.pubMsg.publish(msg)
         if self.positiveStreakCounter >= 1:
-            print("Wow, you are really good at it, try a harder activity")
+            msg = "Wow, you are really good at it, try a harder game"
+            rospy.loginfo(msg)
+            userdata.pubSayMsg.publish(msg)
             # print("Good score! Let's play the next available level", userdata.activityOnFocus)
         else:
-            print("Select an activity")
+            msg = "Well done, try the next game"
+            rospy.loginfo(msg)
+            userdata.pubSayMsg.publish(msg)
+        rospy.sleep(2)
 
         # wait untill the previous activity is finished
         while(userdata.continueKey != True):
@@ -66,17 +71,21 @@ class Win(smach.State):
     def __init__(self):
         smach.State.__init__(self, 
                              outcomes=['loss', 'end', 'positiveStreak'],
-                             input_keys=['continueKey','timerKey', 'performance', 'pubBehMsg','pubMsg'],
-                             output_keys=['continueKey','timerKey','pubBehMsg','pubMsg'])
+                             input_keys=['continueKey','timerKey', 'performance', 'pubBehMsg','pubMsg', 'pubSayMsg'],
+                             output_keys=['continueKey','timerKey','pubBehMsg','pubMsg','pubSayMsg'])
 
     def execute(self, userdata):
         rospy.loginfo('Executing state SINGLE WIN')
 
         msg = 'moveOn'
         userdata.pubMsg.publish(msg)
-        print("Good job! Select the next level of the game")
+        
+        msg = "Select the next level of the game"
+        rospy.loginfo(msg)
+        userdata.pubSayMsg.publish(msg)
+        rospy.sleep(2)
 
-        # wait untill the previous activity is finished
+        # wait until the previous activity is finished
         while(userdata.continueKey != True):
             pass
         userdata.continueKey = False 
@@ -105,8 +114,8 @@ class Loss(smach.State):
     def __init__(self):
         smach.State.__init__(self, 
                              outcomes=['win', 'end', 'negativeStreak'],
-                             input_keys=['continueKey','timerKey','performance', 'pubBehMsg','pubMsg'],
-                             output_keys=['continueKey','timerKey','pubBehMsg','pubMsg'])
+                             input_keys=['continueKey','timerKey','performance', 'pubBehMsg','pubMsg', 'pubSayMsg'],
+                             output_keys=['continueKey','timerKey','pubBehMsg','pubMsg', 'pubSayMsg'])
 
     def execute(self, userdata):
         rospy.loginfo('Executing state SINGLE LOSS')
@@ -114,9 +123,13 @@ class Loss(smach.State):
 
         msg = 'moveOn'
         userdata.pubMsg.publish(msg)
-        print("Don't worry, it's just a single fail, let's try it again")
+        msg = "The score is a bit lower. But don't worry, it's just a single fail, let's try the same game again"
+        rospy.loginfo(msg)
+        userdata.pubSayMsg.publish(msg)
+        rospy.sleep(2)
         
-        # wait untill the previous activity is finished
+        
+        # wait until the previous activity is finished
         while(userdata.continueKey != True):
             pass 
         userdata.continueKey = False
@@ -147,8 +160,8 @@ class NegativeStreak(smach.State):
     def __init__(self):
         smach.State.__init__(self, 
                              outcomes=['win', 'end', 'stay'],
-                             input_keys=['continueKey','timerKey','performance','pubBehMsg','pubMsg'],
-                             output_keys=['continueKey','timerKey','pubBehMsg','pubMsg'])
+                             input_keys=['continueKey','timerKey','performance','pubBehMsg','pubMsg', 'pubSayMsg'],
+                             output_keys=['continueKey','timerKey','pubBehMsg','pubMsg', 'pubSayMsg'])
         self.negativeStreakCounter = 0
     def execute(self, userdata):
         rospy.loginfo('Executing state NEGATIVESTREAK')
@@ -156,10 +169,15 @@ class NegativeStreak(smach.State):
         msg = 'moveOn'
         userdata.pubMsg.publish(msg)
         if self.negativeStreakCounter >= 1:
-            print("It seems that you are tired of it. Try a easier activity")
+            msg = "It seems that you are tired of it. Try a easier activity"
+            rospy.loginfo(msg)
+            userdata.pubSayMsg.publish(msg)
             # print("Bad score again! Let's play the previous level of ", userdata.activityOnFocus)
         else:
-            print("Cheer up. Let's try it again.")
+            msg = "Cheer up. Let's try it again."
+            rospy.loginfo(msg)
+            userdata.pubSayMsg.publish(msg)
+        rospy.sleep(2)
 
         # wait untill the previous activity is finished
         while(userdata.continueKey != True):
@@ -182,7 +200,10 @@ class NegativeStreak(smach.State):
         # Move to single win state
         if userdata.performance > 1:
             self.positiveStreakCounter =0
-            print("Well done! Lets try to keep the good performance")
+            msg = "Well done! Lets try to keep the good performance"
+            rospy.loginfo(msg)
+            userdata.pubSayMsg.publish(msg)
+            rospy.sleep(2)
             ret =  'win'
 
         return ret
@@ -192,8 +213,8 @@ class Idle(smach.State):
     def __init__(self):
         smach.State.__init__(self, 
                              outcomes=['win', 'loss', 'end'],
-                             input_keys=['continueKey','timerKey','performance', 'pubBehMsg','pubMsg'],
-                             output_keys=['continueKey','timerKey','pubBehMsg','pubMsg'])
+                             input_keys=['continueKey','timerKey','performance', 'pubBehMsg','pubMsg', 'pubSayMsg'],
+                             output_keys=['continueKey','timerKey','pubBehMsg','pubMsg', 'pubSayMsg'])
 
     def execute(self, userdata):
         rospy.loginfo('Executing state Idle')
@@ -249,6 +270,7 @@ class DecisionMaker():
         self.sm.userdata.activityOnFocus = "Select an activity"
         self.sm.userdata.pubFSMMsg = self.pubFSMMsg
         self.sm.userdata.pubSayMsg = self.pubSayMsg
+        self.sm.userdata.pubBehMsg = self.pubBehMsg
         
         with self.sm:
             # Add states to the container
@@ -260,12 +282,14 @@ class DecisionMaker():
                                 remapping={'continueKey':'dynamicoKey',
                                             'timerKey': 'timerKey',
                                             'performance': 'performance',
-                                            'pubBehMsg':'pubSayMsg',
+                                            'pubBehMsg':'pubBehMsg',
                                             'pubMsg':'pubFSMMsg', 
+                                            'pubSayMsg': 'pubSayMsg',
                                             'continueKey':'dynamicoKey',
                                             'timerKey': 'timerKey',
-                                            'pubBehMsg':'pubSayMsg',
-                                            'pubMsg':'pubFSMMsg'})
+                                            'pubBehMsg':'pubBehMsg',
+                                            'pubMsg':'pubFSMMsg',
+                                            'pubSayMsg': 'pubSayMsg'})
             
             smach.StateMachine.add('WIN', Win(), 
                                 transitions={'positiveStreak':'POSITIVESTREAK',
@@ -274,12 +298,14 @@ class DecisionMaker():
                                 remapping={'continueKey':'dynamicoKey',
                                             'timerKey': 'timerKey',
                                             'performance': 'performance',
-                                            'pubBehMsg':'pubSayMsg',
-                                            'pubMsg':'pubFSMMsg', 
+                                            'pubBehMsg':'pubBehMsg',
+                                            'pubMsg':'pubFSMMsg',
+                                            'pubSayMsg': 'pubSayMsg', 
                                             'continueKey':'dynamicoKey',
                                             'timerKey': 'timerKey',
-                                            'pubBehMsg':'pubSayMsg',
-                                            'pubMsg':'pubFSMMsg'})
+                                            'pubBehMsg':'pubBehMsg',
+                                            'pubMsg':'pubFSMMsg',
+                                            'pubSayMsg': 'pubSayMsg'})
             
             
             smach.StateMachine.add('LOSS', Loss(), 
@@ -289,12 +315,14 @@ class DecisionMaker():
                                 remapping={'continueKey':'dynamicoKey',
                                             'timerKey': 'timerKey',
                                             'performance': 'performance',
-                                            'pubBehMsg':'pubSayMsg',
+                                            'pubBehMsg':'pubBehMsg',
                                             'pubMsg':'pubFSMMsg', 
+                                            'pubSayMsg': 'pubSayMsg', 
                                             'continueKey':'dynamicoKey',
                                             'timerKey': 'timerKey',
-                                            'pubBehMsg':'pubSayMsg',
-                                            'pubMsg':'pubFSMMsg'})
+                                            'pubBehMsg':'pubBehMsg',
+                                            'pubMsg':'pubFSMMsg',
+                                            'pubSayMsg': 'pubSayMsg'})
             
             smach.StateMachine.add('POSITIVESTREAK', PositiveStreak(), 
                                 transitions={'loss': 'LOSS',
@@ -303,12 +331,14 @@ class DecisionMaker():
                                 remapping={'continueKey':'dynamicoKey',
                                             'timerKey': 'timerKey',
                                             'performance': 'performance',
-                                            'pubBehMsg':'pubSayMsg',
+                                            'pubBehMsg':'pubBehMsg',
                                             'pubMsg':'pubFSMMsg', 
+                                            'pubSayMsg': 'pubSayMsg', 
                                             'continueKey':'dynamicoKey',
                                             'timerKey': 'timerKey',
-                                            'pubBehMsg':'pubSayMsg',
-                                            'pubMsg':'pubFSMMsg'})
+                                            'pubBehMsg':'pubBehMsg',
+                                            'pubMsg':'pubFSMMsg',
+                                            'pubSayMsg': 'pubSayMsg'})
             
             smach.StateMachine.add('NEGATIVESTREAK', NegativeStreak(), 
                                 transitions={'win':'WIN',
@@ -317,12 +347,14 @@ class DecisionMaker():
                                 remapping={'continueKey':'dynamicoKey',
                                             'timerKey': 'timerKey',
                                             'performance': 'performance',
-                                            'pubBehMsg':'pubSayMsg',
+                                            'pubBehMsg':'pubBehMsg',
                                             'pubMsg':'pubFSMMsg', 
+                                            'pubSayMsg': 'pubSayMsg', 
                                             'continueKey':'dynamicoKey',
                                             'timerKey': 'timerKey',
-                                            'pubBehMsg':'pubSayMsg',
-                                            'pubMsg':'pubFSMMsg'})
+                                            'pubBehMsg':'pubBehMsg',
+                                            'pubMsg':'pubFSMMsg',
+                                            'pubSayMsg': 'pubSayMsg'})
         self.sm.set_initial_state(['IDLE'])
 
         # start counter
@@ -360,10 +392,18 @@ class DecisionMaker():
 
         if (len(self.world.index)) == 1:
 
-            print("First entrance. Suggesting based on assessment")
+            rospy.loginfo("First entrance. Suggesting based on assessment")
             self.choose_based_on_assessment(df)
-            print("Let's focus on game: ", self.sm.userdata.activityOnFocus)
-            self.sm.userdata.dynamicoKey = False # don't execute the state transition for the first assesement
+            msg = "Your handwriting is good. Let's play the game: {}".format(self.sm.userdata.activityOnFocus)
+            rospy.loginfo(msg)
+            self.pubSayMsg.publish(msg)
+            rospy.sleep(5)
+            msg = "Please go to the activity and select the game: {}".format(self.sm.userdata.activityOnFocus)
+            rospy.loginfo(msg)
+            self.pubSayMsg.publish(msg)
+
+            # print("Let's focus on game: ", self.sm.userdata.activityOnFocus)
+            self.sm.userdata.dynamicoKey = False # don't execute the state transition for the first assessment
 
             # inform the irecheck manager to start the activity
             msg = "goToActivity"
@@ -387,29 +427,14 @@ class DecisionMaker():
         # if ASSESSMENT --> suggest the activity associated with the lowest score, move to ACTIVITY state
         # if (df.at[0, 'type'] == 'assessment'):
         if (min([df.at[0, 'pressureScore'],df.at[0, 'staticScore'],df.at[0, 'kinematicScore'],df.at[0, 'tiltScore']]) == df.at[0, 'pressureScore']):
-            msg = 'Jouons au jeu submarine!'
-            rospy.loginfo(msg)
-            self.pubSayMsg.publish(msg)
             self.sm.userdata.activityOnFocus = 'Submarine'
         elif (min([df.at[0, 'pressureScore'],df.at[0, 'staticScore'],df.at[0, 'kinematicScore'],df.at[0, 'tiltScore']]) == df.at[0, 'staticScore']):
-            msg = 'Jouons au jeu chemist!'
-            rospy.loginfo(msg)
-            self.pubSayMsg.publish(msg)
             self.sm.userdata.activityOnFocus = 'Chemist'
         elif (min([df.at[0, 'pressureScore'],df.at[0, 'staticScore'],df.at[0, 'kinematicScore'],df.at[0, 'tiltScore']]) == df.at[0, 'kinematicScore']):
-            msg = 'Jouons au jeu pursuit!'
-            rospy.loginfo(msg)
-            self.pubSayMsg.publish(msg)
             self.sm.userdata.activityOnFocus = 'Pursuit'
         elif (min([df.at[0, 'pressureScore'],df.at[0, 'staticScore'],df.at[0, 'kinematicScore'],df.at[0, 'tiltScore']]) == df.at[0, 'tiltScore']):
-            msg = 'Jouons au jeu copter!'
-            rospy.loginfo(msg)
-            self.pubSayMsg.publish(msg)
             self.sm.userdata.activityOnFocus = 'Copter'
         else:
-            msg = 'Jouons au jeu apprentice!'
-            rospy.loginfo(msg)
-            self.pubSayMsg.publish(msg)
             self.sm.userdata.activityOnFocus = 'Apprentice'
         
 

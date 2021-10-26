@@ -55,15 +55,16 @@ class Assessment(smach.State):
         msg = "It is time to check how your handwriting is going. Please perform an evaluation. It could take a while for me to compute it after you finish."
         userdata.robotSay.publish(msg)
         rospy.loginfo(msg)
+        rospy.sleep(2)
 
 
         while(userdata.continueKey != True):
             pass
         userdata.continueKey = False 
 
-        msg = "Great!"
-        userdata.robotSay.publish(msg)
-        rospy.loginfo(msg)
+        # msg = "Great!"
+        # userdata.robotSay.publish(msg)
+        # rospy.loginfo(msg)
 
         if userdata.isEndAssessment:
             # if this is the assessment ordered by the decisionMaker, go to the GoodBye state
@@ -107,11 +108,13 @@ class Goodbye(smach.State):
     def execute(self, userdata):
         rospy.loginfo('Executing state GOODBYE')
         # wait some time
-        rospy.sleep(5)
+        rospy.sleep(2)
         # transition to the next state (end)
         msg = 'au_revoir'
         rospy.loginfo(msg)
-        userdata.pubBehMsg.publish(msg)   
+        userdata.pubBehMsg.publish(msg)
+        # wait some time
+        rospy.sleep(5)   
         return 'proceed'
 
 
@@ -123,8 +126,8 @@ class IrecheckManager():
         # initialize ROS node
         rospy.init_node('irecheckmanager', anonymous=True)
         # initialize subscribers
-        # rospy.Subscriber('/qt_nuitrack_app/faces', Faces, self.nuitrackCallback)
-        rospy.Subscriber('/qt_nuitrack_app/faces', String, self.fakeNuitrackCallback)
+        rospy.Subscriber('/qt_nuitrack_app/faces', Faces, self.nuitrackCallback)
+        # rospy.Subscriber('/qt_nuitrack_app/faces', String, self.fakeNuitrackCallback)
         rospy.Subscriber('dynamicomsg', String, self.dynamicoCallback)
         rospy.Subscriber('autodecisions', String, self.decisionsCallback)
 
@@ -135,6 +138,7 @@ class IrecheckManager():
         self.sm.userdata.dynamicoKey = False
         self.sm.userdata.goToActivityKey = False
         self.sm.userdata.goToEndAssessmentKey = False
+        self.sm.userdata.moveOnKey = False
         self.sm.userdata.dynamicoAssessmentKey = False
         self.sm.userdata.pubBehMsg = rospy.Publisher('/irecheck/button_name', String, queue_size=1)
         self.sm.userdata.robotSay = rospy.Publisher('/qt_robot/speech/say', String, queue_size=1)
@@ -208,8 +212,10 @@ class IrecheckManager():
 
         if dynamicoType == 'assessment':
             self.sm.userdata.dynamicoAssessmentKey = True
+            self.sm.userdata.dynamicoKey = False
         elif dynamicoType == 'activity':
             self.sm.userdata.dynamicoKey = True
+            self.sm.userdata.dynamicoAssessmentKey = False
         else:
             rospy.loginfo("Unknown dynamico type")
 
