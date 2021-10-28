@@ -11,23 +11,22 @@ import smach
 # import the time module
 import time
   
-MINUTES_PER_SESSION = 5
+MINUTES_PER_SESSION = 1
 
 # define state Assessment
 class PositiveStreak(smach.State):
     def __init__(self):
         smach.State.__init__(self, 
                              outcomes=['loss', 'end', 'stay'],
-                             input_keys=['continueKey','timerKey', 'performance', 'pubBehMsg','pubMsg', 'pubSayMsg'],
-                             output_keys=['continueKey','timerKey','pubBehMsg','pubMsg', 'pubSayMsg'])
-        self.positiveStreakCounter = 0
+                             input_keys=['continueKey','timerKey', 'performance', 'pubBehMsg','pubMsg', 'pubSayMsg', 'positiveStreakCounter'],
+                             output_keys=['continueKey','timerKey','pubBehMsg','pubMsg', 'pubSayMsg', 'positiveStreakCounter'])
 
     def execute(self, userdata):
         rospy.loginfo('Executing state POSITIVESTREAK')
 
         msg = 'moveOn'
         userdata.pubMsg.publish(msg)
-        if self.positiveStreakCounter >= 1:
+        if userdata.positiveStreakCounter >= 1:
             msg = "Wow, you are really good at it, try a harder game"
             rospy.loginfo(msg)
             userdata.pubSayMsg.publish(msg)
@@ -53,12 +52,12 @@ class PositiveStreak(smach.State):
 
         # Move to positive Streak state
         if userdata.performance > 1:
-            self.positiveStreakCounter +=1
+            userdata.positiveStreakCounter +=1
             return 'stay'
         
         # Move to single loss state
         if userdata.performance < 1:
-            self.positiveStreakCounter =0
+            userdata.positiveStreakCounter =0
             return 'loss'
 
         # default return
@@ -160,15 +159,15 @@ class NegativeStreak(smach.State):
     def __init__(self):
         smach.State.__init__(self, 
                              outcomes=['win', 'end', 'stay'],
-                             input_keys=['continueKey','timerKey','performance','pubBehMsg','pubMsg', 'pubSayMsg'],
-                             output_keys=['continueKey','timerKey','pubBehMsg','pubMsg', 'pubSayMsg'])
-        self.negativeStreakCounter = 0
+                             input_keys=['continueKey','timerKey','performance','pubBehMsg','pubMsg', 'pubSayMsg','negativeStreakCounter'],
+                             output_keys=['continueKey','timerKey','pubBehMsg','pubMsg', 'pubSayMsg', 'negativeStreakCounter'])
+        
     def execute(self, userdata):
         rospy.loginfo('Executing state NEGATIVESTREAK')
 
         msg = 'moveOn'
         userdata.pubMsg.publish(msg)
-        if self.negativeStreakCounter >= 1:
+        if userdata.negativeStreakCounter >= 1:
             msg = "It seems that you are tired of it. Try a easier activity"
             rospy.loginfo(msg)
             userdata.pubSayMsg.publish(msg)
@@ -194,12 +193,12 @@ class NegativeStreak(smach.State):
 
         # keeps in Negative Streak state
         if userdata.performance < 1:
-            self.negativeStreakCounter +=1
+            userdata.negativeStreakCounter +=1
             ret =  'stay'
         
         # Move to single win state
         if userdata.performance > 1:
-            self.positiveStreakCounter =0
+            userdata.negativeStreakCounter =0
             msg = "Well done! Lets try to keep the good performance"
             rospy.loginfo(msg)
             userdata.pubSayMsg.publish(msg)
@@ -256,6 +255,7 @@ class DecisionMaker():
         self.pubFSMMsg = rospy.Publisher('autodecisions', String, queue_size=10)
         self.pubBehMsg = rospy.Publisher('/irecheck/button_name', String, queue_size=1)
         self.pubSayMsg = rospy.Publisher('/qt_robot/speech/say', String, queue_size=1)
+        rospy.Subscriber('managercommands', String, self.managerCommandsCallback)
         self.world = pd.DataFrame()
         self.round_counter = 0
 
@@ -271,6 +271,7 @@ class DecisionMaker():
         self.sm.userdata.pubFSMMsg = self.pubFSMMsg
         self.sm.userdata.pubSayMsg = self.pubSayMsg
         self.sm.userdata.pubBehMsg = self.pubBehMsg
+        self.sm.userdata.timer = None
         
         with self.sm:
             # Add states to the container
@@ -333,12 +334,14 @@ class DecisionMaker():
                                             'performance': 'performance',
                                             'pubBehMsg':'pubBehMsg',
                                             'pubMsg':'pubFSMMsg', 
-                                            'pubSayMsg': 'pubSayMsg', 
+                                            'pubSayMsg': 'pubSayMsg',
+                                            'positiveStreakCounter': 'positiveStreakCounter', 
                                             'continueKey':'dynamicoKey',
                                             'timerKey': 'timerKey',
                                             'pubBehMsg':'pubBehMsg',
                                             'pubMsg':'pubFSMMsg',
-                                            'pubSayMsg': 'pubSayMsg'})
+                                            'pubSayMsg': 'pubSayMsg',
+                                            'positiveStreakCounter': 'positiveStreakCounter'})
             
             smach.StateMachine.add('NEGATIVESTREAK', NegativeStreak(), 
                                 transitions={'win':'WIN',
@@ -350,23 +353,27 @@ class DecisionMaker():
                                             'pubBehMsg':'pubBehMsg',
                                             'pubMsg':'pubFSMMsg', 
                                             'pubSayMsg': 'pubSayMsg', 
+                                            'negativeStreakCounter': 'negativeStreakCounter',
                                             'continueKey':'dynamicoKey',
                                             'timerKey': 'timerKey',
                                             'pubBehMsg':'pubBehMsg',
                                             'pubMsg':'pubFSMMsg',
-                                            'pubSayMsg': 'pubSayMsg'})
-        self.sm.set_initial_state(['IDLE'])
+                                            'pubSayMsg': 'pubSayMsg',
+                                            'negativeStreakCounter': 'negativeStreakCounter'})
 
-        # start counter
-        counter = threading.Thread(target=self.countdown, args=(MINUTES_PER_SESSION,))
-        counter.start()
+    def run_new_round(self):
+        rospy.loginfo("Start a new round of decision maker")
+        self.sm.userdata.dynamicoKey = False
+        self.sm.userdata.timerKey = False
+        self.sm.userdata.performance = 0 # TODO: boolean or not
+        self.sm.userdata.positiveStreakCounter = 0
+        self.sm.userdata.negativeStreakCounter = 0
+        self.sm.set_initial_state(['IDLE'])
         # execute SMACH plan
         outcome = self.sm.execute()
-        
         rospy.loginfo("OUTCOME: " + outcome)
-
         # keep python from exiting until this node is stopped
-        rospy.spin()
+        
 
     def fakeDynamicoCallback(self, data):
         rospy.loginfo(rospy.get_caller_id() + '- received %s', data.data)
@@ -375,6 +382,17 @@ class DecisionMaker():
             self.sm.userdata.performance = 2
         else:
             self.sm.userdata.performance = 0
+    
+     # callback on dynamicomsg
+    def managerCommandsCallback(self, data):
+        # TODO: what to suggest
+        # log the reception of the message
+        rospy.loginfo(rospy.get_caller_id() + '- received %s', data.data)
+        if data.data == 'start_new_round':
+            # start timer
+            timer = threading.Thread(target=self.countdown, args=(MINUTES_PER_SESSION,))
+            timer.start()
+            self.run_new_round()
 
         
 
@@ -389,6 +407,7 @@ class DecisionMaker():
         # extract the data in the message and convert it in dataframe format
         df = pd.read_json(data.data, orient='records')
         self.world=self.world.append(df)
+        dynamicoType = df.at[0, 'type']
 
         if (len(self.world.index)) == 1:
 
@@ -409,7 +428,7 @@ class DecisionMaker():
             msg = "goToActivity"
             self.pubFSMMsg.publish(msg)
 
-        else:
+        elif dynamicoType == 'activity':
             if (df.at[0, 'score'] > 85 ):
                 msg = 'bravo'
                 # rospy.loginfo(msg)
@@ -421,6 +440,8 @@ class DecisionMaker():
                 self.pubBehMsg.publish(msg)
                 self.sm.userdata.performance = 0
             self.sm.userdata.dynamicoKey = True
+        else:
+            self.sm.userdata.dynamicoKey = False
 
     def choose_based_on_assessment(self,df):
         # implement a simple logic to determine what to suggest next
@@ -481,5 +502,6 @@ if __name__ == "__main__":
         
     try:
         myDecisionMaker = DecisionMaker()
+        rospy.spin()
     except rospy.ROSInterruptException:
         pass
