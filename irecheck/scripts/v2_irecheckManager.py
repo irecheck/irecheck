@@ -9,6 +9,7 @@ from std_msgs.msg import String
 from qt_nuitrack_app.msg import Faces
 from datetime import datetime
 
+NUM_OF_ROUNDS = 2
 
 class Sleeping(smach.State):
     def __init__(self):
@@ -46,8 +47,10 @@ class Assessment(smach.State):
     def __init__(self):
         smach.State.__init__(self, 
                              outcomes=['proceed', 'bye'],
-                             input_keys=['continueKey','pubBehMsg','robotSay','isEndAssessment'],
-                             output_keys=['continueKey','pubBehMsg','robotSay'])
+                             input_keys=['continueKey','pubBehMsg','robotSay','isEndAssessment','pubCommandMsg'],
+                             output_keys=['continueKey','pubBehMsg','robotSay', 'isEndAssessment', 'pubCommandMsg'])
+
+        self.assessment_counter = 0
 
     def execute(self, userdata):
         rospy.loginfo('Executing state ASSESSMENT')
@@ -60,16 +63,23 @@ class Assessment(smach.State):
 
         while(userdata.continueKey != True):
             pass
-        userdata.continueKey = False 
+        userdata.continueKey = False
+        self.assessment_counter = self.assessment_counter + 1
+        rospy.loginfo('Finish {} assessment'.format(self.assessment_counter))
+        if self.assessment_counter <= NUM_OF_ROUNDS:
+            rospy.loginfo('Start the {} round of activities'.format(self.assessment_counter))
+            msg = 'start_new_round'
+            userdata.pubCommandMsg.publish(msg) 
 
         # msg = "Great!"
         # userdata.robotSay.publish(msg)
         # rospy.loginfo(msg)
 
-        if userdata.isEndAssessment:
+        if userdata.isEndAssessment and self.assessment_counter > NUM_OF_ROUNDS:
             # if this is the assessment ordered by the decisionMaker, go to the GoodBye state
             return 'bye'
         else:
+            userdata.isEndAssessment = False
             return 'proceed'
 
 # define state Activity
@@ -126,8 +136,8 @@ class IrecheckManager():
         # initialize ROS node
         rospy.init_node('irecheckmanager', anonymous=True)
         # initialize subscribers
-        rospy.Subscriber('/qt_nuitrack_app/faces', Faces, self.nuitrackCallback)
-        # rospy.Subscriber('/qt_nuitrack_app/faces', String, self.fakeNuitrackCallback)
+        # rospy.Subscriber('/qt_nuitrack_app/faces', Faces, self.nuitrackCallback)
+        rospy.Subscriber('/qt_nuitrack_app/faces', String, self.fakeNuitrackCallback)
         rospy.Subscriber('dynamicomsg', String, self.dynamicoCallback)
         rospy.Subscriber('autodecisions', String, self.decisionsCallback)
 
@@ -142,6 +152,7 @@ class IrecheckManager():
         self.sm.userdata.dynamicoAssessmentKey = False
         self.sm.userdata.pubBehMsg = rospy.Publisher('/irecheck/button_name', String, queue_size=1)
         self.sm.userdata.robotSay = rospy.Publisher('/qt_robot/speech/say', String, queue_size=1)
+        self.sm.userdata.pubCommandMsg = rospy.Publisher('managercommands', String, queue_size=1)
 
         # use the initial time as the filename to save the .csv 
         now = datetime.now()
@@ -167,10 +178,12 @@ class IrecheckManager():
                                 remapping={'continueKey':'dynamicoAssessmentKey',
                                             'pubBehMsg':'pubBehMsg',
                                             'robotSay':'robotSay',
-                                            'isEndAssessment': 'goToEndAssessmentKey', 
+                                            'pubCommandMsg': 'pubCommandMsg',
+                                            'isEndAssessment': 'goToEndAssessmentKey', # TODO: rename the key
                                             'continueKey':'dynamicoAssessmentKey',
                                             'pubBehMsg':'pubBehMsg',
-                                            'robotSay':'robotSay'})
+                                            'robotSay':'robotSay',
+                                            'pubCommandMsg': 'pubCommandMsg'})
             smach.StateMachine.add('ACTIVITY', Activity(), 
                                 transitions={'proceed':'GOODBYE',
                                              'getBack': 'ASSESSMENT',
