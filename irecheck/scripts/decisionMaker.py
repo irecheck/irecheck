@@ -11,15 +11,43 @@ import smach
 # import the time module
 import time
   
-MINUTES_PER_SESSION = 1
+MINUTES_PER_SESSION = 2
 
+SCORE_TO_ACTIVITY_MAP = {
+    'pressureScore': 'Submarine',
+    'staticScore': 'Chemist',
+    'kinematicScore': 'Pursuit',
+    'tiltScore': 'Copter'
+}
+
+class DummyActivitySuggester:
+    """
+    A dummy activity recommender based on the lasted evaluation profile 
+    """
+    def __init__(self) -> None:
+        self.evaluation_profile = None
+        self.sortedActivitySuggestions = []
+        self.currentActivityId = 0
+
+    def get_harder_activity(self):
+        self.currentActivityId = (self.currentActivityId - 1) % len(self.sortedActivitySuggestions)
+        return self.sortedActivitySuggestions[self.currentActivityId]
+    def get_easier_activity(self):
+        self.currentActivityId = (self.currentActivityId + 1) % len(self.sortedActivitySuggestions)
+        return self.sortedActivitySuggestions[self.currentActivityId]
+    
+    def update_evaluation_profile(self,evaluation_profile):
+        self.evaluation_profile = evaluation_profile.copy()
+        self.sortedActivitySuggestions = [SCORE_TO_ACTIVITY_MAP.get(ele[0]) for ele in self.evaluation_profile]
+
+    
 # define state Assessment
 class PositiveStreak(smach.State):
     def __init__(self):
         smach.State.__init__(self, 
                              outcomes=['loss', 'end', 'stay'],
-                             input_keys=['continueKey','timerKey', 'performance', 'pubBehMsg','pubMsg', 'pubSayMsg', 'positiveStreakCounter'],
-                             output_keys=['continueKey','timerKey','pubBehMsg','pubMsg', 'pubSayMsg', 'positiveStreakCounter'])
+                             input_keys=['continueKey','timerKey', 'performance', 'pubBehMsg','pubMsg', 'pubSayMsg', 'positiveStreakCounter','activitySuggester'],
+                             output_keys=['continueKey','timerKey','pubBehMsg','pubMsg', 'pubSayMsg', 'positiveStreakCounter','activitySuggester'])
 
     def execute(self, userdata):
         rospy.loginfo('Executing state POSITIVESTREAK')
@@ -27,12 +55,12 @@ class PositiveStreak(smach.State):
         msg = 'moveOn'
         userdata.pubMsg.publish(msg)
         if userdata.positiveStreakCounter >= 1:
-            msg = "Wow, you are really good at it, try a harder game"
+            msg = "You are really good at it. Let's try a different activity. Let's play {}".format(userdata.activitySuggester.get_harder_activity())
             rospy.loginfo(msg)
             userdata.pubSayMsg.publish(msg)
             # print("Good score! Let's play the next available level", userdata.activityOnFocus)
         else:
-            msg = "Well done, try the next game"
+            msg = "Well done, try the next level of the activity"
             rospy.loginfo(msg)
             userdata.pubSayMsg.publish(msg)
         rospy.sleep(2)
@@ -125,7 +153,7 @@ class Loss(smach.State):
         msg = "The score is a bit lower. But don't worry, it's just a single fail, let's try the same game again"
         rospy.loginfo(msg)
         userdata.pubSayMsg.publish(msg)
-        rospy.sleep(2)
+        rospy.sleep(5)
         
         
         # wait until the previous activity is finished
@@ -159,8 +187,8 @@ class NegativeStreak(smach.State):
     def __init__(self):
         smach.State.__init__(self, 
                              outcomes=['win', 'end', 'stay'],
-                             input_keys=['continueKey','timerKey','performance','pubBehMsg','pubMsg', 'pubSayMsg','negativeStreakCounter'],
-                             output_keys=['continueKey','timerKey','pubBehMsg','pubMsg', 'pubSayMsg', 'negativeStreakCounter'])
+                             input_keys=['continueKey','timerKey','performance','pubBehMsg','pubMsg', 'pubSayMsg','negativeStreakCounter','activitySuggester'],
+                             output_keys=['continueKey','timerKey','pubBehMsg','pubMsg', 'pubSayMsg', 'negativeStreakCounter','activitySuggester'])
         
     def execute(self, userdata):
         rospy.loginfo('Executing state NEGATIVESTREAK')
@@ -168,12 +196,12 @@ class NegativeStreak(smach.State):
         msg = 'moveOn'
         userdata.pubMsg.publish(msg)
         if userdata.negativeStreakCounter >= 1:
-            msg = "It seems that you are tired of it. Try a easier activity"
+            msg = "It seems that you are tired of it. Try a easier activity. Please play {}".format(userdata.activitySuggester.get_easier_activity())
             rospy.loginfo(msg)
             userdata.pubSayMsg.publish(msg)
             # print("Bad score again! Let's play the previous level of ", userdata.activityOnFocus)
         else:
-            msg = "Cheer up. Let's try it again."
+            msg = "Cheer up. Let's try the same activity again."
             rospy.loginfo(msg)
             userdata.pubSayMsg.publish(msg)
         rospy.sleep(2)
@@ -268,6 +296,7 @@ class DecisionMaker():
         self.sm.userdata.positiveStreakCounter = 0
         self.sm.userdata.negativeStreakCounter = 0
         self.sm.userdata.activityOnFocus = "Select an activity"
+        self.sm.userdata.activitySuggester = DummyActivitySuggester()
         self.sm.userdata.pubFSMMsg = self.pubFSMMsg
         self.sm.userdata.pubSayMsg = self.pubSayMsg
         self.sm.userdata.pubBehMsg = self.pubBehMsg
@@ -335,13 +364,15 @@ class DecisionMaker():
                                             'pubBehMsg':'pubBehMsg',
                                             'pubMsg':'pubFSMMsg', 
                                             'pubSayMsg': 'pubSayMsg',
-                                            'positiveStreakCounter': 'positiveStreakCounter', 
+                                            'positiveStreakCounter': 'positiveStreakCounter',
+                                            'activitySuggester': 'activitySuggester', 
                                             'continueKey':'dynamicoKey',
                                             'timerKey': 'timerKey',
                                             'pubBehMsg':'pubBehMsg',
                                             'pubMsg':'pubFSMMsg',
                                             'pubSayMsg': 'pubSayMsg',
-                                            'positiveStreakCounter': 'positiveStreakCounter'})
+                                            'positiveStreakCounter': 'positiveStreakCounter',
+                                            'activitySuggester': 'activitySuggester'})
             
             smach.StateMachine.add('NEGATIVESTREAK', NegativeStreak(), 
                                 transitions={'win':'WIN',
@@ -354,12 +385,14 @@ class DecisionMaker():
                                             'pubMsg':'pubFSMMsg', 
                                             'pubSayMsg': 'pubSayMsg', 
                                             'negativeStreakCounter': 'negativeStreakCounter',
+                                            'activitySuggester': 'activitySuggester',
                                             'continueKey':'dynamicoKey',
                                             'timerKey': 'timerKey',
                                             'pubBehMsg':'pubBehMsg',
                                             'pubMsg':'pubFSMMsg',
                                             'pubSayMsg': 'pubSayMsg',
-                                            'negativeStreakCounter': 'negativeStreakCounter'})
+                                            'negativeStreakCounter': 'negativeStreakCounter',
+                                            'activitySuggester': 'activitySuggester'})
 
     def run_new_round(self):
         rospy.loginfo("Start a new round of decision maker")
@@ -369,9 +402,20 @@ class DecisionMaker():
         self.sm.userdata.positiveStreakCounter = 0
         self.sm.userdata.negativeStreakCounter = 0
         self.sm.set_initial_state(['IDLE'])
+
+        # suggest the first activity in the new round
+        msg = "Your handwriting is good. Let's play the game: {}".format(self.sm.userdata.activityOnFocus)
+        rospy.loginfo(msg)
+        self.pubSayMsg.publish(msg)
+        rospy.sleep(5)
+        msg = "Please go to the activity and select the game: {}".format(self.sm.userdata.activityOnFocus)
+        rospy.loginfo(msg)
+        self.pubSayMsg.publish(msg)
+
         # execute SMACH plan
         outcome = self.sm.execute()
         rospy.loginfo("OUTCOME: " + outcome)
+        self.world = pd.DataFrame() # reset world
         # keep python from exiting until this node is stopped
         
 
@@ -398,9 +442,7 @@ class DecisionMaker():
 
      
     # callback on dynamicomsg
-    def dynamicoCallback(self, data):
-        # TODO: what to suggest
-        
+    def dynamicoCallback(self, data):        
         # log the reception of the message
         rospy.loginfo(rospy.get_caller_id() + '- received %s', data.data)
         
@@ -409,19 +451,9 @@ class DecisionMaker():
         self.world=self.world.append(df)
         dynamicoType = df.at[0, 'type']
 
-        if (len(self.world.index)) == 1:
-
+        if (len(self.world.index)) == 1 and dynamicoType == 'assessment':
             rospy.loginfo("First entrance. Suggesting based on assessment")
-            self.choose_based_on_assessment(df)
-            msg = "Your handwriting is good. Let's play the game: {}".format(self.sm.userdata.activityOnFocus)
-            rospy.loginfo(msg)
-            self.pubSayMsg.publish(msg)
-            rospy.sleep(5)
-            msg = "Please go to the activity and select the game: {}".format(self.sm.userdata.activityOnFocus)
-            rospy.loginfo(msg)
-            self.pubSayMsg.publish(msg)
-
-            # print("Let's focus on game: ", self.sm.userdata.activityOnFocus)
+            self.choose_based_on_assessment(df)            
             self.sm.userdata.dynamicoKey = False # don't execute the state transition for the first assessment
 
             # inform the irecheck manager to start the activity
@@ -433,11 +465,13 @@ class DecisionMaker():
                 msg = 'bravo'
                 # rospy.loginfo(msg)
                 self.pubBehMsg.publish(msg)
+                rospy.sleep(5)
                 self.sm.userdata.performance = 2
             else:
                 msg = 'courage'
                 # rospy.loginfo(msg)
                 self.pubBehMsg.publish(msg)
+                rospy.sleep(5)
                 self.sm.userdata.performance = 0
             self.sm.userdata.dynamicoKey = True
         else:
@@ -446,18 +480,14 @@ class DecisionMaker():
     def choose_based_on_assessment(self,df):
         # implement a simple logic to determine what to suggest next
         # if ASSESSMENT --> suggest the activity associated with the lowest score, move to ACTIVITY state
-        # if (df.at[0, 'type'] == 'assessment'):
-        if (min([df.at[0, 'pressureScore'],df.at[0, 'staticScore'],df.at[0, 'kinematicScore'],df.at[0, 'tiltScore']]) == df.at[0, 'pressureScore']):
-            self.sm.userdata.activityOnFocus = 'Submarine'
-        elif (min([df.at[0, 'pressureScore'],df.at[0, 'staticScore'],df.at[0, 'kinematicScore'],df.at[0, 'tiltScore']]) == df.at[0, 'staticScore']):
-            self.sm.userdata.activityOnFocus = 'Chemist'
-        elif (min([df.at[0, 'pressureScore'],df.at[0, 'staticScore'],df.at[0, 'kinematicScore'],df.at[0, 'tiltScore']]) == df.at[0, 'kinematicScore']):
-            self.sm.userdata.activityOnFocus = 'Pursuit'
-        elif (min([df.at[0, 'pressureScore'],df.at[0, 'staticScore'],df.at[0, 'kinematicScore'],df.at[0, 'tiltScore']]) == df.at[0, 'tiltScore']):
-            self.sm.userdata.activityOnFocus = 'Copter'
-        else:
-            self.sm.userdata.activityOnFocus = 'Apprentice'
-        
+
+        eval_profile = df.loc[0, ['pressureScore', 'staticScore', 'kinematicScore', 'tiltScore']].copy()
+        eval_profile = list(eval_profile.to_dict().items())
+        eval_profile.sort(key = lambda x: x[1])
+        rospy.loginfo("Eval profile: {}".format(eval_profile))
+        self.sm.userdata.activitySuggester.update_evaluation_profile(eval_profile)
+        rospy.loginfo("Sorted Activity Suggestions: {}".format(self.sm.userdata.activitySuggester.sortedActivitySuggestions))
+        self.sm.userdata.activityOnFocus = self.sm.userdata.activitySuggester.sortedActivitySuggestions[0]
 
 
     def analyze_streak(self, number):
