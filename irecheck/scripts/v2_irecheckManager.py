@@ -39,7 +39,8 @@ class Sleeping(smach.State):
         # msg = 'Commençons par dessiner un chat!'
         msg = "Let's start the interaction!"
         rospy.loginfo(msg)
-        userdata.robotSay.publish(msg)   
+        userdata.robotSay.publish(msg)
+        rospy.sleep(5)   
         return 'proceed'
 
 # define state Assessment
@@ -47,7 +48,7 @@ class Assessment(smach.State):
     def __init__(self):
         smach.State.__init__(self, 
                              outcomes=['proceed', 'bye'],
-                             input_keys=['continueKey','pubBehMsg','robotSay','isEndAssessment','pubCommandMsg'],
+                             input_keys=['continueKey','pubBehMsg','robotSay','isEndAssessment','pubCommandMsg'], # TODO: isEndAssessment may be unnecessary
                              output_keys=['continueKey','pubBehMsg','robotSay', 'isEndAssessment', 'pubCommandMsg'])
 
         self.assessment_counter = 0
@@ -75,7 +76,8 @@ class Assessment(smach.State):
         # userdata.robotSay.publish(msg)
         # rospy.loginfo(msg)
 
-        if userdata.isEndAssessment and self.assessment_counter > NUM_OF_ROUNDS:
+        # if userdata.isEndAssessment and self.assessment_counter > NUM_OF_ROUNDS:
+        if self.assessment_counter > NUM_OF_ROUNDS:
             # if this is the assessment ordered by the decisionMaker, go to the GoodBye state
             return 'bye'
         else:
@@ -136,8 +138,8 @@ class IrecheckManager():
         # initialize ROS node
         rospy.init_node('irecheckmanager', anonymous=True)
         # initialize subscribers
-        # rospy.Subscriber('/qt_nuitrack_app/faces', Faces, self.nuitrackCallback)
-        rospy.Subscriber('/qt_nuitrack_app/faces', String, self.fakeNuitrackCallback)
+        rospy.Subscriber('/qt_nuitrack_app/faces', Faces, self.nuitrackCallback)
+        # rospy.Subscriber('/qt_nuitrack_app/faces', String, self.fakeNuitrackCallback)
         rospy.Subscriber('dynamicomsg', String, self.dynamicoCallback)
         rospy.Subscriber('autodecisions', String, self.decisionsCallback)
 
@@ -208,6 +210,7 @@ class IrecheckManager():
         # execute SMACH plan
         outcome = self.sm.execute()
         rospy.loginfo("OUTCOME: " + outcome)
+        rospy.spin()
  
     
     
