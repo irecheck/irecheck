@@ -55,12 +55,14 @@ class PositiveStreak(smach.State):
         msg = 'moveOn'
         userdata.pubMsg.publish(msg)
         if userdata.positiveStreakCounter >= 1:
-            msg = "You are really good at it. Let's try a different activity. Let's play {}".format(userdata.activitySuggester.get_harder_activity())
+            msg = 'pos_streak'
+            userdata.pubBehMsg.publish(msg)
+            rospy.sleep(2)
+            msg = "Let's try a different activity. Let's play {}".format(userdata.activitySuggester.get_harder_activity())
             rospy.loginfo(msg)
             userdata.pubSayMsg.publish(msg)
-            # print("Good score! Let's play the next available level", userdata.activityOnFocus)
         else:
-            msg = "Well done, try the next level of the activity"
+            msg = "Try the next level of the activity"
             rospy.loginfo(msg)
             userdata.pubSayMsg.publish(msg)
         rospy.sleep(2)
@@ -112,7 +114,7 @@ class Win(smach.State):
         msg = 'moveOn'
         userdata.pubMsg.publish(msg)
         
-        msg = "Select the next level of the game"
+        msg = "Select the next level of the game."
         rospy.loginfo(msg)
         userdata.pubSayMsg.publish(msg)
         rospy.sleep(2)
@@ -155,7 +157,7 @@ class Loss(smach.State):
 
         msg = 'moveOn'
         userdata.pubMsg.publish(msg)
-        msg = "The score is a bit lower. But don't worry, it's just a single fail, let's try the same game again"
+        msg = "Let's try the same game again"
         rospy.loginfo(msg)
         userdata.pubSayMsg.publish(msg)
         rospy.sleep(5)
@@ -201,12 +203,14 @@ class NegativeStreak(smach.State):
         msg = 'moveOn'
         userdata.pubMsg.publish(msg)
         if userdata.negativeStreakCounter >= 1:
-            msg = "It seems that you are tired of it. Try a easier activity. Please play {}".format(userdata.activitySuggester.get_easier_activity())
+            msg = 'neg_streak'
+            userdata.pubBehMsg.publish(msg)
+            rospy.sleep(2)
+            msg = "Try a easier activity. Please play {}".format(userdata.activitySuggester.get_easier_activity())
             rospy.loginfo(msg)
             userdata.pubSayMsg.publish(msg)
-            # print("Bad score again! Let's play the previous level of ", userdata.activityOnFocus)
         else:
-            msg = "Cheer up. Let's try the same activity again."
+            msg = "Let's try the same activity again."
             rospy.loginfo(msg)
             userdata.pubSayMsg.publish(msg)
         rospy.sleep(2)
@@ -232,7 +236,7 @@ class NegativeStreak(smach.State):
         # Move to single win state
         if userdata.performance > 1:
             userdata.negativeStreakCounter =0
-            msg = "Well done! Lets try to keep the good performance"
+            msg = "Lets try to keep the good performance"
             rospy.loginfo(msg)
             userdata.pubSayMsg.publish(msg)
             rospy.sleep(2)
