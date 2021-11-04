@@ -1,17 +1,14 @@
 #!/usr/bin/env python3
 
-# from numpy import arctan2
 # from irecheck.scripts.irecheckManager import Assessment
 import rospy
 import pandas as pd
-from rospy.topics import Publisher
 from std_msgs.msg import String
 import threading
-import smach 
-# import the time module
+import smach
 import time
   
-MINUTES_PER_SESSION = 2
+MINUTES_PER_SESSION = 5
 
 SCORE_TO_ACTIVITY_MAP = {
     'pressureScore': 'Submarine',
@@ -37,6 +34,7 @@ class DummyActivitySuggester:
         return self.sortedActivitySuggestions[self.currentActivityId]
     
     def update_evaluation_profile(self,evaluation_profile):
+        self.currentActivityId = 0
         self.evaluation_profile = evaluation_profile.copy()
         self.sortedActivitySuggestions = [SCORE_TO_ACTIVITY_MAP.get(ele[0]) for ele in self.evaluation_profile]
 
@@ -45,13 +43,15 @@ class DummyActivitySuggester:
 class PositiveStreak(smach.State):
     def __init__(self):
         smach.State.__init__(self, 
-                             outcomes=['loss', 'end', 'stay'],
-                             input_keys=['continueKey','timerKey', 'performance', 'pubBehMsg','pubMsg', 'pubSayMsg', 'positiveStreakCounter','activitySuggester'],
+                             outcomes=['loss', 'end', 'stay', 'typeChangeAndWin'],
+                             input_keys=['continueKey','timerKey', 'performance', 'pubBehMsg','pubMsg', 'pubSayMsg', 'positiveStreakCounter','activitySuggester', 'dynamicoGameType'],
                              output_keys=['continueKey','timerKey','pubBehMsg','pubMsg', 'pubSayMsg', 'positiveStreakCounter','activitySuggester'])
+        self.currentGameType = ''
 
     def execute(self, userdata):
         rospy.loginfo('Executing state POSITIVESTREAK')
 
+        self.currentGameType = userdata.dynamicoGameType
         msg = 'moveOn'
         userdata.pubMsg.publish(msg)
         if userdata.positiveStreakCounter >= 1:
@@ -80,8 +80,13 @@ class PositiveStreak(smach.State):
 
         # Move to positive Streak state
         if userdata.performance > 1:
-            userdata.positiveStreakCounter +=1
-            return 'stay'
+            if (self.currentGameType != userdata.dynamicoGameType):
+                # if tried a new type of the game and succeed again, go to single win state
+                userdata.positiveStreakCounter = 0
+                return 'typeChangeAndWin' 
+            else:
+                userdata.positiveStreakCounter +=1
+                return 'stay'
         
         # Move to single loss state
         if userdata.performance < 1:
@@ -127,13 +132,13 @@ class Win(smach.State):
 
         # Move to positive Streak state
         if userdata.performance > 1:
-            ret = 'positiveStreak'
+            return 'positiveStreak'
         
         # Move to single loss state
         if userdata.performance < 1:
-            ret = 'loss'
+            return 'loss'
 
-        return ret
+        return 'loss'
 
 
 # define state Loss
@@ -292,10 +297,11 @@ class DecisionMaker():
         # create and initialize the variables to be passed to states
         self.sm.userdata.dynamicoKey = False
         self.sm.userdata.timerKey = False
+        self.sm.userdata.dynamicoGameType = '' # submarine, copter, etc.
         self.sm.userdata.performance = 0 # TODO: boolean or not
         self.sm.userdata.positiveStreakCounter = 0
         self.sm.userdata.negativeStreakCounter = 0
-        self.sm.userdata.activityOnFocus = "Select an activity"
+        self.sm.userdata.activityOnFocus = ''
         self.sm.userdata.activitySuggester = DummyActivitySuggester()
         self.sm.userdata.pubFSMMsg = self.pubFSMMsg
         self.sm.userdata.pubSayMsg = self.pubSayMsg
@@ -357,7 +363,8 @@ class DecisionMaker():
             smach.StateMachine.add('POSITIVESTREAK', PositiveStreak(), 
                                 transitions={'loss': 'LOSS',
                                 'stay': 'POSITIVESTREAK',
-                                'end': 'END'},
+                                'end': 'END',
+                                'typeChangeAndWin': 'WIN'},
                                 remapping={'continueKey':'dynamicoKey',
                                             'timerKey': 'timerKey',
                                             'performance': 'performance',
@@ -366,6 +373,7 @@ class DecisionMaker():
                                             'pubSayMsg': 'pubSayMsg',
                                             'positiveStreakCounter': 'positiveStreakCounter',
                                             'activitySuggester': 'activitySuggester', 
+                                            'dynamicoGameType': 'dynamicoGameType',
                                             'continueKey':'dynamicoKey',
                                             'timerKey': 'timerKey',
                                             'pubBehMsg':'pubBehMsg',
@@ -401,22 +409,24 @@ class DecisionMaker():
         self.sm.userdata.performance = 0 # TODO: boolean or not
         self.sm.userdata.positiveStreakCounter = 0
         self.sm.userdata.negativeStreakCounter = 0
+        self.sm.userdata.dynamicoGameType = ''
         self.sm.set_initial_state(['IDLE'])
 
-        # suggest the first activity in the new round
-        msg = "Your handwriting is good. Let's play the game: {}".format(self.sm.userdata.activityOnFocus)
-        rospy.loginfo(msg)
-        self.pubSayMsg.publish(msg)
-        rospy.sleep(5)
-        msg = "Please go to the activity and select the game: {}".format(self.sm.userdata.activityOnFocus)
-        rospy.loginfo(msg)
-        self.pubSayMsg.publish(msg)
+        if self.sm.userdata.activityOnFocus != '':
+            # suggest the first activity in the new round
+            msg = "Your handwriting is good. Let's play the game: {}".format(self.sm.userdata.activityOnFocus)
+            rospy.loginfo(msg)
+            self.pubSayMsg.publish(msg)
+            rospy.sleep(5)
+            msg = "Please go to the activity and select the game: {}".format(self.sm.userdata.activityOnFocus)
+            rospy.loginfo(msg)
+            self.pubSayMsg.publish(msg)
 
         # execute SMACH plan
         outcome = self.sm.execute()
         rospy.loginfo("OUTCOME: " + outcome)
         self.world = pd.DataFrame() # reset world
-        # keep python from exiting until this node is stopped
+        rospy.loginfo("Reset dataframe")
         
 
     def fakeDynamicoCallback(self, data):
@@ -429,7 +439,6 @@ class DecisionMaker():
     
      # callback on dynamicomsg
     def managerCommandsCallback(self, data):
-        # TODO: what to suggest
         # log the reception of the message
         rospy.loginfo(rospy.get_caller_id() + '- received %s', data.data)
         if data.data == 'start_new_round':
@@ -450,9 +459,12 @@ class DecisionMaker():
         df = pd.read_json(data.data, orient='records')
         self.world=self.world.append(df)
         dynamicoType = df.at[0, 'type']
+        dynamicoGameType = df.at[0, 'game']
 
         if (len(self.world.index)) == 1 and dynamicoType == 'assessment':
-            rospy.loginfo("First entrance. Suggesting based on assessment")
+            # only run this block in the new round
+
+            rospy.loginfo("Update evaluation profile and suggest based on assessment")
             self.choose_based_on_assessment(df)            
             self.sm.userdata.dynamicoKey = False # don't execute the state transition for the first assessment
 
@@ -461,7 +473,7 @@ class DecisionMaker():
             self.pubFSMMsg.publish(msg)
 
         elif dynamicoType == 'activity':
-            if (df.at[0, 'score'] > 85 ):
+            if (df.at[0, 'score'] > 60 ):
                 msg = 'bravo'
                 # rospy.loginfo(msg)
                 self.pubBehMsg.publish(msg)
@@ -474,6 +486,7 @@ class DecisionMaker():
                 rospy.sleep(5)
                 self.sm.userdata.performance = 0
             self.sm.userdata.dynamicoKey = True
+            self.sm.userdata.dynamicoGameType = dynamicoGameType
         else:
             self.sm.userdata.dynamicoKey = False
 
@@ -513,23 +526,11 @@ class DecisionMaker():
 
 
 
-'''
-        - Assessment
-        - Take the worst skill to suggest
-        - IF score < 50:
-            - give another change and acummulate 1 error
-        - IF score < 50 again:
-            - Take the game with highest score in the game-log (dataframe) 
-            OR a game related to the highest skill from the assessment
-        - 
-
-
-'''
-
-
 #########################################################################
 if __name__ == "__main__":
-        
+    # To test this module, run:
+    # rostopic pub -1 /managercommands std_msgs/String start_new_round
+
     try:
         myDecisionMaker = DecisionMaker()
         rospy.spin()
