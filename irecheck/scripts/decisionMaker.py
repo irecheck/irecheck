@@ -463,7 +463,11 @@ class DecisionMaker():
         df = pd.read_json(data.data, orient='records')
         self.world=self.world.append(df)
         dynamicoType = df.at[0, 'type']
-        dynamicoGameType = df.at[0, 'game']
+        
+        if 'game' in df.columns:
+            dynamicoGameType = df.at[0, 'game']
+        else:
+            dynamicoGameType = None
 
         if (len(self.world.index)) == 1 and dynamicoType == 'assessment':
             # only run this block in the new round
