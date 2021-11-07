@@ -8,6 +8,7 @@ import roslib; roslib.load_manifest('smach')
 from std_msgs.msg import String
 from qt_nuitrack_app.msg import Faces
 from datetime import datetime
+import sys
 
 NUM_OF_ROUNDS = 2
 
@@ -159,7 +160,8 @@ class IrecheckManager():
         # use the initial time as the filename to save the .csv 
         now = datetime.now()
         dt_string = now.strftime("%d-%m-%Y_%H-%M-%S")
-        self.filename = '~/Documents/iReCHeCk_logs/' + dt_string + '.csv'
+        subject_id = str(sys.argv[1]) # e.g. ID01
+        self.filename = '~/Documents/iReCHeCk_logs/' + dt_string + '_' + subject_id + '.csv'
         
         
         # open the container
@@ -252,6 +254,7 @@ class IrecheckManager():
         self.sm.userdata.faceKey = True
     
     def fakeNuitrackCallback(self, data):
+        # rostopic pub -1 /qt_nuitrack_app/faces std_msgs/String fakeFace
         # only for testing
         rospy.loginfo(rospy.get_caller_id() + '- received face')
         # notify the FSM of the detection of a face
