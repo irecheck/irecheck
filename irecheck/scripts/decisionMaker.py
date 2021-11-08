@@ -62,10 +62,17 @@ class PositiveStreak(smach.State):
             rospy.loginfo(msg)
             userdata.pubSayMsg.publish(msg)
         else:
-            msg = "Try the next level of the activity"
+            # msg = "Try the next level of the activity"
+            # rospy.loginfo(msg)
+            # userdata.pubSayMsg.publish(msg)
+            # rospy.sleep(2)
+            msg = 'go_next_level'
+            userdata.pubBehMsg.publish(msg)
+            rospy.sleep(2)
+            msg = "Play {}".format(userdata.dynamicoGameType)
             rospy.loginfo(msg)
             userdata.pubSayMsg.publish(msg)
-        rospy.sleep(2)
+            rospy.sleep(2)
 
         # wait untill the previous activity is finished
         while(userdata.continueKey != True):
@@ -105,7 +112,7 @@ class Win(smach.State):
     def __init__(self):
         smach.State.__init__(self, 
                              outcomes=['loss', 'end', 'positiveStreak'],
-                             input_keys=['continueKey','timerKey', 'performance', 'pubBehMsg','pubMsg', 'pubSayMsg'],
+                             input_keys=['continueKey','timerKey', 'performance', 'pubBehMsg','pubMsg', 'pubSayMsg', 'dynamicoGameType'],
                              output_keys=['continueKey','timerKey','pubBehMsg','pubMsg','pubSayMsg'])
 
     def execute(self, userdata):
@@ -113,8 +120,13 @@ class Win(smach.State):
 
         msg = 'moveOn'
         userdata.pubMsg.publish(msg)
+
+
+        msg = 'go_next_level'
+        userdata.pubBehMsg.publish(msg)
+        rospy.sleep(2)
         
-        msg = "Select the next level of the game."
+        msg = "Play {}".format(userdata.dynamicoGameType)
         rospy.loginfo(msg)
         userdata.pubSayMsg.publish(msg)
         rospy.sleep(2)
@@ -148,7 +160,7 @@ class Loss(smach.State):
     def __init__(self):
         smach.State.__init__(self, 
                              outcomes=['win', 'end', 'negativeStreak'],
-                             input_keys=['continueKey','timerKey','performance', 'pubBehMsg','pubMsg', 'pubSayMsg'],
+                             input_keys=['continueKey','timerKey','performance', 'pubBehMsg','pubMsg', 'pubSayMsg', 'dynamicoGameType'],
                              output_keys=['continueKey','timerKey','pubBehMsg','pubMsg', 'pubSayMsg'])
 
     def execute(self, userdata):
@@ -157,10 +169,15 @@ class Loss(smach.State):
 
         msg = 'moveOn'
         userdata.pubMsg.publish(msg)
-        msg = "Let's try the same game again"
+
+        msg = 'keep_the_game'
+        userdata.pubBehMsg.publish(msg)
+        rospy.sleep(2)
+
+        msg = "Play {}".format(userdata.dynamicoGameType)
         rospy.loginfo(msg)
         userdata.pubSayMsg.publish(msg)
-        rospy.sleep(5)
+        rospy.sleep(2)
         
         
         # wait until the previous activity is finished
@@ -194,7 +211,7 @@ class NegativeStreak(smach.State):
     def __init__(self):
         smach.State.__init__(self, 
                              outcomes=['win', 'end', 'stay'],
-                             input_keys=['continueKey','timerKey','performance','pubBehMsg','pubMsg', 'pubSayMsg','negativeStreakCounter','activitySuggester'],
+                             input_keys=['continueKey','timerKey','performance','pubBehMsg','pubMsg', 'pubSayMsg','negativeStreakCounter','activitySuggester', 'dynamicoGameType'],
                              output_keys=['continueKey','timerKey','pubBehMsg','pubMsg', 'pubSayMsg', 'negativeStreakCounter','activitySuggester'])
         
     def execute(self, userdata):
@@ -206,14 +223,21 @@ class NegativeStreak(smach.State):
             msg = 'neg_streak'
             userdata.pubBehMsg.publish(msg)
             rospy.sleep(2)
-            msg = "Try a easier activity. Please play {}".format(userdata.activitySuggester.get_easier_activity())
+            msg = "Let's move to a different game. Please play {}".format(userdata.activitySuggester.get_easier_activity())
             rospy.loginfo(msg)
             userdata.pubSayMsg.publish(msg)
         else:
-            msg = "Let's try the same activity again."
+            # msg = "Let's try the same activity again."
+            # rospy.loginfo(msg)
+            # userdata.pubSayMsg.publish(msg)
+            # rospy.sleep(2)
+            msg = 'keep_the_game'
+            userdata.pubBehMsg.publish(msg)
+            rospy.sleep(2)
+            msg = "Play {}".format(userdata.dynamicoGameType)
             rospy.loginfo(msg)
             userdata.pubSayMsg.publish(msg)
-        rospy.sleep(2)
+            rospy.sleep(2)
 
         # wait untill the previous activity is finished
         while(userdata.continueKey != True):
@@ -340,7 +364,8 @@ class DecisionMaker():
                                             'performance': 'performance',
                                             'pubBehMsg':'pubBehMsg',
                                             'pubMsg':'pubFSMMsg',
-                                            'pubSayMsg': 'pubSayMsg', 
+                                            'pubSayMsg': 'pubSayMsg',
+                                            'dynamicoGameType': 'dynamicoGameType', 
                                             'continueKey':'dynamicoKey',
                                             'timerKey': 'timerKey',
                                             'pubBehMsg':'pubBehMsg',
@@ -357,7 +382,8 @@ class DecisionMaker():
                                             'performance': 'performance',
                                             'pubBehMsg':'pubBehMsg',
                                             'pubMsg':'pubFSMMsg', 
-                                            'pubSayMsg': 'pubSayMsg', 
+                                            'pubSayMsg': 'pubSayMsg',
+                                            'dynamicoGameType': 'dynamicoGameType', 
                                             'continueKey':'dynamicoKey',
                                             'timerKey': 'timerKey',
                                             'pubBehMsg':'pubBehMsg',
@@ -398,6 +424,7 @@ class DecisionMaker():
                                             'pubSayMsg': 'pubSayMsg', 
                                             'negativeStreakCounter': 'negativeStreakCounter',
                                             'activitySuggester': 'activitySuggester',
+                                            'dynamicoGameType': 'dynamicoGameType',
                                             'continueKey':'dynamicoKey',
                                             'timerKey': 'timerKey',
                                             'pubBehMsg':'pubBehMsg',
