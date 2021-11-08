@@ -1,0 +1,2 @@
+"QT/bored_long";0.6;
+"QT/talkinglong";"\sel=alt=p-70\Rappelle-toi \pau=130\ Je vais dans la direction vers laquelle tu penche ton stylo. On doit prendre \pau=50\ et livrer les boites. Une flèche rouge nous dit \pau=50\ où on doit aller. Si tu lâche le stylo, je vais faire tomber la boite. "

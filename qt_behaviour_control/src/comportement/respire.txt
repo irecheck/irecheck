@@ -1,0 +1,3 @@
+"";0.85;
+"QT/calmig_down_exercise_nose";"Respire un peu, et réessaye";
+"QT/calmig_down_exercise_nose";"ce n'est pas grave, reprends ton souffle, et on repart"

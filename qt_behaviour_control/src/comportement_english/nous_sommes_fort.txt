@@ -1,0 +1,4 @@
+"QT/happy";0.85;
+"QT/happy";"On est trop forts";
+"QT/happy";"On est super forts!"
+"QT/happy";"On a trop bien réussi!"

@@ -1,0 +1,3 @@
+"QT/strong";1;
+"QT/showing_smile";"It seems that you are tired of it."
+"QT/showing_smile";"This might not be a good score. We can practice it later."

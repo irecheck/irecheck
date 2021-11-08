@@ -1,0 +1,5 @@
+"";1;
+"";"Tu ne m'écoutes \sel=alt=p+100\ \Rspd=130\ plus \pau=120\ \sel=alt=p-50\  \Rspd=70\ "+self.fname+" ?";
+"";"Hey! "+self.fname+"?";
+"";self.fname+"?";
+"";self.fname+", tu m'écoutes?"

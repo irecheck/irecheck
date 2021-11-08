@@ -1,0 +1,5 @@
+"QT/hi";1;
+"QT/showing_smile";"Select the next level of this game.";
+"QT/showing_smile";"Let's try a harder level";
+"QT/showing_smile";"Let's move on and go to the next level of this game";
+"QT/showing_smile";"I bet you can do a good job in the next level as well";

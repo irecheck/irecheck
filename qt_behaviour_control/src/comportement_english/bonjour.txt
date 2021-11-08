@@ -1,0 +1,3 @@
+"QT/hi";1;
+"QT/showing_smile";"Hello, " + self.fname;
+"QT/showing_smile";"Hi, " + self.fname;

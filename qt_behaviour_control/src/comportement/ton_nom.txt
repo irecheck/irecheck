@@ -1,0 +1,3 @@
+"QT/show_tablet";0.8;
+"QT/talking";"Clique sur ton nom pour commencer"
+"QT/talking";"Avant qu'on commence, tu dois cliquer sur ton nom"

@@ -1,0 +1,4 @@
+"QT/happy";0.85;
+"QT/happy";"J'ai beaucoup progressé"
+"QT/happy";"J'ai fait beaucoup de progrès!"
+"QT/happy";"Je me débrouille beaucoup mieux qu'avant."

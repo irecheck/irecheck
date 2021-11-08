@@ -1,0 +1,3 @@
+"QT/happy";1.0;
+"QT/happy";"You are really good at it, " + self.fname;
+"QT/happy";"You have won so many times, " + self.fname;

@@ -1,0 +1,3 @@
+"QT/bored";1;
+"";"Est-ce que je m'améliore?"
+"";"Je fais mieux kavant?"

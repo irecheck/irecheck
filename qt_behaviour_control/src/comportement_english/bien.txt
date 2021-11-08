@@ -1,0 +1,3 @@
+"";0.8
+"QT/showing_smile";"Est-ce que c'est bien?"
+"QT/showing_smile";"C'est comme ça qu'il faut faire?"

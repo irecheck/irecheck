@@ -1,0 +1,5 @@
+"QT/come";1;
+"QT/one_eye_wink";self.fname + " c'est l'heure de mon cours, non?"
+"QT/one_eye_wink";self.fname + " tu viens m'aider à améliorer mon écriture?"
+"QT/one_eye_wink";self.fname + " je suis impatient d'écrire, tu viens?"
+"QT/one_eye_wink";self.fname + " tu peux venir pour qu'on fasse mon cours?"

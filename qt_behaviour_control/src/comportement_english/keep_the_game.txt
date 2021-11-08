@@ -1,0 +1,4 @@
+"QT/strong";1;
+"QT/showing_smile";"Let's try the same game again."
+"QT/showing_smile";"Play the same game again."
+"QT/showing_smile";"Let's try another time."

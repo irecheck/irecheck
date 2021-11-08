@@ -1,0 +1,4 @@
+"QT/ohno";0.85;
+"";"Tu semble fatigué";
+"";"On dirait que tu es fatigué ?";
+"";self.fname + ", Tu as l'air fatigué";

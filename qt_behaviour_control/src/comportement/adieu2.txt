@@ -1,0 +1,2 @@
+"QT/hi";1;
+"QT/showing_smile";"Au revoir"+ self.fname + " ! Bon courage pour la suite!";

@@ -1,0 +1,4 @@
+"QT/show_tablet";1;
+"QT/talking";"Je te laisse choisir la prochaine activité sur la tablette."
+"QT/talking";"À toi de choisir dans les jeux sur la tablette."
+"QT/talking";"Parmi les jeux qu'on a sur notre \Rspd=100\ tablette,\Rspd=80\ lequel tu veux faire ensuite?"

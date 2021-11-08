@@ -1,0 +1,4 @@
+"";1;
+"QT/happy";"Tu n'as pas \pau=5\ \sel=alt=p+50\ abandonné! Bravo!";
+"QT/happy";"Tu as tenu bon, C'est bien !";
+"QT/happy";"Tu \sel=alt=p+50\ persévères, Super!";

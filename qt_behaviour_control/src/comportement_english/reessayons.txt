@@ -1,0 +1,3 @@
+"QT/show_tablet";1;
+"QT/showing_smile";"encore une fois?";
+"QT/showing_smile";"On essaye encore?"
