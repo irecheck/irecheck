@@ -120,8 +120,12 @@ class Goodbye(smach.State):
         
     def execute(self, userdata):
         rospy.loginfo('Executing state GOODBYE')
-        # wait some time
-        rospy.sleep(2)
+
+        msg = "Okay my little friend. This is the end of the session. It was nice to have fun with you!"
+        userdata.robotSay.publish(msg)
+        rospy.loginfo(msg)
+        rospy.sleep(5)
+
         # transition to the next state (end)
         msg = 'au_revoir'
         rospy.loginfo(msg)
