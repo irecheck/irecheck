@@ -114,7 +114,7 @@ class RobotBehavior(object):
 		
 		# My version
 		home_path = os.path.expanduser("~")
-		files_path =  home_path + "/catkin_ws/src/qt_behaviour_control/src/comportement_english/"
+		files_path =  "/home/carnieto/catkin_ws/src/irecheck/qt_behaviour_control/src/comportement_english/"
 		
 		
 		for file_name in os.listdir(files_path):
