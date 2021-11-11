@@ -166,6 +166,8 @@ class IrecheckManager():
         dt_string = now.strftime("%d-%m-%Y_%H-%M-%S")
         subject_id = str(sys.argv[1]) # e.g. ID01
         self.filename = '~/Documents/iReCHeCk_logs/' + dt_string + '_' + subject_id + '.csv'
+
+        rospy.loginfo("Starting IrecheckManager for subject: {}".format(subject_id))
         
         
         # open the container

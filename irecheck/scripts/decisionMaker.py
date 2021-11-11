@@ -7,6 +7,7 @@ from std_msgs.msg import String
 import threading
 import smach
 import time
+import sys
   
 MINUTES_PER_SESSION = 5
 
@@ -335,6 +336,12 @@ class DecisionMaker():
         self.sm.userdata.pubSayMsg = self.pubSayMsg
         self.sm.userdata.pubBehMsg = self.pubBehMsg
         self.sm.userdata.timer = None
+
+        if len(sys.argv) > 1:
+            subject_id = str(sys.argv[1]) # e.g. ID01
+        else:
+            subject_id = "ID9999999999"
+        rospy.loginfo("Starting decisionMaker for subject: {}".format(subject_id))
         
         with self.sm:
             # Add states to the container
@@ -456,6 +463,7 @@ class DecisionMaker():
         # execute SMACH plan
         outcome = self.sm.execute()
         rospy.loginfo("OUTCOME: " + outcome)
+        rospy.loginfo('Executing state END')
         self.world = pd.DataFrame() # reset world
         rospy.loginfo("Reset dataframe")
         
