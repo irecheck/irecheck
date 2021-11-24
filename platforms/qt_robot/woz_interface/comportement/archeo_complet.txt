@@ -1,0 +1,2 @@
+"QT/bored_long";0.6;
+"QT/talkinglong";"Attention ! \pau=80\ Si tu appuie trop fort, tu risque de casser le trésor. Une fois que tu as trouvé tout, n'oublie pas de valider."

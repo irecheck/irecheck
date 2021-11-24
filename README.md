@@ -209,7 +209,7 @@ Create the folder before running the package, or change the path.
 
 Copy the packages of the path «path_of_inseders_packages», present in this repo, inside the rotobt (head) in the path "~/catkin_ws/src" with the comand:
 ```
-scp -r irecheck/platforms/qt_robot/«package_name»/ qtrobot@10.42.0.1
+scp -r irecheck/platforms/qt_robot/«package_name»/ qtrobot@10.42.0.1:~/catkin_ws/src/
 ```
 List of packages:
 - qt_behaviour_control
@@ -249,7 +249,6 @@ The options of behavior are:
 - Poursuite = ["poursuite_lance","poursuite_expli","poursuite_complet"]
 - Sous_marin = ["pression_lance","pression_expli","pression_complet"]
 - Apprenti = ["cowritter_lance","cowritter_expli_class","cowritter_complet"]
-
 
 **NOTE**: All the behavior are in French!
 

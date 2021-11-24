@@ -63,7 +63,7 @@ var commandsList = [
 					["Le plus important ?", "important",9],
 					["Que fait-on ensuite ?", "ensuite",10],
 					["Pourquoi ce n'est pas bien ?", "pk_pas_bien",11],
-					["Tu es sur(e) ?", "tu_es_sur",11],
+					["Tu es sur(e) ?", ,11],
 					["Le plus simple pour toi?","plus_simple",5],
 					["Le plus difficile pour toi?","plus_difficile",5],
 					["Qu'est-ce que je fais mal et bien?","bien_mal",5],

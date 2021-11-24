@@ -1,0 +1,2 @@
+"QT/bored";0.6;
+"QT/talking";"Je dois livrer ce drapeau, \pau=30\ mais  je ne sais pas à quel pays \pau=50\ il appartient. Tu peux me recopier son nom pour que je puisse le livrer?"

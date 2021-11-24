@@ -1,0 +1,2 @@
+"QT/bored_long";0.6;
+"QT/talkinglong";"Il faut bien suivre l'example, et écrire dessus pour qu'on puisse livrer. Sinon notre colis risque d'être refusé. "

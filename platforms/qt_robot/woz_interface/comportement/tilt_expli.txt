@@ -1,2 +1,2 @@
 "QT/bored";0.6;
-"QT/talking";"Je me suis transformé en hélicoptère dans le jeu, et tu dois me piloter en inclinant ton stylo. Aide-moi à livrer les boites."
+"QT/talking";"Je conduis un hélicoptère dans le jeu, et tu dois m'aider à piloter en plaçant ton stylo dans le cercle. Aide-moi à livrer les boîtes."

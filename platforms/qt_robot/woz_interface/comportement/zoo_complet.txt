@@ -1,0 +1,2 @@
+"QT/bored_long";0.6;
+"QT/talkinglong";"il faut bien tout colorier. Si tu n'as pas le temps de finir, tu peux sauvegarder en cliquant sur la croix. On terminera une prochaine fois."

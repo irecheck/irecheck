@@ -1,0 +1,2 @@
+"QT/bored";0.6;
+"QT/talking";"Copie le mot avec les bonnes couleurs avec moi. Quand tu lève le stylo, la couleur change."

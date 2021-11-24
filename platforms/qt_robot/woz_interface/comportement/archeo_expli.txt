@@ -1,0 +1,2 @@
+"QT/bored";0.6;
+"QT/talking";"Dans ce jeu, j'ai enterré un trésor dans le sol. Appuie le stylo sur la tablette. Déplace-le pour creuser dans le sol et trouver le trésor"

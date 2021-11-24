@@ -1,0 +1,2 @@
+"QT/bored";0.6;
+"QT/talking";"Tu peux me montrer comment bien colorier un \sel=alt\ dessin sur la tablette? \pau=50\ On perd des points \sel=alt\ si on dépasse ou si on se trompe de couleurs."
