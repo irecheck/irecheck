@@ -1,0 +1,2 @@
+"QT/bored";0.6;
+"QT/talking";"Choisis un chiffre, ou une lettre, et montre-moi comment bien l'écrire."

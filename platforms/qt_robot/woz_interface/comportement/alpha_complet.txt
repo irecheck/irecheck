@@ -1,0 +1,2 @@
+"QT/bored";0.6;
+"QT/talkinglong";"Attention ! \pau=80\ Il faut bien que tu me montre en repassant sur le modèle. Plus on suit le modèle, plus le trait est vert, et plus on gagne de points."

@@ -1,11 +1,11 @@
 var groupsList = [
-	["static/images/scenario/archeo.png","Jeu \"Archéologue\""],
-	["static/images/scenario/drapeau.png","Jeu \"Drapeaux\""],
+	["static/images/scenario/g2465.png","Jeux \"Sous-marin\" et \"Archéologue\""],//à modifier
+	["static/images/scenario/drapeau.png","Jeux \"Drapeaux\" et \"Alphabet\""],//à modifier
 	["static/images/scenario/zoo.png","Jeu \"Zoo\""],
 	["static/images/scenario/chim3.png","Jeu \"Chimiste\""],
 	["static/images/scenario/copter.png", "Jeu \"Hélicoptère\""],
 	["static/images/scenario/apprenti.png","Jeu \"Apprenti\""],
-	["static/images/scenario/Pression.PNG", "Jeu \"Sous-marin\""],
+	["static/images/scenario/g2270.png", "Jeu \"Jus\""],//à modifier
 	["static/images/scenario/mongolf.png", "Jeu \"Poursuite\""],
 	["static/images/scenario/start.png", "QT lance la séance"],
 	["static/images/scenario/explain.png", "QT explique son scénario"],
@@ -29,13 +29,13 @@ var infoList = [
 ]
 
 var textList = [
-	["","Jeu \"Archéologue\""],
-	["","Jeu \"Drapeaux\""],
+	["","Jeux \"Sous-marin\" et \"Archéologue\""],
+	["","Jeux \"Drapeaux\" et \"Alphabet\""],
 	["", "Jeu \"Zoo\""],
 	["", "Jeu \"Chimiste\""],
 	["", "Jeu \"Hélicoptère\""],
 	["","Jeu \"Apprenti\""],
-	["", "Jeu \"Sous-marin\""],
+	["", "Jeu \"Jus\""],
 	["","Jeu \"Poursuite\""],
 	["", "QT lance la séance"],
 	["", "QT explique son scénario"],
@@ -44,12 +44,18 @@ var textList = [
 ]
 
 var commandsList = [
-	["#3AB8DD", [	["Lancement", "archeo_lance",10],
-					["Explication des règles","archeo_expli",13],
-					["Complément des règles","archeo_complet",12]	]	],
-	["#F2838C", [	["Lancement", "drapeau_lance",10],
-					["Explication des règles","drapeau_expli",13],
-					["Complément des règles","drapeau_complet",12]	]	],
+	["#3AB8DD", [	["Sous-marin: Lancement", "pression_lance",10],
+					["Sous-marin: Explication des règles", "pression_expli",12],
+					["Sous-marin: Complément des règles","pression_complet",13],
+					["Archéologue: Lancement", "archeo_lance",10],
+					["Archéologue: Explication des règles","archeo_expli",13],
+					["Archéologue: Complément des règles","archeo_complet",12]	]	],
+	["#F2838C", [	["Drapeaux: Lancement", "drapeau_lance",10],
+					["Drapeaux: Explication des règles","drapeau_expli",13],
+					["Drapeaux: Complément des règles","drapeau_complet",12],
+					["Alphabet: Lancement", "alpha_lance",10],
+					["Alphabet: Explication des règles", "alpha_expli",12],
+					["Alphabet: Complément des règles","alpha_complet",13]]	],
 	["#C7AAFE", [	["Lancement", "zoo_lance",10],
 					["Explication des règles","zoo_expli",13],
 					["Complément des règles","zoo_complet",12]	]	],
@@ -61,9 +67,9 @@ var commandsList = [
 	["#FEE977", [	["Lancement", "cowritter_lance",10],
 					["Explication des règles","cowritter_expli_class",13],
 					["Complément des règles","cowritter_complet",12]	]	],
-	["#ABEDFD", [	["Lancement", "pression_lance",10],
-					["Explication des règles", "pression_expli",12],
-					["Complément des règles","pression_complet",13]	]	],
+	["#ABEDFD", [	["Lancement", "jus_lance",10],//à modifier
+					["Explication des règles", "jus_expli",12], //à modifier
+					["Complément des règles","jus_complet",15]	]	],//à modifier
 	["#FEC772", [	["Lancement", "poursuite_lance",10],
 					["Explication des règles", "poursuite_expli",12],
 					["Complément des règles","poursuite_complet",12]	]	],

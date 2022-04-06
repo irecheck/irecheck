@@ -1,0 +1,2 @@
+"QT/bored";0.6;
+"QT/talking";"Aide mon avatar à faire un jus. Laisse ta main gauche appuyée sur le bouton jaune pour allumer la lumière. Avec tes doigts, suit les étapes qui sont indiqué dans le cadre gris."
