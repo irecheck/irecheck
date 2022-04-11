@@ -10,7 +10,7 @@ from qt_nuitrack_app.msg import Faces
 from datetime import datetime
 import sys
 
-NUM_OF_ROUNDS = 2
+NUM_OF_ROUNDS = 1
 
 class Sleeping(smach.State):
     def __init__(self):
@@ -278,7 +278,7 @@ class IrecheckManager():
 
         elif (data.data == 'goToEndAssessment'):
             self.sm.userdata.moveOnKey = False
-            self.sm.userdata.goToEndAssessmentKey = True
+            self.sm.userdata.goToEndAssessmentKey = False
             self.sm.userdata.goToActivityKey = False
 
         elif (data.data == 'goToActivity'):
