@@ -53,6 +53,7 @@ class RobotBehavior(object):
 		self.emotion_pub = rospy.Publisher('/qt_robot/emotion/show',String, queue_size=10)
 		self.gesture_pub = rospy.Publisher('/qt_robot/gesture/play',String,queue_size=10)
 
+		print("Initiating the behavior for child <{}> and therapist <{}>".format(self.fname,self.fname2))
 
 		# print "\n\nInitializing behavior handler!"
 		# print 'Child name:', self.fname
@@ -114,7 +115,7 @@ class RobotBehavior(object):
 		
 		# My version
 		home_path = os.path.expanduser("~")
-		files_path =  "/home/carnieto/catkin_ws/src/irecheck/qt_behaviour_control/src/comportement_english/"
+		files_path =  "/home/carnieto/catkin_ws/src/irecheck/qt_behaviour_control/src/comportement/"
 		
 		
 		for file_name in os.listdir(files_path):

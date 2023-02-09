@@ -33,9 +33,8 @@ class DynamicoListener():
         self.pubMsg = rospy.Publisher('dynamicomsg', String, queue_size=10)
         
         # get credentials information from the file
-        path = os.path.realpath(__file__).replace('dynamicoListener.py','')
-        with open(path + '/DYNAMICO_CREDENTIALS.txt') as f:
-        #with open(path + '/DYNAMICO_CREDENTIALS_PARIS.txt') as f:
+        path = os.path.realpath(__file__).replace('getAllDatabase.py','')
+        with open(path + '/DYNAMICO_CREDENTIALS_PARIS.txt') as f:
             data = json.load(f)
 
         print ("DATA> \n", data)
@@ -64,12 +63,13 @@ class DynamicoListener():
         doc_ref = self.db.collection(listening_collection_1).where(u'userId', u'==', self.user_id)
         self.doc_watch = doc_ref.on_snapshot(self.on_snapshot)
 
+        # self.doc_watch.on_snapshot()
 
         # [DEBUG ONLY]
         print("Waiting for messages")
 
         # # keep python from exiting until this node is stopped
-        # rospy.spin()
+        rospy.spin()
 
 
     # we use the sign_in_with_email_and_password function from https://gist.github.com/Bob-Thomas/49fcd13bbd890ba9031cc76be46ce446
@@ -94,29 +94,28 @@ class DynamicoListener():
 
     def on_snapshot(self, doc_snapshot, changes, read_time):
         
-        print("LEN   " + self.listening_collection + " : ", len(changes)) 
-        
+        #print("LEN   " + self.listening_collection + " : ", len(changes)) 
 
+        final_csv = pd.DataFrame()
 
-        if len(changes)==1:
+        # Getting every entry of the 
+        for current_entry in changes:
 
-            # Getting data as dictionary             
-            item = changes[0].document._data #ch.document._data
-
+            item = current_entry.document._data
+            name = current_entry.document.id
+   
             # Correcting nested dict of writing diagnoses
             try:
                 mid_dict = item['features']
                 item.update(mid_dict)
                 del item['features']
-                print ("ITEM->", item ) 
+                # print ("ITEM->", item ) 
 
             except:
                 # print("It is not a writing analysis.")
                 pass
            
-            # Addind the type of dynamico message
-            # item['type'] =  # ['activity', 'assessment']
-
+         
             if self.listening_collection == 'scores':
                 item['type'] =  'activity'
             elif self.listening_collection == 'writingDiagnoses':
@@ -128,38 +127,33 @@ class DynamicoListener():
             year,month,day,hour,minute,second,tzinfo = val1.year,val1.month,val1.day,val1.hour, val1.minute, val1.second, val1.tzinfo
             utc_time  = "%s-%s-%s %s:%s:%s"%(year, month, day,hour,minute,second) 
             item['createdAt']=utc_time
-            final = pd.DataFrame(item, index=[0])
+            temp_df = pd.DataFrame(item, index=[0])
+            final_csv = pd.concat([final_csv,temp_df])
+            print(final_csv)
+
+        # HERE is where it saves the file to CSV
+        csv_name = "CSV_NAME_HERE"+".csv"
+        final_csv.to_csv(csv_name)
+        print("FILE SAVED IN " + os.getcwd() + '/' + csv_name)
+
+           
             
-            
+        # else:
+        #     # [DEBUG ONLY]
+        #     print("\n\n-------------- Fisrt time. No message was sent --------------\n")
 
-            # convert the dataframe in a json string and publish it as a ROS message
-            msg = final.to_json(orient='records')
-            rospy.loginfo(msg)
-            self.pubMsg.publish(msg)
-            
-        else:
-            # [DEBUG ONLY]
-            print("\n\n-------------- Fisrt time. No message was sent --------------\n")
-
-       
-
-        # [DEBUG ONLY]
-        # print("\nEND of collection----------------\n\n")
-
+   
 
 
 #########################################################################
 if __name__ == "__main__":
     
-    # myDynamicoListener = DynamicoListener('scores')
-    
+  
     try:
         myDynamicoListener = DynamicoListener('writingDiagnoses')
         myDynamicoListener_2 = DynamicoListener('scores')
 
-        # keep python from exiting until this node is stopped
-        rospy.spin()
-
+    
         print("My code never gets here!")
 
     except rospy.ROSInterruptException:

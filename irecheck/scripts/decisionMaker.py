@@ -9,7 +9,7 @@ import smach
 import time
 import sys
   
-MINUTES_PER_SESSION = 5
+MINUTES_PER_SESSION = 0.2 #5
 
 SCORE_TO_ACTIVITY_MAP = {
     'pressureScore': 'Submarine',
@@ -516,7 +516,7 @@ class DecisionMaker():
             self.pubFSMMsg.publish(msg)
 
         elif dynamicoType == 'activity':
-            if (df.at[0, 'score'] > 60 ):
+            if (df.at[0, 'score'] > 30 ):
                 msg = 'bravo'
                 # rospy.loginfo(msg)
                 self.pubBehMsg.publish(msg)
@@ -530,8 +530,18 @@ class DecisionMaker():
                 self.sm.userdata.performance = 0
             self.sm.userdata.dynamicoKey = True
             self.sm.userdata.dynamicoGameType = dynamicoGameType
+
+            # FOR INFINITE TIME, CHANGE HERE
+            if(self.sm.userdata.timerKey):
+                msg = 'goToAssessment'
+                self.pubFSMMsg.publish(msg)
+
         else:
             self.sm.userdata.dynamicoKey = False
+
+
+
+
 
     def choose_based_on_assessment(self,df):
         # implement a simple logic to determine what to suggest next
