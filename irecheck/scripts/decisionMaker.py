@@ -9,7 +9,7 @@ import smach
 import time
 import sys
   
-MINUTES_PER_SESSION = 0.2 #5
+MINUTES_PER_SESSION = 1 #5
 
 SCORE_TO_ACTIVITY_MAP = {
     'pressureScore': 'Submarine',

@@ -10,15 +10,24 @@ from qt_nuitrack_app.msg import Faces
 from datetime import datetime
 import sys
 
+from qt_robot_interface.srv import *
+from qt_gesture_controller.srv import gesture_play
+from qt_motors_controller.srv import *
+from std_msgs.msg import Float64MultiArray
+
+
+
 NUM_OF_ROUNDS = 2
 
 BREAK_COUNTER = 0
 NUMBER_BREAKS = 1
 
+CONDITION = 0
 CONDITION_OPTIONS = ['breathe', 'stretch']
-EXPERIMENT_CONDITION = CONDITION_OPTIONS[1]
+EXPERIMENT_CONDITION = CONDITION_OPTIONS[CONDITION]
 
-robot_connected = False
+# robot_connected = False
+robot_connected = True
 
 CURRENT_ROUND = 0
 
@@ -29,7 +38,8 @@ class global_robotSay():
     if robot_connected:
 
         def publish(sentence):
-            speechSay = rospy.ServiceProxy('/qt_robot/behavior/talkText', speech_say)
+            rospy.loginfo(sentence)
+            speechSay = rospy.ServiceProxy('/qt_robot/behavior/talkText', behavior_talk_text)
             # speechSay = rospy.ServiceProxy('/qt_robot/speech/say', speech_say)
             # rospy.wait_for_service('/qt_robot/speech/say')
             rospy.wait_for_service('/qt_robot/behavior/talkText')
@@ -86,7 +96,7 @@ class Assessment(smach.State):
     def execute(self, userdata):
         rospy.loginfo('Executing state ASSESSMENT')
         
-        msg = "It is time to check how your handwriting is going. Please perform an evaluation. It could take a while for me to compute it after you finish."
+        msg = "It is time to check how your handwriting is going." # Please perform an evaluation. It could take a while for me to compute it after you finish."
         userdata.robotSay.publish(msg)
         rospy.loginfo(msg)
         rospy.sleep(2)
@@ -136,18 +146,20 @@ class Activity(smach.State):
         # case 2: get back to ASSESSMENT
         elif ((userdata.continueKey is False) and (userdata.getBackKey is True) ):
             
+            userdata.getBackKey = False
+            
             # if break didnt happen yet, make a break. Otherwise, send to the last evaluation to finish
             #SHOULD RETHINK IT BETTER LATER (consider the round number here)
-            # global BREAK_COUNTER
-            # global NUMBER_BREAKS
-            # print("------------------------  BREAK_COUNTER", int(BREAK_COUNTER))
-            # print("NUMBER_BREAKS", NUMBER_BREAKS)
-            # if BREAK_COUNTER <= NUMBER_BREAKS:
-            #     BREAK_COUNTER += 1
-            #     return 'break'
-            # else:
-            #     return 'getBack'
-            return 'getBack'
+            global BREAK_COUNTER
+            global NUMBER_BREAKS
+            print("------------------------  BREAK_COUNTER", int(BREAK_COUNTER))
+            print("NUMBER_BREAKS", NUMBER_BREAKS)
+            if BREAK_COUNTER <= NUMBER_BREAKS:
+                BREAK_COUNTER += 1
+                return 'break'
+            else:
+                return 'getBack'
+            # return 'getBack'
         # case 3: take to BREAK
         # elif ((userdata.continueKey is False) and (userdata.getBackKey is False) and (userdata.breakKey is True)):
         #     return 'break'
@@ -196,6 +208,8 @@ class Break(smach.State):
                             outcomes=['proceed'],
                             input_keys=['pubBehMsg','robotSay'],
                             output_keys=['pubBehMsg','robotSay'])
+        self.say = rospy.Publisher('/qt_robot/speech/say', String, queue_size=10)
+        
 
     def execute(self, userdata):
   
@@ -216,24 +230,46 @@ class Break(smach.State):
         rospy.loginfo('Executing breathing state')
         msg = 'We are now going to do some deep breathing !'
         userdata.robotSay.publish(msg)
-        
-
-        msg = 'Sit straight in your chair.'
-        userdata.robotSay.publish(msg)
-        
-        msg = 'We are going to start. When I say in, inhale through the nose. When I say out, exhale through the mouth'
-        userdata.robotSay.publish(msg)
-                
+        gesture = rospy.Publisher('/qt_robot/gesture/play', String, queue_size=1)
+        # gestureService = rospy.ServiceProxy('/qt_robot/gesture/play', gesture_play)
+        # rospy.wait_for_service('/qt_robot/gesture/play')
+        # rest.call(['left_arm', 'right_arm', 'HeadPitch'])
         rospy.sleep(1.)
         
+
+        # msg = 'Sit straight in your chair.'
+        # userdata.robotSay.publish(msg)
+        
+        gesture.publish('QT/sneezing')
+        # gestureService.call('QT/sneezing', .9)
+
+        msg = 'When I say: inhale, you bring the air to your langs slowly. When I say exhale, you leave the air go through your mouth'
+        userdata.robotSay.publish(msg)
+                
+
+
+        rospy.sleep(1.)
+
+
+        msg = "Ready? Let's go!"
+        userdata.robotSay.publish(msg)
+
+
         for i in range(2):
-            msg = "In"
+            
+            # gestureService.call("QT/sneezing",.9)
+            gesture.publish('QT/sneezing')
+
+            rospy.sleep(1)
+            msg = "Inhale"
             userdata.robotSay.publish(msg)
+
             rospy.sleep(2)
             
-            msg = "Out"
+            msg = "exhale"
             userdata.robotSay.publish(msg)
-            rospy.sleep(2)
+            rospy.sleep(4)
+            # rospy.wait_for_service('/qt_robot/gesture/play')
         
         msg = 'That is it !'
         userdata.robotSay.publish(msg)
@@ -243,77 +279,74 @@ class Break(smach.State):
     
     def stretch(self, userdata):
 
-        # emotionShow = rospy.ServiceProxy('/qt_robot/emotion/show', emotion_show)
-        # rospy.wait_for_service('/qt_robot/emotion/show')
-        # emotionShow('QT/neutral')
-
-        # speechSay = rospy.ServiceProxy('/qt_robot/speech/say', speech_say)
-        # rospy.wait_for_service('/qt_robot/speech/say')
-        # speechSay("I stood still for a very long time, I really need some stretching !")
-
-        # gesturePlay = rospy.ServiceProxy('/qt_robot/gesture/play', gesture_play)
-        # rospy.wait_for_service('/qt_robot/gesture/play')
-        # gesturePlay('stretch', 1)
- 
-        # speechSay = rospy.ServiceProxy('/qt_robot/speech/say', speech_say)
-        # rospy.wait_for_service('/qt_robot/speech/say')
-        # speechSay("Lets do a stretch session together, it will be fun !")
-
-        # speechSay = rospy.ServiceProxy('/qt_robot/speech/say', speech_say)
-        # rospy.wait_for_service('/qt_robot/speech/say')
-        # speechSay("We start with the head. I will show you how to do each stretch. Your stretch should last at least five seconds and I will count to five when you do it.")
-       
-        msg = ("We start with the head. I will show you how to do each stretch. Your stretch should last at least five seconds and I will count to five when you do it.")
-       
-        userdata.robotSay.publish(msg)
-       
-        # added
-        # speechSay = rospy.ServiceProxy('/qt_robot/speech/say', speech_say)
-        # rospy.wait_for_service('/qt_robot/speech/say')
-        # speechSay("You should start stretching when I show you how to do it. But you need to maintain the position for more time than me, until I finish counting.")
-        # gesturePlay = rospy.ServiceProxy('/qt_robot/gesture/play', gesture_play)
-        # rospy.wait_for_service('/qt_robot/gesture/play')
-        # gesturePlay('head_left', 1.5)
-
+     
         # seconds = 0
         # start_time = time.time()
         numbers = ['one', 'two', 'three', 'four', 'five']
         
+        headPub = rospy.Publisher('/qt_robot/head_position/command', Float64MultiArray, queue_size=1)
+        right_arm_Pub = rospy.Publisher('/qt_robot/right_arm_position/command', Float64MultiArray, queue_size=1)
+        left_arm_Pub = rospy.Publisher('/qt_robot/left_arm_position/command', Float64MultiArray, queue_size=1)
+        # local_speech = rospy.Publisher('/qt_robot/speech/say', String, queue_size=1)
+        # rospy.sleep(3)rospy.Publisher('/qt_robot/speech/say', String, queue_size=1)
+
+        # Pub1.publish(Float64MultiArray(data=[15, 0, 15]))
+        # rospy.sleep(3)
+        # Pub2.publish(Float64MultiArray(data=[-20,-85, 0]))
+        # rospy.sleep(1)
+
+        def arms_wide():
+            right_arm_Pub.publish(Float64MultiArray(data=[15, 0, 15]))
+            left_arm_Pub.publish(Float64MultiArray(data=[-15, 0, 15]))
+      
+        def arms_front():
+            right_arm_Pub.publish(Float64MultiArray(data=[15, -85, 0]))
+            left_arm_Pub.publish(Float64MultiArray(data=[-15,-85, 0]))
+
+        def arms_up():
+            right_arm_Pub.publish(Float64MultiArray(data=[80, -85, 0]))
+            left_arm_Pub.publish(Float64MultiArray(data=[-80,-85, 0]))
+         
 
         moves_list = { 
-                'head_left':{'robotSpeech':'Lets go', 'gesture': 'head_left', 'speed': 1.5 },
-                'head_right':{'robotSpeech':'Look there', 'gesture': 'head_right', 'speed': 1.5 },
-                'head_down':{'robotSpeech':'The coin in the groud', 'gesture': 'head_down', 'speed': 1.5 },
-                'head_up':{'robotSpeech':'Prayse the lord', 'gesture': 'head_up', 'speed': 1.5 },
-                'wide_arms':{'robotSpeech':'Cross', 'gesture': 'wide_arms', 'speed': 1.5 },
-                'hands_open':{'robotSpeech':'Open hand', 'gesture': 'hands_open', 'speed': 1.5 },
-                'hands_close':{'robotSpeech':'Close hand', 'gesture': 'hands_close', 'speed': 1.5 }
+                # 'head_left':{'robotSpeech':'Lets go', 'gesture': 'headPub.publish(Float64MultiArray(data=[-60,-0]))', 'speed': 1.5 },
+                # 'head_right':{'robotSpeech':'Look there', 'gesture': 'headPub.publish(Float64MultiArray(data=[60,-0]))', 'speed': 1.5 },
+                # 'head_down':{'robotSpeech':'The coin in the groud', 'gesture': 'head_pub.publish(Float64MultiArray(data=[-0,30]))', 'speed': 1.5 },
+                # 'head_up':{'robotSpeech':'Prayse the lord', 'gesture': 'head_pub.publish(Float64MultiArray(data=[-0,-30])', 'speed': 1.5 },
+                'wide_arms':{'robotSpeech':'Open your arms as open as you can', 'gesture': 'arms_wide()', 'speed': 1.5 },
+                'wide_front':{'robotSpeech':'Now, stretch your arms in front of you', 'gesture': 'arms_front()', 'speed': 1.5 },
+                'wide_up':{'robotSpeech':'Alleluia', 'gesture': 'arms_up()', 'speed': 1.5 },
+                # 'hands_open':{'robotSpeech':'Open hand', 'gesture': 'hands_open', 'speed': 1.5 },
+                # 'hands_close':{'robotSpeech':'Close hand', 'gesture': 'hands_close', 'speed': 1.5 }
         }
 
         # moves = moves_list.keys()
 
         for move in moves_list.keys():
             
-            msg = "Now we gonna perform: " + move 
-            userdata.robotSay.publish(msg)
+            # msg = "Now we gonna perform: " + move 
+            # userdata.robotSay.publish(msg)
     
             # msg = moves_list[move]['robotSpeech']
+            # userdata.robotSay.publish(moves_list[move]['robotSpeech'])
+
+            # msg = "Do as I am doing and I will count to 5"
+            # userdata.robotSay.publish(msg)
+
+            # moves_list[move]['robotSpeech']
+
+            eval(moves_list[move]['gesture'])
+            rospy.sleep(2)
             userdata.robotSay.publish(moves_list[move]['robotSpeech'])
 
-            # gesturePlay = rospy.ServiceProxy('/qt_robot/gesture/play', gesture_play)
-            # rospy.wait_for_service('/qt_robot/gesture/play')
-            # gesturePlay(moves_list[move]['gesture'], moves_list[move]['speed'])
             
-            # rospy.loginfo("CURRENT MOVE")
-            # rospy.loginfo(moves_list[move]['gesture'])
-
 
             for seconds in range(5):
                 
                 msg = numbers[seconds]
                 userdata.robotSay.publish(msg)
-
-                rospy.sleep(1)
+                # self.say.publish(msg)
+                rospy.sleep(.5)
             # seconds = seconds + 1
         
             # emotionShow = rospy.ServiceProxy('/qt_robot/emotion/show', emotion_show)
@@ -326,12 +359,18 @@ class Break(smach.State):
         # speechSay("Great ! The next stretch is moving the head up.")
         
         msg = "Great ! We did it."
+        msg = "Bravo!"
         userdata.robotSay.publish(msg)
+        userdata.pubBehMsg.publish('bravo')
 
+        # rest = rospy.ServiceProxy('/qt_robot/motors/home', home)
+        # rospy.wait_for_service('/qt_robot/motors/home')
+        # rest.call(['left_arm', 'right_arm', 'HeadPitch'])
+       
 
         return 'proceed'
 
-
+    
 
 
 
@@ -341,6 +380,40 @@ class IrecheckManager():
 
         # initialize ROS node
         rospy.init_node('irecheckmanager', anonymous=True)
+
+
+        # rospy.loginfo("trying to move head")
+        # # href = Float64MultiArray(data=[-0,-30])
+        # head_pub.publish(Float64MultiArray(data=[-0,-0]))
+
+
+        # Pub1 = rospy.Publisher('/qt_robot/right_arm_position/command', Float64MultiArray, queue_size=1)
+        # Pub2 = rospy.Publisher('/qt_robot/left_arm_position/command', Float64MultiArray, queue_size=1)
+        # rospy.sleep(1)
+
+        # Pub1.publish(Float64MultiArray(data=[15, 0, 15]))
+        # Pub2.publish(Float64MultiArray(data=[-15, 0, 15]))
+        # rospy.sleep(3)
+        # Pub1.publish(Float64MultiArray(data=[80, -85, 0]))
+        # Pub2.publish(Float64MultiArray(data=[-80,-85, 0]))
+        # rospy.sleep(1)
+
+
+        # rest = rospy.ServiceProxy('/qt_robot/motors/home', home)
+        # rospy.wait_for_service('/qt_robot/motors/home')
+        # rest.call(['left_arm', 'right_arm', 'HeadPitch'])
+        
+        # return
+
+
+
+
+
+
+
+
+
+
         # initialize subscribers
         rospy.Subscriber('/qt_nuitrack_app/faces', Faces, self.nuitrackCallback)
         # rospy.Subscriber('/qt_nuitrack_app/faces', String, self.fakeNuitrackCallback)
@@ -358,6 +431,10 @@ class IrecheckManager():
         self.sm.userdata.dynamicoAssessmentKey = False
         self.sm.userdata.pubBehMsg = rospy.Publisher('/irecheck/button_name', String, queue_size=1)
         self.sm.userdata.pubCommandMsg = rospy.Publisher('managercommands', String, queue_size=1)
+        # rospy.loginfo("Subscribing")
+        # self.sm.userdata.gesturePub = rospy.Publisher('/qt_robot/head_position/command', Float64MultiArray, queue_size=1)
+
+        # rospy.sleep(2)
 
         # I changed the topic so QT moves the mouth while speaking too
         # self.sm.userdata.robotSay = rospy.Publisher('/qt_robot/speech/say', String, queue_size=1)
@@ -435,8 +512,8 @@ class IrecheckManager():
                                             'robotSay':'robotSay'})
 
 
-        self.sm.set_initial_state(['ASSESSMENT'])
-        # self.sm.set_initial_state(['BREAK'])
+        # self.sm.set_initial_state(['ASSESSMENT'])
+        self.sm.set_initial_state(['BREAK'])
 
 
         rospy.loginfo("Starting SM in 2 secs")
