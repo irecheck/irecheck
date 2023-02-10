@@ -14,7 +14,7 @@ class FakeDynamico():
     def __init__(self):
         rospy.init_node('talker', anonymous=True)
         self.pub = rospy.Publisher('dynamicomsg', String, queue_size=1)
-        self.dataframe = pd.read_csv("/home/carnieto/Documents/iReCHeCk_logs/18-10-2021_17-07-05.csv")
+        self.dataframe = pd.read_csv("/home/carnieto/Documents/iReCHeCk_logs/Olders/18-10-2021_17-07-05.csv")
         # self.dataframe = pd.read_csv("/home/chenwang/Documents/iReCHeCk_logs/03-11-2021_16-32-11-dryrun-daniel-fake.csv")
         # print(self.dataframe)
         self.id = 0

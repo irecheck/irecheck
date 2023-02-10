@@ -24,7 +24,7 @@ NUM_OF_ROUNDS = 2
 BREAK_COUNTER = 0
 NUMBER_BREAKS = 1
 
-CONDITION = 0
+CONDITION = int(sys.argv[3]) #get the type of condition
 CONDITION_OPTIONS = ['breathe', 'stretch']
 EXPERIMENT_CONDITION = CONDITION_OPTIONS[CONDITION]
 
@@ -57,7 +57,7 @@ class global_robotSay():
             rospy.loginfo(sentence)
 
 
-class Sleeping(smach.State):
+class Welcome(smach.State):
     def __init__(self):
         smach.State.__init__(self, 
                              outcomes=['proceed'],
@@ -66,27 +66,68 @@ class Sleeping(smach.State):
 
 
     def execute(self, userdata):
-        rospy.loginfo('Executing state SLEEPING')
+        
+        rospy.loginfo('Executing state WELCOME')
         # stay here until the condition for transitioning is met
-        while(userdata.continueKey != True):
-            pass
+        # while(userdata.continueKey != True):
+        #     pass
+        
+        try:
+            subject_name = str(sys.argv[2]) # e.g. Jonas
+            rospy.loginfo("\n\nInteraction started for subject named: " + str(subject_name + "\n\n"))
+
+        except:
+            rospy.loginfo("\n\nNO child name provided. Calling the poor unamed of <<My friend>>\n\n")
+            subject_name="My friend"
+
         # transition to the next state (react the the event and say a proactive sentence)
         userdata.continueKey = False
         msg = 'bonjour'
         rospy.loginfo(msg)
         userdata.pubBehMsg.publish(msg) 
-        rospy.sleep(5)
+        
+        rospy.sleep(3)
 
-        msg = "Please take this seat"
-        rospy.loginfo(msg)
+
+        # msg= "Hey, " + subject_name
+        # userdata.robotSay.publish(msg)   
+
+        msg= "Pleased to meet you. I am Q T robot!  I come from  E P F L, in Lôussanne, and I help the children to increase their handwriting skills" 
         userdata.robotSay.publish(msg)   
-        rospy.sleep(5)
 
-        # msg = 'Commençons par dessiner un chat!'
-        msg = "Let's start the interaction!"
-        rospy.loginfo(msg)
+
+        msg = "It will be a pleasure to play with you today!"
+        # rospy.loginfo(msg)
+        userdata.robotSay.publish(msg)   
+        # rospy.sleep(1):
+
+        msg = "Let's start by making a first analysis of your handwriting!"
+        # rospy.loginfo(msg)
         userdata.robotSay.publish(msg)
-        rospy.sleep(5)   
+        # rospy.sleep(1) 
+        
+        msg = "Take the pen in front of you!"
+        # rospy.loginfo(msg)
+        userdata.robotSay.publish(msg)
+        rospy.sleep(2) 
+        
+        msg = "Do you have it?! Great! Now, on the iPad in front of you, check the screen. On the left part, click in the blue button named: New Analysis!"
+        # rospy.loginfo(msg)
+        userdata.robotSay.publish(msg)
+        rospy.sleep(2) 
+        
+
+        msg = "You will starting by drawing a cat in the white part. When you finish, click in the green button on the side of the first cat."
+        # rospy.loginfo(msg)
+        userdata.robotSay.publish(msg)
+        rospy.sleep(3) 
+        # rospy.sleep(30) 
+        
+        msg = "When you finish drawing the cat, click in the green button. Then, you will have to copy the text you see in the space below."
+        # rospy.loginfo(msg)
+        userdata.robotSay.publish(msg)
+        rospy.sleep(1) 
+
         return 'proceed'
 
 # define state Assessment
@@ -102,21 +143,17 @@ class Assessment(smach.State):
     def execute(self, userdata):
         rospy.loginfo('Executing state ASSESSMENT')
         
-        msg = "It is time to check how your handwriting is going. You gonna do the " # Please perform an evaluation. It could take a while for me to compute it after you finish."
-        userdata.robotSay.publish(msg)
-        # rospy.loginfo(msg)
-        
-        
-        msg = "On the iPad in front of you: "
-        userdata.robotSay.publish(msg)
-        
-        
-        
+        # msg = "It is time to check how your handwriting is going. You gonna do the " # Please perform an evaluation. It could take a while for me to compute it after you finish."
+        # userdata.robotSay.publish(msg)
+        # # rospy.loginfo(msg)
+       
+       
         rospy.sleep(2)
 
 
         while(userdata.continueKey != True):
             pass
+        
         userdata.continueKey = False
         self.assessment_counter = self.assessment_counter + 1
         rospy.loginfo('Finish {} assessment'.format(self.assessment_counter))
@@ -135,6 +172,28 @@ class Assessment(smach.State):
             return 'bye'
         else:
             userdata.isEndAssessment = False
+        
+        
+            msg = "Yes! You did it. This is the result of your handwriting. Take a time to look at them."
+            # rospy.loginfo(msg)
+            userdata.robotSay.publish(msg)
+            rospy.sleep(5) 
+
+            
+            msg = "Let's make them better!. On the top of the screen, you will see your name. Click on it with the pen to come back to the main screen."
+            # rospy.loginfo(msg)
+            userdata.robotSay.publish(msg)
+            rospy.sleep(2) 
+
+            
+
+
+            msg = "Well Done!, Now, on the right part, click in the blue button named: New Activity! So we can start playing!"
+            # rospy.loginfo(msg)
+            userdata.robotSay.publish(msg)
+            rospy.sleep(2) 
+
+
             return 'proceed'
 
 # define state Activity
@@ -171,6 +230,14 @@ class Activity(smach.State):
                 BREAK_COUNTER += 1
                 return 'break'
             else:
+
+                msg = "Great! Now, stop! It feels you have been practising enough. Let's check once again your handwriting."
+                userdata.robotSay.publish(msg)
+                
+                msg = "Go back to the handwrite analisys screen. For that, on the top right of the screen, click on the blue button with a X. Then, click on the blue button with a X again and solve the math problem. Ask help to my colleagues to do so."
+                userdata.robotSay.publish(msg)
+                
+
                 return 'getBack'
             # return 'getBack'
         # case 3: take to BREAK
@@ -192,22 +259,23 @@ class Goodbye(smach.State):
     def execute(self, userdata):
         rospy.loginfo('Executing state GOODBYE')
 
-        msg = "Okay my little friend. This is the end of the session. It was nice to have fun with you!"
-        userdata.robotSay.publish(msg)
-        # rospy.loginfo(msg)
-        rospy.sleep(5)
 
         # transition to the next state (end)
         msg = 'au_revoir'
         rospy.loginfo(msg)
         userdata.pubBehMsg.publish(msg)
         # wait some time
+       
+        msg = "Okay my little friend. This is the end of the session. It was nice to have fun with you!"
+        userdata.robotSay.publish(msg)
+        # rospy.loginfo(msg)
+        # rospy.sleep(1)
 
-        msg = "Bye!"
+        msg = "Bye Bye!"
         userdata.robotSay.publish(msg)
 
 
-        rospy.sleep(5)   
+        rospy.sleep(1)   
         return 'proceed'
 
 
@@ -232,9 +300,31 @@ class Break(smach.State):
     def execute(self, userdata):
   
         if CURRENT_ROUND == NUM_OF_ROUNDS:
+            
+            
+            # msg = "Great! It feels you have been practising enough. Let's check once again your handwriting."
+            # userdata.robotSay.publish(msg)
+            
+
+            # msg = "Go back to the handwrite analisys screen. Ask help to my colleagues to do so."
+            # userdata.robotSay.publish(msg)
+            
             return 'proceed'
   
+
+
         rospy.loginfo('Starting break session')
+
+
+
+        msg = "Ok! We have been playing for a while now. Let's make a pause."
+        userdata.robotSay.publish(msg)
+
+        msg = "Please leave the pen on the side of the iPad"
+        userdata.robotSay.publish(msg)
+
+        msg = "Do you have your hands free?"
+        userdata.robotSay.publish(msg)
 
         # building the function name
         function_name = "self." + EXPERIMENT_CONDITION + "(userdata)"
@@ -251,9 +341,10 @@ class Break(smach.State):
     def breathe(self, userdata):
         
         rospy.loginfo('Executing breathing state')
-        msg = 'We are now going to do some deep breathing !'
+        msg = 'Great! We are now going to do some deep breathing !'
         userdata.robotSay.publish(msg)
         gesture = rospy.Publisher('/qt_robot/gesture/play', String, queue_size=1)
+        emotion = rospy.Publisher('/qt_robot/emotion/show', String, queue_size=1)
         # gestureService = rospy.ServiceProxy('/qt_robot/gesture/play', gesture_play)
         # rospy.wait_for_service('/qt_robot/gesture/play')
         # rest.call(['left_arm', 'right_arm', 'HeadPitch'])
@@ -265,6 +356,10 @@ class Break(smach.State):
         
         gesture.publish('QT/sneezing')
         # gestureService.call('QT/sneezing', .9)
+
+
+        msg = "Now, sit straith in your chair so we can enjoy our breathing exercise!"
+        userdata.robotSay.publish(msg)
 
         msg = 'When I say: inhale, you bring the air to your langs slowly. When I say exhale, you leave the air go through your mouth'
         userdata.robotSay.publish(msg)
@@ -289,23 +384,29 @@ class Break(smach.State):
 
             rospy.sleep(2)
             
-            msg = "exhale"
+            msg = "Exhale"
             userdata.robotSay.publish(msg)
             rospy.sleep(2)
+
+            if i == 2:
+                msg = "Just two more times!"
+                userdata.robotSay.publish(msg)
+                rospy.sleep(2)
+
             # rospy.wait_for_service('/qt_robot/gesture/play')
         
-        msg = 'Ok!'
+        msg = 'Bravo!'
         userdata.robotSay.publish(msg)
 
         # Meditation
-        msg = "Now, sit straith, put your hands on your legs and close your eyes!"
+        msg = "Now, still siting straith, put your hands on your legs and close your eyes!"
         userdata.robotSay.publish(msg)
 
 
-        msg = "I want you to concentrate and think about happy memories. Or things that make you happy!"
+        msg = "I want you to concentrate and think about: things that make you happy!"
         userdata.robotSay.publish(msg)
 
-        msg = "I will count to 10 in silent! and tell you when we are done. You keep thinking about it and breathing slowly!"
+        msg = "I will count to 15 in silence! and tell you when we are done. You keep thinking about it and breathing slowly!"
         userdata.robotSay.publish(msg)
         
         msg = "Ready? Let's go!"
@@ -313,19 +414,49 @@ class Break(smach.State):
 
 
 
-        numbers = ['one', 'two', 'three', 'four', 'five']
+        # numbers = ['one', 'two', 'three', 'four', 'five']
         
-        for i in range(10):
+        for i in range(15):
             
             # msg = i
             # userdata.robotSay.publish(msg)
             rospy.sleep(1)
             rospy.loginfo(i)
         
-        msg = 'Well done! Are you rested and feeling calm?!'
+        
+        # Meditation
+        msg = "Alright! Open your eyes again!"
+        userdata.robotSay.publish(msg)
+
+        emotion.publish('QT/breathing_exercise')
+        
+        msg = "Take again a deep breath like me!"
+        userdata.robotSay.publish(msg)
+
+        msg = "Now, I want you to think about your favorite: music. Don't sing it. Only think. I will count to 15 in silence and tell you when it is done. You keep thinking about it and breathing slowly!"
+        userdata.robotSay.publish(msg)
+        
+        msg = "It is the last time. Now go, close your eyes and think about you favorite song and relax!"
         userdata.robotSay.publish(msg)
 
 
+
+        # numbers = ['one', 'two', 'three', 'four', 'five']
+        
+        for i in range(15):
+            
+            # msg = i
+            # userdata.robotSay.publish(msg)
+            rospy.sleep(1)
+            rospy.loginfo(i)
+        
+        
+        
+        
+        msg = 'Yes! We did it! Are you rested and feeling calm?!'
+        userdata.robotSay.publish(msg)
+
+        userdata.pubBehMsg.publish('bravo')
 
         msg = 'Cool! I think we are ready to restart the activities again!'
         userdata.robotSay.publish(msg)
@@ -343,17 +474,25 @@ class Break(smach.State):
         msg = 'Excellent! Now we gonna perform a small stretching session'
         userdata.robotSay.publish(msg)
 
+
      
         # seconds = 0
         # start_time = time.time()
         # numbers = ['one', 'two', 'three', 'four', 'five']
-        numbers = ['one', 'two']#, 'three', 'four', 'five']
+        numbers = ['one', 'two', 'three', 'four']#, 'five']
+
+        msg = 'Follow my instructions and do as I do. I will count to 4 for each exercise, ok?!'
+        userdata.robotSay.publish(msg)
+        
         
         headPub = rospy.Publisher('/qt_robot/head_position/command', Float64MultiArray, queue_size=1)
         right_arm_Pub = rospy.Publisher('/qt_robot/right_arm_position/command', Float64MultiArray, queue_size=1)
         left_arm_Pub = rospy.Publisher('/qt_robot/left_arm_position/command', Float64MultiArray, queue_size=1)
         local_speech = rospy.Publisher('/qt_robot/speech/say', String, queue_size=1)
         rospy.sleep(2)#rospy.Publisher('/qt_robot/speech/say', String, queue_size=1)
+
+        headPub.publish(Float64MultiArray(data=[1,0]))
+
 
         # Pub1.publish(Float64MultiArray(data=[15, 0, 15]))
         # rospy.sleep(3)
@@ -377,15 +516,14 @@ class Break(smach.State):
          
 
         moves_list = { 
-                # 'head_right':{'robotSpeech':'While keeping your trunk straith, look to your right. Just as I am doing.', 'gesture': 'headPub.publish(Float64MultiArray(data=[60,0]))', 'speed': 1.5 },
-                # 'head_left':{'robotSpeech':'Next, in the same way as before, we are looking to the left.', 'gesture': 'headPub.publish(Float64MultiArray(data=[-60,0]))', 'speed': 1.5 },
-                # 'head_down':{'robotSpeech':'We look down now. Like looking for a coin on the ground', 'gesture': 'headPub.publish(Float64MultiArray(data=[-0,30]))', 'speed': 1.5 },
-                # 'head_up':{'robotSpeech':' Next move: Looking to the sky like this.', 'gesture': 'headPub.publish(Float64MultiArray(data=[-0,-30]))', 'speed': 1.5 },
-                # 'wide_arms':{'robotSpeech':'Open your arms as wide as you can', 'gesture': 'arms_wide()', 'speed': 1.5 },
-                # 'wide_front':{'robotSpeech':'Now, stretch your arms in front of you', 'gesture': 'arms_front()', 'speed': 1.5 },
-                # 'wide_up':{'robotSpeech':'Now we put our both arms up like this!', 'gesture': 'arms_up()', 'speed': 1.5 },
-                # 'hands_open':{'robotSpeech':'Open hand', 'gesture': 'hands_open', 'speed': 1.5 },
-                # 'hands_close':{'robotSpeech':'Close hand', 'gesture': 'hands_close', 'speed': 1.5 }
+                'head_right':{'robotSpeech':'While keeping your trunk straith, look to your right. Just as I am doing.', 'gesture': 'headPub.publish(Float64MultiArray(data=[60,0]))', 'speed': 1.5 },
+                'head_left':{'robotSpeech':'Now, to the left.', 'gesture': 'headPub.publish(Float64MultiArray(data=[-60,0]))', 'speed': 1.5 },
+                'head_down':{'robotSpeech':'We look down now', 'gesture': 'headPub.publish(Float64MultiArray(data=[-0,30]))', 'speed': 1.5 },
+                'head_up':{'robotSpeech':' Next move: Looking up!.', 'gesture': 'headPub.publish(Float64MultiArray(data=[-0,-30]))', 'speed': 1.5 },
+                'wide_arms':{'robotSpeech':'Open your arms as wide as you can', 'gesture': 'arms_wide()', 'speed': 1.5 },
+                'wide_front':{'robotSpeech':'Now, stretch your arms in front of you', 'gesture': 'arms_front()', 'speed': 1.5 },
+                'wide_up':{'robotSpeech':'Now we put our both arms up like this!', 'gesture': 'arms_up()', 'speed': 1.5 },
+                
         }
 
         # moves = moves_list.keys()
@@ -402,11 +540,11 @@ class Break(smach.State):
             # userdata.robotSay.publish(msg)
 
             # moves_list[move]['robotSpeech']
-            rospy.sleep(1)
+            # rospy.sleep(1)
             eval(moves_list[move]['gesture'])
-            rospy.sleep(1)
+            rospy.sleep(2)
             userdata.robotSay.publish(moves_list[move]['robotSpeech'])
-            msg = "Ready? Let's count"
+            msg = "Ready? Go!"
             userdata.robotSay.publish(msg)
             
 
@@ -416,7 +554,7 @@ class Break(smach.State):
                 # msg = numbers[seconds]
                 userdata.robotSay.publish(seconds)
                 # self.say.publish(msg)
-                rospy.sleep(.5)
+                # rospy.sleep(.2)
             # seconds = seconds + 1
 
 
@@ -438,7 +576,7 @@ class Break(smach.State):
         # speechSay("Great ! The next stretch is moving the head up.")
         
         # msg = "Awesome! We did it."
-        msg = "Bravo! We did it"
+        msg = "Yes! We did it"
         userdata.robotSay.publish(msg)
         userdata.pubBehMsg.publish('bravo')
 
@@ -451,42 +589,12 @@ class Break(smach.State):
 
 class IrecheckManager():
     def __init__(self):
+
+
         self.world = pd.DataFrame()     # dataframe storing all info of relevance for iReCHeCk (sources: Dynamico)
 
         # initialize ROS node
         rospy.init_node('irecheckmanager', anonymous=True)
-
-
-        # rospy.loginfo("trying to move head")
-        # # href = Float64MultiArray(data=[-0,-30])
-        # head_pub.publish(Float64MultiArray(data=[-0,-0]))
-
-
-        # Pub1 = rospy.Publisher('/qt_robot/right_arm_position/command', Float64MultiArray, queue_size=1)
-        # Pub2 = rospy.Publisher('/qt_robot/left_arm_position/command', Float64MultiArray, queue_size=1)
-        # rospy.sleep(1)
-
-        # Pub1.publish(Float64MultiArray(data=[15, 0, 15]))
-        # Pub2.publish(Float64MultiArray(data=[-15, 0, 15]))
-        # rospy.sleep(3)
-        # Pub1.publish(Float64MultiArray(data=[80, -85, 0]))
-        # Pub2.publish(Float64MultiArray(data=[-80,-85, 0]))
-        # rospy.sleep(1)
-
-
-        # rest = rospy.ServiceProxy('/qt_robot/motors/home', home)
-        # rospy.wait_for_service('/qt_robot/motors/home')
-        # rest.call(['left_arm', 'right_arm', 'HeadPitch'])
-        
-        # return
-
-
-
-
-
-
-
-
 
 
         # initialize subscribers
@@ -524,8 +632,9 @@ class IrecheckManager():
         now = datetime.now()
         dt_string = now.strftime("%d-%m-%Y_%H-%M-%S")
         
-        subject_id = str("TESTE") # e.g. ID01
-        # subject_id = str(sys.argv[1]) # e.g. ID01
+        # subject_id = str("TESTE") # e.g. ID01
+
+        subject_id = str(sys.argv[1]) # e.g. ID01
         self.filename = '~/Documents/iReCHeCk_logs/' + dt_string + '_' + subject_id + '.csv'
 
         rospy.loginfo("Starting IrecheckManager for subject: {}".format(subject_id))
@@ -534,14 +643,15 @@ class IrecheckManager():
 
         with self.sm:
             # Add states to the container
-            # smach.StateMachine.add('BREAK', Break(), 
-            #                     transitions={'proceed':'ASSESSMENT'},
-            #                     remapping={'continueKey':'faceKey',
-            #                                 'pubBehMsg':'pubBehMsg',
-            #                                 # 'robotSay':'robotSay', 
-            #                                 # 'continueKey':'faceKey',
-            #                                 # 'pubBehMsg':'pubBehMsg',
-            #                                 'robotSay':'robotSay'})
+            smach.StateMachine.add('WELCOME', Welcome(), 
+                                transitions={'proceed':'ASSESSMENT'},
+                                # transitions={'proceed':'end'},
+                                remapping={'continueKey':'faceKey',
+                                            'pubBehMsg':'pubBehMsg',
+                                            'robotSay':'robotSay', 
+                                            'continueKey':'faceKey',
+                                            'pubBehMsg':'pubBehMsg',
+                                            'robotSay':'robotSay'})
 
             smach.StateMachine.add('BREAK', Break(), 
                                 transitions={'proceed':'ACTIVITY'},
@@ -588,7 +698,8 @@ class IrecheckManager():
                                             'robotSay':'robotSay'})
 
 
-        self.sm.set_initial_state(['ASSESSMENT'])
+        self.sm.set_initial_state(['WELCOME'])
+        # self.sm.set_initial_state(['ASSESSMENT'])
         # self.sm.set_initial_state(['BREAK'])
 
 

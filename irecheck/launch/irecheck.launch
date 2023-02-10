@@ -1,7 +1,12 @@
 <launch>
   <group>
-    <node pkg="irecheck" name="irecheckWorldManager" type="irecheckWorldManager.py"/>
-    <node pkg="irecheck" name="irecheckWorld" type="irecheckWorld.py"/>
+  	<arg name="participant_id" />
+  	<arg name="participant_name" />
+  	<arg name="therapist" />
+    <node pkg="irecheck" name="Manager" type="break_Type_Manager.py" args="" />
+    <node pkg="irecheck" name="DecisionMaker" type="decisionMaker.py"/>
     <node pkg="irecheck" name="dispatcher" type="dispatcher.py"/>
+    <node pkg="qt_behaviour_control" name="BehaviourShooter" type="qtrobot_auto.py"/>
   </group>
 </launch>
+

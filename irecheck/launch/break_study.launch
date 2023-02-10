@@ -1,0 +1,13 @@
+<launch>
+  <group>
+  	<arg name="id" />
+  	<arg name="name" />
+    <arg name="condition" />
+    <node pkg="dynamico" name="Dynamico" type="dynamicoListener.py" />
+    <node pkg="qt_behaviour_control" name="BehaviourShooter" type="qtrobot_auto.py" args="$(arg name) Therapist" output="screen"/>
+    <node pkg="irecheck" name="DecisionMaker" type="decisionMaker.py" output="screen"/>
+    <!-- <node pkg="irecheck" name="dispatcher" type="dispatcher.py"/> -->
+    <node pkg="irecheck" name="Manager" type="break_Type_Manager.py" args="$(arg id) $(arg name) $(arg condition)" output="screen" required="true"/>
+  </group>
+</launch>
+
