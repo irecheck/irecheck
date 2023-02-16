@@ -3,11 +3,28 @@
   	<arg name="id" />
   	<arg name="name" />
     <arg name="condition" />
+
+    <!-- launches camera -->
+    <!-- <include file="$(find realsense2_camera)/launch/rs_camera.launch"/> -->
+    <!-- Should be started manually now -->
+
+
     <node pkg="dynamico" name="Dynamico" type="dynamicoListener.py" />
     <node pkg="qt_behaviour_control" name="BehaviourShooter" type="qtrobot_auto.py" args="$(arg name) Therapist" output="screen"/>
     <node pkg="irecheck" name="DecisionMaker" type="decisionMaker.py" output="screen"/>
     <!-- <node pkg="irecheck" name="dispatcher" type="dispatcher.py"/> -->
+    
+    <!-- MANAGER -->
     <node pkg="irecheck" name="Manager" type="break_Type_Manager.py" args="$(arg id) $(arg name) $(arg condition)" output="screen" required="true"/>
+    
+    <!-- Rosbag recording irecheck nodes-->
+    <!-- <node pkg="rosbag" type="record" name="rosbag_record_interation"   args="record -o irecheck_  /dynamicomsg /irecheck/button_name /rosout"/>  -->
+    
+    <!-- Rosbag recording camera nodes-->
+    <node pkg="rosbag" type="record" name="rosbag_record_interation"   args="record -o /media/carnieto/CHILI-IRECHECK/realsense/irecheck_ID$(arg id)_  -e '/camera/(.*)' /dynamicomsg /irecheck/button_name /rosout"/> 
+  
+    <!-- rosnode kill BehaviourShooter DecisionMaker Dynamico rosbag_record_interation -->
+  
   </group>
 </launch>
 

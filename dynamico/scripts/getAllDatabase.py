@@ -150,8 +150,8 @@ if __name__ == "__main__":
     
   
     try:
-        myDynamicoListener = DynamicoListener('writingDiagnoses')
-        myDynamicoListener_2 = DynamicoListener('scores')
+        # myDynamicoListener = DynamicoListener('writingDiagnoses')
+        myDynamicoListener_1 = DynamicoListener('children')
 
     
         print("My code never gets here!")

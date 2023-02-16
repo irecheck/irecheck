@@ -9,9 +9,11 @@ import smach
 import time
 import sys
   
-MINUTES_PER_SESSION = 1 #5
-SCORE_THRESHOLD = 49
+MINUTES_PER_SESSION = 2
+# MINUTES_PER_SESSION = 5
+SCORE_THRESHOLD = 30
 FIRST_TIME = True
+# FIRST_TIME = False
 
 SCORE_TO_ACTIVITY_MAP = {
     'pressureScore': 'Submarine',
@@ -454,9 +456,10 @@ class DecisionMaker():
 
         if self.sm.userdata.activityOnFocus != '':
             # suggest the first activity in the new round
+            global FIRST_TIME
             if FIRST_TIME:
                 FIRST_TIME = False
-                rospy.sleep(50)
+                rospy.sleep(40)
             
             msg = "It's time to play and to have fun. Let's play the game: {}".format(self.sm.userdata.activityOnFocus)
             rospy.loginfo(msg)

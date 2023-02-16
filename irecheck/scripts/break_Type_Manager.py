@@ -6,25 +6,46 @@ import smach
 import pandas as pd
 import roslib; roslib.load_manifest('smach')
 from std_msgs.msg import String
+from std_srvs.srv import Empty
+
 from qt_nuitrack_app.msg import Faces
 from datetime import datetime
 import sys
 import random
+import time
+from irecheck_toolkit import *
+
 
 from qt_robot_interface.srv import *
 from qt_gesture_controller.srv import gesture_play
 from qt_motors_controller.srv import *
 from std_msgs.msg import Float64MultiArray
 
-
+start_state = 'WELCOME'
+# start_state = 'ACTIVITY'
+# start_state = 'BREAK'
 
 NUM_OF_ROUNDS = 2
 # NUM_OF_ROUNDS = 1
 
 BREAK_COUNTER = 0
+# BREAK_COUNTER = 1
+
 NUMBER_BREAKS = 1
 
-CONDITION = int(sys.argv[3]) #get the type of condition
+try: 
+    id = str(sys.argv[1])
+    name = str(sys.argv[2])
+    # int(sys.argv[3])
+    CONDITION = int(sys.argv[3]) #get the type of condition
+
+except:
+    id = '0000'
+    name = 'TESTE'
+    CONDITION =1
+
+
+# CONDITION = int(sys.argv[3]) #get the type of condition
 CONDITION_OPTIONS = ['breathe', 'stretch']
 EXPERIMENT_CONDITION = CONDITION_OPTIONS[CONDITION]
 
@@ -32,9 +53,23 @@ EXPERIMENT_CONDITION = CONDITION_OPTIONS[CONDITION]
 robot_connected = True
 
 CURRENT_ROUND = 0
+# CURRENT_ROUND = 1
+
+timefilename = '~/Documents/iReCHeCk_logs/Sessions_length.csv'
+
+timestamp = datetime.now().strftime("%d-%m-%Y_%H-%M-%S")
+
+
+time_logger = Time_logger(timefilename,id,name, timestamp, CONDITION_OPTIONS[CONDITION])
+
 
 
 CONGRATS = ['Great!', 'Awesome!', 'Nice!', 'Excellent!', 'Cool!', 'You rock!', 'Very good!', "Alright!", 'You got it!', 'You are on fire!' ]
+
+
+# def timeTracker(key):
+
+#     doc = pd.
 
 
 class global_robotSay():
@@ -109,9 +144,13 @@ class Welcome(smach.State):
         msg = "Take the pen in front of you!"
         # rospy.loginfo(msg)
         userdata.robotSay.publish(msg)
-        rospy.sleep(2) 
+        rospy.sleep(1) 
         
-        msg = "Do you have it?! Great! Now, on the iPad in front of you, check the screen. On the left part, click in the blue button named: New Analysis!"
+        msg = "Do you have it?!"
+        userdata.robotSay.publish(msg)
+        rospy.sleep(1) 
+        
+        msg = "Great! Now, on the iPad in front of you, check the screen. On the left part, click in the blue button named: New Analysis!"
         # rospy.loginfo(msg)
         userdata.robotSay.publish(msg)
         rospy.sleep(2) 
@@ -120,14 +159,15 @@ class Welcome(smach.State):
         msg = "You will starting by drawing a cat in the white part. When you finish, click in the green button on the side of the first cat."
         # rospy.loginfo(msg)
         userdata.robotSay.publish(msg)
-        rospy.sleep(3) 
-        # rospy.sleep(30) 
+        # rospy.sleep(3) 
+        rospy.sleep(30) 
         
-        msg = "When you finish drawing the cat, click in the green button. Then, you will have to copy the text you see in the space below."
+        msg = "When you finish drawing the cat, click in the green button. Then, you will have to copy the text you see in the space bellow."
         # rospy.loginfo(msg)
         userdata.robotSay.publish(msg)
         rospy.sleep(1) 
 
+        time_logger.add('welcome')
         return 'proceed'
 
 # define state Assessment
@@ -148,7 +188,7 @@ class Assessment(smach.State):
         # # rospy.loginfo(msg)
        
        
-        rospy.sleep(2)
+        rospy.sleep(1)
 
 
         while(userdata.continueKey != True):
@@ -169,18 +209,21 @@ class Assessment(smach.State):
         # if userdata.isEndAssessment and self.assessment_counter > NUM_OF_ROUNDS:
         if self.assessment_counter >= NUM_OF_ROUNDS:
             # if this is the assessment ordered by the decisionMaker, go to the GoodBye state
+            
+            time_logger.add('evaluation_2')
             return 'bye'
         else:
             userdata.isEndAssessment = False
         
         
-            msg = "Yes! You did it. This is the result of your handwriting. Take a time to look at them."
+            # msg = "Yes! You did it. This is the result of your handwriting. Take a time to look at them."
+            msg = "Yes! You did it. This is the result of your handwriting. But don't worry. We are working on it now."
             # rospy.loginfo(msg)
             userdata.robotSay.publish(msg)
-            rospy.sleep(5) 
+            rospy.sleep(1) 
 
             
-            msg = "Let's make them better!. On the top of the screen, you will see your name. Click on it with the pen to come back to the main screen."
+            msg = "Let's make them better!. On the top of the screen, on your left, you will see your name written. Click on it with the pen to come back to the main screen."
             # rospy.loginfo(msg)
             userdata.robotSay.publish(msg)
             rospy.sleep(2) 
@@ -193,7 +236,8 @@ class Assessment(smach.State):
             userdata.robotSay.publish(msg)
             rospy.sleep(2) 
 
-
+            time_logger.add('evaluation_1')
+            
             return 'proceed'
 
 # define state Activity
@@ -228,6 +272,7 @@ class Activity(smach.State):
             print("NUMBER_BREAKS", NUMBER_BREAKS)
             if BREAK_COUNTER < NUMBER_BREAKS:
                 BREAK_COUNTER += 1
+                time_logger.add('activity_1')
                 return 'break'
             else:
 
@@ -237,6 +282,7 @@ class Activity(smach.State):
                 msg = "Go back to the handwrite analisys screen. For that, on the top right of the screen, click on the blue button with a X. Then, click on the blue button with a X again and solve the math problem. Ask help to my colleagues to do so."
                 userdata.robotSay.publish(msg)
                 
+                time_logger.add('activity_2')
 
                 return 'getBack'
             # return 'getBack'
@@ -261,30 +307,28 @@ class Goodbye(smach.State):
 
 
         # transition to the next state (end)
-        msg = 'au_revoir'
-        rospy.loginfo(msg)
-        userdata.pubBehMsg.publish(msg)
-        # wait some time
-       
         msg = "Okay my little friend. This is the end of the session. It was nice to have fun with you!"
         userdata.robotSay.publish(msg)
         # rospy.loginfo(msg)
         # rospy.sleep(1)
 
+        msg = 'au_revoir'
+        rospy.loginfo(msg)
+        userdata.pubBehMsg.publish(msg)
+        # wait some time
+       
         msg = "Bye Bye!"
         userdata.robotSay.publish(msg)
 
-
         rospy.sleep(1)   
+        time_logger.add('ended')
+
         return 'proceed'
 
 
 
 
 # --------------------------------- Breaking Classes
-
-
-
 class Break(smach.State):
   
     """All the stretching movements."""
@@ -335,6 +379,7 @@ class Break(smach.State):
         msg = 'start_new_round'
         userdata.pubCommandMsg.publish(msg)
 
+        time_logger.add('break')
         return ret
 
 
@@ -360,6 +405,8 @@ class Break(smach.State):
 
         msg = "Now, sit straith in your chair so we can enjoy our breathing exercise!"
         userdata.robotSay.publish(msg)
+        rospy.sleep(.5)
+
 
         msg = 'When I say: inhale, you bring the air to your langs slowly. When I say exhale, you leave the air go through your mouth'
         userdata.robotSay.publish(msg)
@@ -399,7 +446,7 @@ class Break(smach.State):
         userdata.robotSay.publish(msg)
 
         # Meditation
-        msg = "Now, still siting straith, put your hands on your legs and close your eyes!"
+        msg = "Now, still sitting straith, put your hands on your legs and close your eyes!"
         userdata.robotSay.publish(msg)
 
 
@@ -436,7 +483,7 @@ class Break(smach.State):
         msg = "Now, I want you to think about your favorite: music. Don't sing it. Only think. I will count to 15 in silence and tell you when it is done. You keep thinking about it and breathing slowly!"
         userdata.robotSay.publish(msg)
         
-        msg = "It is the last time. Now go, close your eyes and think about you favorite song and relax!"
+        msg = "It is the last time. Now go, close your eyes and think about you favorite song!"
         userdata.robotSay.publish(msg)
 
 
@@ -483,15 +530,16 @@ class Break(smach.State):
 
         msg = 'Follow my instructions and do as I do. I will count to 4 for each exercise, ok?!'
         userdata.robotSay.publish(msg)
-        
+        rospy.sleep(1)
         
         headPub = rospy.Publisher('/qt_robot/head_position/command', Float64MultiArray, queue_size=1)
         right_arm_Pub = rospy.Publisher('/qt_robot/right_arm_position/command', Float64MultiArray, queue_size=1)
         left_arm_Pub = rospy.Publisher('/qt_robot/left_arm_position/command', Float64MultiArray, queue_size=1)
         local_speech = rospy.Publisher('/qt_robot/speech/say', String, queue_size=1)
-        rospy.sleep(2)#rospy.Publisher('/qt_robot/speech/say', String, queue_size=1)
+        rospy.sleep(1)#rospy.Publisher('/qt_robot/speech/say', String, queue_size=1)
 
         headPub.publish(Float64MultiArray(data=[1,0]))
+        rospy.sleep(1)#rospy.Publisher('/qt_robot/speech/say', String, queue_size=1)
 
 
         # Pub1.publish(Float64MultiArray(data=[15, 0, 15]))
@@ -544,8 +592,10 @@ class Break(smach.State):
             eval(moves_list[move]['gesture'])
             rospy.sleep(2)
             userdata.robotSay.publish(moves_list[move]['robotSpeech'])
+            rospy.sleep(1)           
             msg = "Ready? Go!"
             userdata.robotSay.publish(msg)
+            rospy.sleep(.5)
             
 
             for seconds in numbers:
@@ -554,7 +604,7 @@ class Break(smach.State):
                 # msg = numbers[seconds]
                 userdata.robotSay.publish(seconds)
                 # self.say.publish(msg)
-                # rospy.sleep(.2)
+                rospy.sleep(.5)
             # seconds = seconds + 1
 
 
@@ -592,6 +642,7 @@ class IrecheckManager():
 
 
         self.world = pd.DataFrame()     # dataframe storing all info of relevance for iReCHeCk (sources: Dynamico)
+        self.timeLength = pd.DataFrame()     # dataframe storing time (sources: Time)
 
         # initialize ROS node
         rospy.init_node('irecheckmanager', anonymous=True)
@@ -614,7 +665,9 @@ class IrecheckManager():
         self.sm.userdata.dynamicoAssessmentKey = False
         self.sm.userdata.pubBehMsg = rospy.Publisher('/irecheck/button_name', String, queue_size=1)
         self.sm.userdata.pubCommandMsg = rospy.Publisher('managercommands', String, queue_size=1)
-        # rospy.loginfo("Subscribing")
+        
+        # 
+        #  rospy.loginfo("Subscribing")
         # self.sm.userdata.gesturePub = rospy.Publisher('/qt_robot/head_position/command', Float64MultiArray, queue_size=1)
 
         # rospy.sleep(2)
@@ -629,16 +682,19 @@ class IrecheckManager():
 
 
         # use the initial time as the filename to save the .csv 
-        now = datetime.now()
-        dt_string = now.strftime("%d-%m-%Y_%H-%M-%S")
+        # now = datetime.now()
+        # dt_string = now.strftime("%d-%m-%Y_%H-%M-%S")
         
         # subject_id = str("TESTE") # e.g. ID01
 
-        subject_id = str(sys.argv[1]) # e.g. ID01
-        self.filename = '~/Documents/iReCHeCk_logs/' + dt_string + '_' + subject_id + '.csv'
+        subject_id = id #str(sys.argv[1]) # e.g. ID01
+        global timestamp
+        self.filename = '~/Documents/iReCHeCk_logs/'  + timestamp + '_ID-' + subject_id + '_DynamilisData.csv'
+        # self.timefilename = '~/Documents/iReCHeCk_logs/Sessions_length.csv'
 
         rospy.loginfo("Starting IrecheckManager for subject: {}".format(subject_id))
         
+        # self.sm.time_logger = Time_logger(self.timefilename,subject_id,str(sys.argv[2]), dt_string, CONDITION_OPTIONS[CONDITION])
         
 
         with self.sm:
@@ -698,13 +754,27 @@ class IrecheckManager():
                                             'robotSay':'robotSay'})
 
 
-        self.sm.set_initial_state(['WELCOME'])
+        # self.sm.set_initial_state(['WELCOME'])
         # self.sm.set_initial_state(['ASSESSMENT'])
         # self.sm.set_initial_state(['BREAK'])
+        self.sm.set_initial_state([start_state])
 
 
-        rospy.loginfo("Starting SM in 2 secs")
-        rospy.sleep(2)
+
+        rospy.logwarn("-----Waiting for intel camera!----")
+        # rospy.logwarn(msg, *args, **kwargs)
+        wait_for_node('/camera/realsense2_camera_manager')
+        rospy.loginfo("-----Camera found!----")
+        
+        rospy.sleep(3)
+
+        
+        input("All ready: Press Enter to continue...")
+
+        
+
+
+        time_logger.add('started')
 
         # execute SMACH plan
         outcome = self.sm.execute()
@@ -837,6 +907,12 @@ class IrecheckManager():
     def save2csv(self):
         
         self.world.to_csv(self.filename, index=False)
+
+
+    def saveTimeLength2csv(self, key):
+        
+        self.timeLength.to_csv(self.timefilename, index=False)
+
 
     # # save the world dataFrame in a CSV file at the end of the session
     # def shareWorld(self):
