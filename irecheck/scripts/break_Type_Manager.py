@@ -518,7 +518,7 @@ class Break(smach.State):
         rest.call(['left_arm', 'right_arm', 'HeadPitch', 'HeadYaw'])
         # rest.call(['left_arm', 'right_arm', 'HeadPitch'])
        
-        msg = 'Excellent! Now we gonna perform a small stretching session'
+        msg = 'Great! Now we gonna perform a small stretching session'
         userdata.robotSay.publish(msg)
 
 
@@ -763,9 +763,12 @@ class IrecheckManager():
 
         rospy.logwarn("-----Waiting for intel camera!----")
         # rospy.logwarn(msg, *args, **kwargs)
-        wait_for_node('/camera/realsense2_camera_manager')
+        wait_for_node('/camera/realsense2_camera')
+        
         rospy.loginfo("-----Camera found!----")
         
+        rospy.loginfo("\n\n-----All good and waiting for the experimenter to presss enter in 3 seconds----\n\n")
+
         rospy.sleep(3)
 
         

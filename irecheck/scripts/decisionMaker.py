@@ -9,8 +9,8 @@ import smach
 import time
 import sys
   
-MINUTES_PER_SESSION = 2
-# MINUTES_PER_SESSION = 5
+# MINUTES_PER_SESSION = 2
+MINUTES_PER_SESSION = 5
 SCORE_THRESHOLD = 30
 FIRST_TIME = True
 # FIRST_TIME = False
